@@ -12,9 +12,11 @@
     "ng": "ng",
     "data": "node scripts/fetch-data.mjs",
     "generate:views": "node scripts/generate-views.mjs",
-    "prestart": "npm run data && npm run generate:views",
+    "index": "node scripts/build-index.mjs",
+    "prepare:site": "npm run data && npm run generate:views && npm run index",
+    "prestart": "npm run prepare:site",
     "start": "ng serve",
-    "prebuild": "npm run data && npm run generate:views",
+    "prebuild": "npm run prepare:site",
     "build": "ng build"
   },
   "dependencies": {

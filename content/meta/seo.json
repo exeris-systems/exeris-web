@@ -1,0 +1,7 @@
+{
+  "not-found": {
+    "title": "Page not found",
+    "description": "This address does not exist on exeris.eu.",
+    "index": false
+  }
+}
