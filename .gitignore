@@ -1,0 +1,24 @@
+# Dependencies (node_modules may be a symlink to a tmpfs directory)
+node_modules
+/node_modules
+
+# Build output
+/dist
+/.angular
+/out-tsc
+/coverage
+
+# Generated per build
+/src/app/generated
+/src/data/site-sha.json
+
+# Lighthouse CI
+/.lighthouseci
+
+# Logs and editors
+npm-debug.log*
+*.log
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json

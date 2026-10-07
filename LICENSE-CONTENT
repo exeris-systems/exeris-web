@@ -1,0 +1,25 @@
+Site content and brand assets
+=============================
+
+The source code in this repository is licensed under the Apache License, Version 2.0 (see
+LICENSE). That licence does not extend to the content of the site or to the Exeris brand.
+
+Not covered by the Apache License, Version 2.0:
+
+  - the site copy: the text authored under content/ and src/content/, and the text it renders
+    on exeris.eu;
+  - the brand assets under src/assets/brand/: the Exeris mark, the wordmark, the lockups, the
+    app and favicon icons and the social card.
+
+© Exeris Systems, all rights reserved.
+
+"Exeris" and the Exeris mark are trademarks of Exeris Systems. No licence to use them is
+granted by this repository, by its source code licence, or by the fact that the files are
+publicly readable. Forks of the source code must remove the brand assets and the site copy and
+must not present themselves as Exeris Systems or as exeris.eu.
+
+Benchmark figures quoted on the site are copied verbatim from the claims register of the
+exeris-benchmarks repository, which carries its own licence.
+
+The IBM Plex typefaces are distributed through @fontsource under the SIL Open Font License 1.1
+and keep that licence.
