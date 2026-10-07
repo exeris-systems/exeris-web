@@ -12,7 +12,7 @@
         "http://127.0.0.1:4173/lab",
         "http://127.0.0.1:4173/pricing"
       ],
-      "numberOfRuns": 1,
+      "numberOfRuns": 3,
       "settings": {
         "chromeFlags": "--no-sandbox --headless=new"
       }
