@@ -1,0 +1,80 @@
+{
+  "concepts": [
+    {
+      "title": "The Wall",
+      "href": "/platform#wall",
+      "hint": "Spring-free kernel boundary · ADR-006",
+      "keywords": "boundary spring kernel spi core"
+    },
+    {
+      "title": "Code Detachment",
+      "href": "/pricing#detachment",
+      "hint": "Detach to own",
+      "keywords": "licence lock-in ownership"
+    },
+    {
+      "title": "Pure Mode",
+      "href": "/spring",
+      "hint": "Spring Runtime",
+      "keywords": "spring brownfield"
+    },
+    {
+      "title": "Compatibility Mode",
+      "href": "/spring",
+      "hint": "Spring Runtime",
+      "keywords": "spring threadlocal"
+    },
+    {
+      "title": "Glass Box",
+      "href": "/platform#tier-1",
+      "hint": "JFR-first observability",
+      "keywords": "telemetry jfr observability"
+    },
+    {
+      "title": "Driver swap",
+      "href": "/skus/api-gateway",
+      "hint": "Community and Enterprise drivers",
+      "keywords": "io_uring enterprise community maven"
+    },
+    {
+      "title": "Platform map",
+      "href": "/platform#map",
+      "hint": "Three tiers",
+      "keywords": "architecture tiers substrate"
+    },
+    {
+      "title": "Claims register",
+      "href": "/lab#method",
+      "hint": "How figures are quoted",
+      "keywords": "benchmarks evidence method"
+    },
+    {
+      "title": "Contact",
+      "href": "/pricing#contact",
+      "hint": "Platform and Enterprise",
+      "keywords": "sales email"
+    }
+  ],
+  "docs": [
+    {
+      "title": "Kernel whitepaper",
+      "href": "https://github.com/exeris-systems/exeris-kernel/blob/main/docs/whitepaper.md"
+    },
+    {
+      "title": "High-level architecture",
+      "href": "https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md"
+    },
+    {
+      "title": "ADR index",
+      "href": "https://github.com/exeris-systems/exeris-docs/blob/main/adr-index.md"
+    },
+    {
+      "title": "Claims register",
+      "href": "https://github.com/exeris-systems/exeris-benchmarks/blob/main/docs/CLAIMS.md"
+    },
+    {
+      "title": "Capability licence registry",
+      "href": "https://github.com/exeris-systems/exeris-docs/blob/main/cap-license-registry.md"
+    }
+  ]
+}
