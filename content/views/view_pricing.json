@@ -1,0 +1,51 @@
+{
+  "name": "pricing",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Pricing",
+  "view": {
+    "name": "pricing",
+    "kind": "PAGE",
+    "route": "pricing",
+    "title": "Pricing",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"center\": true, \"eyebrow\": \"PRICING\", \"title\": \"Start free. Subscribe to operate. Detach to own.\", \"lede\": \"Three tiers in pricing, the same three tiers as the platform. No marketing bundles. The commercial licence is source-available; production use requires an active subscription.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExPricingTiers",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"tiers\": [{\"name\": \"Community\", \"sub\": \"Apache-2.0 · open core\", \"price\": \"Free\", \"tone\": \"cyan\", \"cta\": {\"label\": \"Start with the kernel\", \"href\": \"/platform\"}, \"points\": [\"The kernel: SPI, Core, the Community driver, the TCK\", \"The community-licensed caps: `cors-policy`, `i18n`, `observability-bridge`\", \"SDK, tooling and the annotation processor\", \"JFR-first observability\", \"The reproducible benchmark lab\", \"No telemetry phone-home, no feature gating\"], \"foot\": \"Self-supported\"}, {\"name\": \"Platform\", \"sub\": \"Commercial subscription\", \"price\": \"Contact us\", \"tone\": \"flow\", \"featured\": true, \"cta\": {\"label\": \"Contact us\", \"href\": \"/pricing#contact\"}, \"points\": [\"Everything in Community\", \"The hosted control plane\", \"The {caps.commercial} commercial-licensed caps, source-available\", \"Every Platform SKU of the Gateway and Service Boundary families\", \"Studio organisation features: multi-environment promotion, audit dashboards\", \"Production support and CVE notification\", \"Code Detachment on request\"], \"foot\": \"Production runtime licence\"}, {\"name\": \"Enterprise\", \"sub\": \"Acceleration paths\", \"price\": \"Contact us\", \"tone\": \"slate\", \"cta\": {\"label\": \"Contact us\", \"href\": \"/pricing#contact\"}, \"points\": [\"Everything in Platform\", \"The Enterprise kernel driver: io_uring, HTTP/3, QUIC TLS\", \"NUMA-aware allocation and slab pools\", \"Enterprise observability: decoder and forensics CLI\", \"Bot Blocker and the enterprise-private `bot-fingerprinting` cap\", \"On-prem deployment and SSO\"], \"foot\": \"For workloads where syscalls, NUMA or ingress dominate\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExStepGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"detachment\", \"alt\": true, \"head\": {\"eyebrow\": \"§ CODE DETACHMENT\", \"title\": \"No silent lock-in. Detach to own.\", \"body\": \"A one-time fee grants perpetual use of the detached version: the unsigned composition manifest and the build artifacts needed to operate it independently. The Wall guarantees there is no hidden classpath glue.\"}, \"steps\": [{\"title\": \"Source-available always\", \"body\": \"Every commercial-licensed cap and every source-available SKU is readable in a public repository before you subscribe.\", \"tone\": \"cyan\"}, {\"title\": \"Subscribe to operate\", \"body\": \"An active Platform subscription is the production runtime licence. Code visibility does not depend on it.\", \"tone\": \"flow\"}, {\"title\": \"Detach to own\", \"body\": \"A one-time fee converts to perpetual use of the detached version: unsigned manifest, full build artifacts.\", \"tone\": \"slate\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExContact",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"contact\", \"eyebrow\": \"CONTACT\", \"title\": \"Talk to us about Platform or Enterprise.\", \"body\": \"Tell us what you run today and what you want to replace underneath it.\", \"label\": \"Contact us\"}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "name": "platform",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Platform",
+  "view": {
+    "name": "platform",
+    "kind": "PAGE",
+    "route": "platform",
+    "title": "Platform",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"PLATFORM\", \"title\": \"A runtime, not a framework.\", \"lede\": \"Exeris replaces the runtime underneath the application. Ingress, memory, persistence, flow and observability are the kernel’s job, behind a Spring-free SPI. Capabilities compose on that substrate, SKUs are named compositions of capabilities, and the build checks every edge between them.\", \"ctas\": [{\"label\": \"Kernel on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-kernel\", \"variant\": \"solid\"}, {\"label\": \"High-level architecture\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExPlatformMap",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"map\", \"head\": {\"eyebrow\": \"§ PLATFORM MAP\", \"title\": \"Three tiers, one direction of dependency.\", \"body\": \"Every arrow points down. A tier uses the one beneath it and nothing else, and the reverse edge does not build.\"}, \"tiers\": [{\"label\": \"TIER 3\", \"title\": \"SKUs\", \"body\": \"Named, signed compositions sold as products.\", \"items\": \"skus\", \"arrow\": \"composed of\"}, {\"label\": \"TIER 2\", \"title\": \"Capabilities\", \"body\": \"{caps.total} caps in {layers} layers, under {licences} licences.\", \"items\": \"layers\", \"arrow\": \"runs on\"}, {\"label\": \"TIER 1\", \"title\": \"Substrate\", \"body\": \"The kernel, its drivers, the host runtime and the build-time tooling.\", \"items\": [\"Kernel SPI and Core\", \"Community driver\", \"Enterprise driver\", \"TCK\", \"Spring Runtime\", \"SDK\", \"Tooling\", \"LSP and composition runtime\"]}], \"family\": {\"title\": \"FAMILY PRODUCTS\", \"body\": \"BudgetHQ runs on Spring Runtime and the Exeris kernel as the dogfooding case for that combination. It is a proprietary product outside the open-core taxonomy.\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExTierDeep",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"tier-1\", \"label\": \"Tier 1\", \"eyebrow\": \"SUBSTRATE\", \"title\": \"Kernel, host runtime, SDK, tooling.\", \"alt\": true, \"body\": \"The repositories that make up the substrate. The community modules are Apache-2.0 and public; the Enterprise driver and the enterprise observability tooling are private.\"}",
+            "children": [
+              {
+                "type": "CUSTOM",
+                "customType": "ExRepoGrid",
+                "binding": {
+                  "source": "STATIC"
+                },
+                "props": "{\"repos\": [{\"name\": \"exeris-kernel\", \"href\": \"https://github.com/exeris-systems/exeris-kernel\", \"label\": \"Apache-2.0\", \"description\": \"SPI, Core, the Community driver and the TCK. Spring-free by construction (ADR-006).\"}, {\"name\": \"exeris-kernel-enterprise\", \"label\": \"Commercial\", \"note\": \"private\", \"description\": \"The Enterprise driver behind the same SPI: io_uring, HTTP/3 over QUIC, slab pools, the native PG wire driver.\"}, {\"name\": \"exeris-spring-runtime\", \"href\": \"https://github.com/exeris-systems/exeris-spring-runtime\", \"label\": \"Tier 1 product\", \"description\": \"Hosts Spring applications on the kernel in Pure Mode or Compatibility Mode.\"}, {\"name\": \"exeris-sdk\", \"href\": \"https://github.com/exeris-systems/exeris-sdk\", \"label\": \"Apache-2.0\", \"description\": \"Annotations and the source model: the contract between domain code and the tooling.\"}, {\"name\": \"exeris-tooling\", \"href\": \"https://github.com/exeris-systems/exeris-tooling\", \"label\": \"Apache-2.0\", \"description\": \"The annotation processor and the code generators: kernel handlers, services, repositories, OpenAPI and the Angular front end.\"}, {\"name\": \"exeris-platform\", \"href\": \"https://github.com/exeris-systems/exeris-platform\", \"label\": \"Apache-2.0\", \"description\": \"The LSP server and the composition runtime.\"}, {\"name\": \"exeris-telemetry-spec\", \"label\": \"Wire spec\", \"note\": \"private\", \"description\": \"The telemetry wire format the kernel and the capabilities emit (ADR-018).\"}, {\"name\": \"exeris-enterprise-observability\", \"label\": \"Commercial\", \"note\": \"private\", \"description\": \"Crash decoder, forensics and CLI over the telemetry wire format.\"}, {\"name\": \"exeris-benchmarks\", \"href\": \"https://github.com/exeris-systems/exeris-benchmarks\", \"label\": \"Apache-2.0\", \"description\": \"The benchmark harness, the results and the claims register every figure on this site comes from.\"}]}"
+              }
+            ]
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExTierDeep",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"tier-2\", \"label\": \"Tier 2\", \"eyebrow\": \"CAPABILITIES\", \"title\": \"{caps.total} capabilities in {layers} layers.\", \"body\": \"Generated from the capability licence registry. Each cap is its own repository with declared provides and requires, and the cap-tier Wall keeps a cap out of its siblings’ internals.\"}",
+            "children": [
+              {
+                "type": "CUSTOM",
+                "customType": "ExLayerBreakdown",
+                "binding": {
+                  "source": "STATIC"
+                },
+                "props": "{}"
+              }
+            ]
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExTierDeep",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"tier-3\", \"label\": \"Tier 3\", \"eyebrow\": \"SKUS\", \"title\": \"{skus} SKUs in two families.\", \"alt\": true, \"body\": \"Each SKU repository carries the composition manifest under the Exeris Commercial License. Every SKU repository is source-available except Bot Blocker, which is closed-source on anti-abuse-security grounds.\"}",
+            "children": [
+              {
+                "type": "CUSTOM",
+                "customType": "ExRepoGrid",
+                "binding": {
+                  "source": "STATIC"
+                },
+                "props": "{\"repos\": [{\"name\": \"exeris-sku-api-gateway\", \"label\": \"Source-available\", \"description\": \"Gateway family. The first SKU scaffold the manifest format is enforced on (ADR-053).\"}, {\"name\": \"exeris-sku-edge-proxy\", \"label\": \"Source-available\", \"description\": \"Gateway family. The Enterprise driver is recommended for edge deployments.\"}, {\"name\": \"exeris-sku-bot-blocker\", \"label\": \"Closed-source\", \"description\": \"Gateway family. Detachment grants a perpetual binary-use licence and the manifest, not the source.\"}, {\"name\": \"exeris-sku-idp\", \"label\": \"Source-available\", \"description\": \"Service Boundary family. Includes the AI abstraction caps.\"}, {\"name\": \"exeris-sku-pim\", \"label\": \"Source-available\", \"description\": \"Service Boundary family.\"}, {\"name\": \"exeris-sku-oms\", \"label\": \"Source-available\", \"description\": \"Service Boundary family. Composes the flow saga engine through the kernel SPI.\"}, {\"name\": \"exeris-sku-content-api\", \"label\": \"Source-available\", \"description\": \"Service Boundary family: the Headless CMS API.\"}]}"
+              }
+            ]
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExWallDiagram",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"wall\", \"head\": {\"eyebrow\": \"§ THE WALL · ADR-006\", \"title\": \"The kernel never sees Spring.\", \"body\": \"SPI and Core are Spring-free, the Enterprise driver depends only on SPI and Core, and the TCK holds every driver to the same contract. Architecture tests in each affected repository check the boundary; it is not a convention.\"}, \"tiers\": [{\"name\": \"SPI\", \"modules\": \"exeris-kernel-spi\", \"rule\": \"Contracts only: no implementation, no framework types.\", \"tone\": \"flow\"}, {\"name\": \"Core\", \"modules\": \"exeris-kernel-core\", \"rule\": \"Lifecycle, memory and flow behind the SPI. Spring-free.\", \"tone\": \"flow\"}, {\"name\": \"Community\", \"modules\": \"exeris-kernel-community\", \"rule\": \"NIO transport, off-heap TLS over Panama FFM. Apache-2.0.\", \"tone\": \"cyan\"}, {\"name\": \"Enterprise\", \"modules\": \"exeris-kernel-enterprise\", \"rule\": \"io_uring · QUIC · native PG wire. Depends only on SPI and Core.\", \"tone\": \"slate\"}, {\"name\": \"TCK\", \"modules\": \"exeris-kernel-tck\", \"rule\": \"Zero-alloc verdicts · evidence export.\", \"tone\": \"cyan\"}], \"wall\": \"The Wall: no Spring type, servlet API or DI container crosses into SPI or Core\", \"callout\": {\"variant\": \"contract\", \"inline\": true, \"eyebrow\": \"ADR-006 · SPRING-FREE KERNEL BOUNDARY\", \"title\": \"The dependency arrow never reverses.\", \"body\": \"Spring integration lives in exeris-spring-runtime and depends on the kernel, never the other way round. The same rule holds one tier up: a capability cannot reach into Spring internals, into a sibling capability’s private classes or into the kernel’s private packages.\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/adr-index.md\", \"linkLabel\": \"ADR index\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

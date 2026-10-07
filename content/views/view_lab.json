@@ -1,0 +1,35 @@
+{
+  "name": "lab",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Lab",
+  "view": {
+    "name": "lab",
+    "kind": "PAGE",
+    "route": "lab",
+    "title": "Lab",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"BENCHMARK LABORATORY\", \"title\": \"Lab\", \"lede\": \"Every figure here is a registered copy string from the claims register of exeris-benchmarks, a chart drawn from the numbers inside such a string, a median read from a campaign’s result.json, or a row the evidence bundle marks CITABLE. Each one sits next to its fence.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExLab",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"tabs\": [{\"id\": \"cold-start\", \"label\": \"Cold start\", \"title\": \"Cold start: spawn to first response\", \"intro\": \"Five arms, all in JVM mode over cleartext HTTP/1.1 on one developer laptop. The Exeris row is the registered absolute figure; the other arms are its comparators.\", \"claims\": [\"L14.comparison\", \"L14.absolute\"], \"notes\": [\"Quarkus native image was not measured.\"]}, {\"id\": \"cpu\", \"label\": \"CPU per request\", \"title\": \"CPU per request on a single-row read\", \"intro\": \"The tuned Postgres triad on dedicated bare metal: Exeris Community against two Quarkus arms in JVM mode, in head-to-head AB/BA pairs on the same box.\", \"labels\": {\"exeris\": \"Exeris Community\", \"tuned\": \"Quarkus, hand-tuned pure JDBC\", \"hibernate\": \"Quarkus + Hibernate\", \"mode\": \"JVM mode\"}, \"claims\": [\"L12.comparison\", \"L12.absolute\", \"L12.tail\", \"L12.footprint\"]}, {\"id\": \"memory\", \"label\": \"Memory\", \"title\": \"Memory budget and the TLS tax\", \"intro\": \"The memory floor, CPU per request across memory budgets, and what enabling TLS costs each arm.\", \"labels\": {\"exeris\": \"Exeris Community\", \"quarkus\": \"Quarkus, netty-tcnative / BoringSSL\", \"off\": \"TLS off\", \"on\": \"TLS on\"}, \"claims\": [\"L13.floor\", \"L13.cpu-req\", \"L13.tls-tax\"], \"notes\": [\"The CPU-per-request figures of this tab and of the CPU tab come from different campaigns; they are not a trend.\"]}, {\"id\": \"spring\", \"label\": \"Spring hosting\", \"title\": \"Spring hosting and the repository layer\", \"intro\": \"The same Spring application measured on Tomcat and hosted on the Exeris kernel, and what the Spring Data repository layer and a permitAll security chain cost per request.\", \"labels\": {\"exeris\": \"Exeris Community\", \"spring\": \"Spring Boot on Tomcat\"}, \"claims\": [\"L1.copy\", \"L3.ceiling\", \"L3.migration-order\", \"L4.copy\", \"L11.copy\"]}, {\"id\": \"sagas\", \"label\": \"Sagas (contract v2)\", \"title\": \"Sagas under contract v2\", \"intro\": \"One framework deployed two ways: Axon Framework with Axon Server as a separate process, and the same framework embedded with no server. The rows are those the evidence bundle marks CITABLE.\", \"labels\": {\"server-backed arm, ceiling\": \"Server-backed arm (spring-axon-jdbc): ceiling\", \"serverless arm, ceiling\": \"Serverless arm (spring-axon-embedded-jdbc): ceiling\", \"serverless arm has no external engine\": \"Serverless arm: deployment unit\", \"Axon Server, post-load resident\": \"Axon Server: post-load resident memory\"}, \"notes\": [\"Nothing from the scenario’s first saga run is quoted: the claims register withdraws that run. A contract-v2 comparison names its frameworks and arms and stays on this page.\", \"Exeris runs its saga engine as a library in the application process, with no coordinator process and no distributed lock service (ADR-013). That is a property of the deployment, not a measurement.\"]}, {\"id\": \"method\", \"label\": \"Method\", \"title\": \"How claims work\", \"intro\": \"The site quotes; it does not paraphrase. The register in exeris-benchmarks decides what may be said about a result and how.\", \"points\": [\"Registered: a figure appears only as the copy string the register holds for it, verbatim, with its claim id and its fence.\", \"Withdrawn: figures the register retracts are listed there with what replaced them, so they cannot re-enter from an old note.\", \"Never quote alone: the figures that need their context, with the rule for each.\", \"Every report names its hardware profile and its claim scope; comparisons with other runtimes stay on this page.\", \"The site’s build reads the register and fails when a claim a page cites is missing or its copy has changed.\"]}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

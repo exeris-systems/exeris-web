@@ -1,4 +1,52 @@
 {
+  "home": {
+    "title": "Define. Compose. Execute.",
+    "description": "Exeris is a European open-core JVM platform: a kernel, capabilities and SKUs composed against one contract. Systems by contract. Compute without waste."
+  },
+  "platform": {
+    "title": "Platform",
+    "description": "The Exeris platform in three tiers: the kernel substrate, composable capabilities and SKUs, and the Wall that keeps Spring out of the kernel."
+  },
+  "capabilities": {
+    "title": "Capabilities",
+    "description": "The Exeris capability matrix by layer and licence, generated from the capability licence registry."
+  },
+  "skus": {
+    "title": "SKUs",
+    "description": "Exeris SKUs: signed compositions of capabilities in the Gateway and Service Boundary families."
+  },
+  "sku-api-gateway": {
+    "title": "API Gateway",
+    "description": "The Exeris API Gateway SKU: its composition of capabilities, the kernel driver swap and its deployment shapes."
+  },
+  "sku-idp": {
+    "title": "IDP",
+    "description": "The Exeris Intelligent Document Processing SKU: pipeline, composition and the AI abstraction layer, cloud or air-gapped."
+  },
+  "sku-bot-blocker": {
+    "title": "Bot Blocker",
+    "description": "The Exeris Bot Blocker SKU: JA3/JA4 TLS fingerprinting at the kernel layer, and why it is the one closed-source SKU."
+  },
+  "spring": {
+    "title": "Spring Runtime",
+    "description": "Exeris Spring Runtime hosts existing Spring applications on the Exeris kernel in Pure Mode or Compatibility Mode."
+  },
+  "ai": {
+    "title": "AI",
+    "description": "The Exeris AI layer: intent in, systems out. What exists today, what is planned, and how AI works on the platform."
+  },
+  "pricing": {
+    "title": "Pricing",
+    "description": "Exeris pricing: Community, Platform and Enterprise tiers, and Code Detachment."
+  },
+  "docs": {
+    "title": "Docs",
+    "description": "An index of the Exeris documentation: whitepapers, architecture, ADRs, SDK, tooling and benchmark methodology."
+  },
+  "lab": {
+    "title": "Lab",
+    "description": "The Exeris benchmark laboratory: registered claims with their fences, cold start, CPU per request, memory, Spring hosting and sagas."
+  },
   "not-found": {
     "title": "Page not found",
     "description": "This address does not exist on exeris.eu.",

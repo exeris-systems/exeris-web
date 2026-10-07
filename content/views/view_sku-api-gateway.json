@@ -1,0 +1,67 @@
+{
+  "name": "sku-api-gateway",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.SkuApiGateway",
+  "view": {
+    "name": "sku-api-gateway",
+    "kind": "PAGE",
+    "route": "skus/api-gateway",
+    "title": "API Gateway",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"sku\": \"api-gateway\", \"hero\": \"An HTTP gateway composed from routing, upstream pooling, a policy chain, backend health and an admin control plane, on a kernel-direct data plane with no Spring dependency. Source-available under the Exeris Commercial License.\", \"ctas\": [{\"label\": \"Discuss fit →\", \"href\": \"/pricing#contact\", \"variant\": \"solid\"}, {\"label\": \"Architecture\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md\"}, {\"label\": \"Evidence\", \"href\": \"/lab\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuComposition",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"sku\": \"api-gateway\", \"head\": {\"eyebrow\": \"§ COMPOSITION\", \"title\": \"One composition manifest, two kernel drivers.\", \"body\": \"The manifest is byte-identical across Community and Enterprise deployments. Swapping the custom NIO engine for io_uring, HTTP/3 and QUIC TLS is a Tier 1 Maven-coordinate change, never a manifest change.\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCardGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"alt\": true, \"columns\": 2, \"joined\": true, \"head\": {\"eyebrow\": \"§ DRIVER SWAP · TIER 1\", \"title\": \"Same SKU. Two engines.\", \"body\": \"The swap happens at the Maven-coordinate and ServiceLoader level in the substrate.\"}, \"cards\": [{\"eyebrow\": \"COMMUNITY · DEFAULT\", \"title\": \"Community driver\", \"code\": \"exeris-kernel-community\", \"tone\": \"cyan\", \"points\": [\"NIO transport for HTTP/1.1 and HTTP/2\", \"Portable off-heap TLS over Panama FFM\", \"Pure Java, no kernel bypass\", \"Cross-platform\", \"Apache-2.0\"]}, {\"eyebrow\": \"ENTERPRISE · OPT-IN\", \"title\": \"Enterprise driver\", \"code\": \"exeris-kernel-enterprise\", \"tone\": \"slate\", \"points\": [\"io_uring transport on Linux, IOCP on Windows\", \"HTTP/3 over QUIC TLS\", \"Slab-pool memory, NUMA-aware through libnuma\", \"Commercial\"]}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExStepGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"head\": {\"eyebrow\": \"§ DEPLOYMENT\", \"title\": \"Single process or distributed.\", \"body\": \"The control plane runs in-process or distributed, depending on the caps the manifest selects.\"}, \"steps\": [{\"title\": \"Co-located\", \"body\": \"Embedded in the application JVM next to its upstreams. No sidecar; JFR observability in-process.\", \"tone\": \"cyan\"}, {\"title\": \"Standalone gateway\", \"body\": \"A dedicated process scaled by replica, with the admin control plane serving its configuration.\", \"tone\": \"flow\"}, {\"title\": \"Distributed\", \"body\": \"Several gateway instances behind one control plane. For multi-region edge deployments the Edge Proxy SKU is the composition to use.\", \"tone\": \"slate\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuCards",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"alt\": true, \"columns\": 2, \"head\": {\"eyebrow\": \"§ RELATED\", \"title\": \"Other Gateway-family SKUs\"}, \"skus\": [{\"id\": \"edge-proxy\", \"href\": \"/skus#sku-edge-proxy\", \"description\": \"Routing, TLS termination, circuit breaking and health at the edge, with an edge-failover cap of its own.\"}, {\"id\": \"bot-blocker\", \"href\": \"/skus/bot-blocker\", \"description\": \"JA3/JA4 TLS fingerprinting at the kernel layer. The closed-source exception.\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}
