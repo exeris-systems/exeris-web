@@ -1,0 +1,28 @@
+{
+  "name": "not-found",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.NotFound",
+  "view": {
+    "name": "not-found",
+    "kind": "PAGE",
+    "route": "404",
+    "title": "Page not found",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "HERO",
+            "props": "This address does not exist on exeris.eu.",
+            "children": [
+              {
+                "type": "RICH_TEXT",
+                "props": "Use the navigation above or press / to search the site. Pages from the previous Exeris landing site have moved: the evidence pages are now the Lab."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
