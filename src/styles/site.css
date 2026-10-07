@@ -1,0 +1,741 @@
+/*
+ * Site layout and component styles. Colours come only from the tokens in brand.css; metrics
+ * and type scale follow the Exeris design tokens (square corners, mono eyebrows, 1280 px
+ * container, 96 px section rhythm on wide screens).
+ */
+
+@layer base {
+  html {
+    background-color: var(--ex-bg);
+    scroll-padding-top: 72px;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--ex-bg);
+    color: var(--ex-fg);
+    font-family: var(--ex-font);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ex-flow-cyan);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklch, var(--ex-flow-blue) 45%, transparent);
+    color: var(--ex-fg);
+  }
+
+  h1, h2, h3, h4 {
+    color: var(--ex-fg);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  code, pre, kbd {
+    font-family: var(--ex-mono);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+
+.ex-skip {
+  position: absolute;
+  left: 16px;
+  top: -48px;
+  z-index: 100;
+  padding: 10px 14px;
+  background: var(--ex-fg);
+  color: var(--ex-bg);
+  font-family: var(--ex-mono);
+  font-size: 12px;
+  text-decoration: none;
+}
+.ex-skip:focus {
+  top: 8px;
+}
+
+.ex-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  box-sizing: border-box;
+}
+@media (min-width: 768px) {
+  .ex-container { padding-inline: 32px; }
+}
+@media (min-width: 1200px) {
+  .ex-container { padding-inline: 48px; }
+}
+
+.ex-section {
+  padding-block: 56px;
+  border-bottom: 1px solid var(--ex-line);
+  position: relative;
+}
+.ex-section--alt {
+  background: var(--ex-bg-1);
+}
+@media (min-width: 960px) {
+  .ex-section { padding-block: 96px; }
+  .ex-section--tight { padding-block: 64px; }
+}
+
+.ex-atmos {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 0%, color-mix(in oklch, var(--ex-flow-blue) 10%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 90% 100%, color-mix(in oklch, var(--ex-flow-cyan) 6%, transparent), transparent 70%);
+}
+
+.ex-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .ex-grid--2, .ex-grid--3, .ex-grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .ex-grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .ex-grid--4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Panels joined by shared borders, as in the design's bordered grids. */
+.ex-joined {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid var(--ex-line);
+  gap: 1px;
+  background: var(--ex-line);
+}
+.ex-joined > * {
+  background: var(--ex-surface);
+}
+@media (min-width: 720px) {
+  .ex-joined--2, .ex-joined--3, .ex-joined--4, .ex-joined--6 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .ex-joined--3 { grid-template-columns: repeat(3, 1fr); }
+  .ex-joined--4 { grid-template-columns: repeat(4, 1fr); }
+  .ex-joined--6 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1200px) {
+  .ex-joined--6 { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* ── Generated simple blocks (markup emitted by @exeris/codegen-ts view-gen) ───────────── */
+
+.exeris-page {
+  display: block;
+}
+
+.exeris-page [data-block="CONTAINER"] {
+  padding-block: 48px;
+  padding-inline: max(16px, calc((100% - 1184px) / 2));
+  border-bottom: 1px solid var(--ex-line);
+}
+
+.exeris-page [data-block="RICH_TEXT"] {
+  max-width: 72ch;
+  color: var(--ex-fg-2);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.exeris-page [data-block="HERO"] {
+  background: var(--ex-bg-1);
+  color: var(--ex-fg);
+  border-bottom: 1px solid var(--ex-line);
+  padding: 56px max(16px, calc((100% - 1184px) / 2));
+  font-size: 20px;
+  line-height: 1.5;
+}
+.exeris-page [data-block="HERO"] [data-block="RICH_TEXT"] {
+  margin-top: 16px;
+}
+
+/* The generated page title: the generator emits it as the page's h1. */
+.exeris-page > h1 {
+  margin: 0;
+  padding: 72px max(16px, calc((100% - 1184px) / 2)) 0;
+  background: var(--ex-bg-1);
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+/* ── Type primitives ────────────────────────────────────────────────────── */
+
+.ex-eyebrow {
+  font-family: var(--ex-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ex-flow-blue-text);
+  margin: 0;
+}
+
+.ex-mono {
+  font-family: var(--ex-mono);
+}
+
+.ex-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 760px;
+  margin-bottom: 40px;
+}
+.ex-section-head h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+.ex-section-head p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ex-fg-2);
+  line-height: 1.6;
+  max-width: 64ch;
+}
+.ex-section-head--center {
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.ex-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+  font-family: var(--ex-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ex-fg-4);
+}
+.ex-crumbs li + li::before {
+  content: "/";
+  margin-right: 8px;
+  color: var(--ex-fg-5);
+}
+.ex-crumbs a {
+  text-decoration: none;
+}
+.ex-crumbs a:hover {
+  color: var(--ex-fg);
+}
+.ex-crumbs [aria-current] {
+  color: var(--ex-fg-2);
+}
+
+.ex-link {
+  color: var(--ex-flow-blue-text);
+  text-decoration: none;
+  border-bottom: 1px dashed color-mix(in oklch, var(--ex-flow-blue-text) 50%, transparent);
+}
+.ex-link:hover {
+  color: var(--ex-fg);
+  border-bottom-color: var(--ex-fg);
+}
+
+.ex-arrow-link {
+  font-family: var(--ex-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-flow-blue-text);
+  text-decoration: none;
+}
+.ex-arrow-link:hover {
+  color: var(--ex-fg);
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+
+.ex-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  box-sizing: border-box;
+  padding: 10px 18px;
+  border: 1px solid var(--ex-line-2);
+  background: transparent;
+  color: var(--ex-fg-2);
+  font-family: var(--ex-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+}
+.ex-btn:hover {
+  border-color: var(--ex-flow-blue-text);
+  color: var(--ex-fg);
+}
+.ex-btn--solid {
+  background: var(--ex-fg);
+  border-color: var(--ex-fg);
+  color: var(--ex-bg);
+}
+.ex-btn--solid:hover {
+  background: var(--ex-fg-2);
+  border-color: var(--ex-fg-2);
+  color: var(--ex-bg);
+}
+.ex-btn--primary {
+  background: var(--ex-flow-blue);
+  border-color: var(--ex-flow-blue);
+  color: var(--ex-fg);
+}
+.ex-btn--primary:hover {
+  background: var(--ex-flow-blue-hover);
+  border-color: var(--ex-flow-blue-hover);
+  color: var(--ex-fg);
+}
+.ex-btn--lg {
+  min-height: 46px;
+  padding: 14px 22px;
+  font-size: 12px;
+}
+.ex-btn--sm {
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+.ex-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ── Tags, LEDs ─────────────────────────────────────────────────────────── */
+
+.ex-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 20px;
+  box-sizing: border-box;
+  padding: 1px 7px;
+  border: 1px solid var(--ex-line);
+  background: var(--ex-surface-2);
+  color: var(--ex-fg-3);
+  font-family: var(--ex-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ex-tag--flow {
+  color: var(--ex-flow-blue-text);
+  border-color: color-mix(in oklch, var(--ex-flow-blue-text) 32%, transparent);
+  background: color-mix(in oklch, var(--ex-flow-blue) 8%, transparent);
+}
+.ex-tag--cyan {
+  color: var(--ex-flow-cyan);
+  border-color: color-mix(in oklch, var(--ex-flow-cyan) 32%, transparent);
+  background: color-mix(in oklch, var(--ex-flow-cyan) 6%, transparent);
+}
+.ex-tag--evidence {
+  color: var(--ex-evidence);
+  border-color: color-mix(in oklch, var(--ex-evidence) 32%, transparent);
+  background: color-mix(in oklch, var(--ex-evidence) 6%, transparent);
+}
+.ex-tag--ok {
+  color: var(--ex-ok);
+  border-color: color-mix(in oklch, var(--ex-ok) 32%, transparent);
+  background: color-mix(in oklch, var(--ex-ok) 6%, transparent);
+}
+.ex-tag--err {
+  color: var(--ex-err);
+  border-color: color-mix(in oklch, var(--ex-err) 32%, transparent);
+  background: color-mix(in oklch, var(--ex-err) 6%, transparent);
+}
+.ex-tag--muted {
+  color: var(--ex-fg-4);
+}
+.ex-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ex-led {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ex-fg-4);
+  flex: none;
+}
+.ex-led--flow {
+  background: var(--ex-flow-cyan);
+  box-shadow: 0 0 8px var(--ex-flow-cyan);
+}
+
+/* Licence and tier coding: Flow Cyan, the Flow Blue step, neutral slate. */
+.ex-lic--community { --ex-tone: var(--ex-flow-cyan); }
+.ex-lic--commercial { --ex-tone: var(--ex-flow-blue-text); }
+.ex-lic--enterprise-private { --ex-tone: var(--ex-fg-2); }
+
+/* ── Cards ──────────────────────────────────────────────────────────────── */
+
+.ex-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 22px;
+  background: var(--ex-surface);
+  border: 1px solid var(--ex-line);
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+}
+.ex-joined .ex-card {
+  border: 0;
+}
+a.ex-card:hover {
+  background: var(--ex-surface-2);
+}
+.ex-card--edge {
+  border-top: 2px solid var(--ex-tone, var(--ex-flow-blue));
+}
+.ex-card--side {
+  border-left: 3px solid var(--ex-tone, var(--ex-flow-blue));
+}
+.ex-card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.25;
+}
+.ex-card p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--ex-fg-2);
+  line-height: 1.6;
+}
+.ex-card .ex-card__foot {
+  margin-top: auto;
+  padding-top: 8px;
+  font-family: var(--ex-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ex-fg-4);
+}
+.ex-card .ex-card__code {
+  font-family: var(--ex-mono);
+  font-size: 11.5px;
+  color: var(--ex-fg-4);
+  letter-spacing: 0.02em;
+}
+
+.ex-points {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ex-points li {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ex-fg-2);
+  line-height: 1.55;
+}
+.ex-points li::before {
+  content: "▸";
+  font-family: var(--ex-mono);
+  color: var(--ex-tone, var(--ex-flow-blue-text));
+  flex: none;
+}
+.ex-points--check li::before {
+  content: "✓";
+}
+
+.ex-step-num {
+  font-family: var(--ex-mono);
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ex-tone, var(--ex-flow-blue-text));
+}
+
+/* ── Callout ────────────────────────────────────────────────────────────── */
+
+.ex-callout {
+  padding: 22px 24px;
+  background: var(--ex-surface);
+  border: 1px solid var(--ex-line);
+  border-left: 3px solid var(--ex-tone, var(--ex-flow-blue));
+}
+.ex-callout--contract { --ex-tone: var(--ex-flow-cyan); }
+.ex-callout--warning { --ex-tone: var(--ex-err); }
+.ex-callout--verdict { --ex-tone: var(--ex-evidence); }
+.ex-callout h3 {
+  margin: 8px 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+.ex-callout p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ex-fg-2);
+  max-width: 76ch;
+}
+.ex-callout .ex-eyebrow {
+  color: var(--ex-tone, var(--ex-flow-blue-text));
+}
+.ex-callout--warning .ex-eyebrow {
+  color: var(--ex-err);
+}
+
+/* ── Code pane ──────────────────────────────────────────────────────────── */
+
+.ex-code {
+  background: var(--ex-bg-1);
+  border: 1px solid var(--ex-line);
+  min-width: 0;
+}
+.ex-code__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ex-line);
+  font-family: var(--ex-mono);
+  font-size: 11px;
+  color: var(--ex-fg-3);
+}
+.ex-code__bar .ex-code__lang {
+  margin-left: auto;
+  color: var(--ex-fg-4);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 10px;
+}
+.ex-code pre {
+  margin: 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ex-fg-2);
+}
+.ex-code pre:focus-visible {
+  outline-offset: -2px;
+}
+
+/* ── KPI and evidence ───────────────────────────────────────────────────── */
+
+.ex-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+  background: var(--ex-surface);
+}
+.ex-kpi__label {
+  font-family: var(--ex-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ex-fg-4);
+}
+.ex-kpi__value {
+  font-family: var(--ex-mono);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: var(--ex-fg);
+}
+.ex-kpi__value--evidence {
+  color: var(--ex-evidence);
+}
+.ex-kpi__sub {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ex-fg-3);
+}
+.ex-kpi__src {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.ex-claim-id {
+  font-family: var(--ex-mono);
+  font-size: 10.5px;
+  color: var(--ex-evidence);
+  text-decoration: none;
+  border-bottom: 1px dashed color-mix(in oklch, var(--ex-evidence) 50%, transparent);
+}
+
+.ex-quote {
+  margin: 0;
+  padding: 16px 18px;
+  background: var(--ex-surface);
+  border: 1px solid var(--ex-line);
+  border-left: 3px solid var(--ex-evidence);
+}
+.ex-quote blockquote {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ex-fg);
+}
+.ex-quote figcaption {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--ex-fg-3);
+}
+.ex-fence {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ex-fg-3);
+}
+.ex-fence strong {
+  font-family: var(--ex-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-fg-4);
+  font-weight: 500;
+  margin-right: 6px;
+}
+
+/* ── Inline SVG charts ──────────────────────────────────────────────────── */
+
+.ex-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  font-family: var(--ex-mono);
+}
+.ex-chart text {
+  font-size: 12px;
+  fill: var(--ex-fg-2);
+}
+.ex-chart .ex-chart__muted {
+  fill: var(--ex-fg-4);
+}
+.ex-chart .ex-chart__bar {
+  fill: var(--ex-surface-4);
+}
+.ex-chart .ex-chart__bar--evidence {
+  fill: var(--ex-evidence);
+}
+.ex-chart .ex-chart__value--evidence {
+  fill: var(--ex-evidence);
+}
+.ex-chart .ex-chart__axis {
+  stroke: var(--ex-line-2);
+}
+
+/* ── Table ──────────────────────────────────────────────────────────────── */
+
+.ex-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--ex-line);
+}
+.ex-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.ex-table th, .ex-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--ex-line);
+  vertical-align: top;
+}
+.ex-table thead th {
+  font-family: var(--ex-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-fg-4);
+  font-weight: 500;
+  background: var(--ex-bg-1);
+}
+.ex-table tbody th {
+  font-weight: 600;
+  color: var(--ex-fg);
+}
+.ex-table td {
+  color: var(--ex-fg-2);
+}
+.ex-table tr:last-child > * {
+  border-bottom: 0;
+}
+.ex-table .ex-num {
+  font-family: var(--ex-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ── Visually hidden ────────────────────────────────────────────────────── */
+
+.ex-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
