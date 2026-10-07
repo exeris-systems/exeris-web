@@ -1,0 +1,156 @@
+/*
+ * Brand kit v6 on top of @exeris/ui-kit's `theme-exeris`.
+ *
+ * This is the single file that holds brand colour values. It declares the token names of the
+ * kit's v6 theme (`--ex-flow-*`, `--ex-evidence`, the surface / text / line scales) and the v6
+ * primitives (`exeris-tag-{flow,cyan,evidence}`, `exeris-led-flow`,
+ * `exeris-kpi-value-{flow,cyan,evidence}`), and re-points the kit rules of the installed theme
+ * that still read the prototype palette. When the kit's own theme carries v6, this file and its
+ * import line in styles.css are removed and nothing else changes: the rest of the site reads
+ * only the names declared here.
+ *
+ * It is imported after `@exeris/ui-kit/theme-exeris` and is unlayered, so it wins over the kit's
+ * `@layer components` rules without raising specificity.
+ *
+ * Rules the values encode:
+ *  - The Flow gradient (Flow Blue → Flow Cyan) is for the flow element only: `--ex-flow`.
+ *  - Evidence Orange is reserved for verified results (a figure bound to a registered claim id, a
+ *    verdict). Only the evidence modifiers read `--ex-evidence`; no accent, button or link does.
+ *  - Flow Blue on Background is 3.7:1, below AA for body-size text, so text and outlines use
+ *    `--ex-flow-blue-text`, Flow Blue mixed 25% toward Surface (5.8:1 on Background). Flow Blue
+ *    itself is for fills, rules and large marks.
+ *  - Licences and tiers are coded with Flow Blue / Flow Cyan steps plus neutral greys.
+ *  - Green and red are status colours only.
+ */
+
+[data-theme="exeris"],
+[data-theme="exeris"] .dark {
+  /* Brand kit v6 */
+  --ex-flow-blue: #2563eb;
+  --ex-flow-blue-hover: #1d4ed8;
+  --ex-flow-blue-text: #5a89ef;
+  --ex-flow-cyan: #06b6d4;
+  --ex-flow: linear-gradient(90deg, var(--ex-flow-blue), var(--ex-flow-cyan));
+  --ex-evidence: #f59e0b;
+
+  /* Surfaces: Background #0A0F1A and cool steps above it */
+  --ex-bg: #0a0f1a;
+  --ex-bg-1: #0d1320;
+  --ex-surface: #111827;
+  --ex-surface-2: #162033;
+  --ex-surface-3: #1e2a40;
+  --ex-surface-4: #2a3852;
+
+  /* Text: Surface #F8FAFC and its cool greys. fg-5 is decorative (separators), never text. */
+  --ex-fg: #f8fafc;
+  --ex-fg-2: #cbd5e1;
+  --ex-fg-3: #a3b1c6;
+  --ex-fg-4: #8a9ab2;
+  --ex-fg-5: #5b6b82;
+
+  /* Lines */
+  --ex-line: #1c2638;
+  --ex-line-2: #263248;
+  --ex-line-strong: #3a4862;
+
+  /* Status */
+  --ex-ok: #22c55e;
+  --ex-warn: oklch(0.88 0.17 100);
+  --ex-err: #f87171;
+
+  /* The kit's sRGB channel tokens, as conversions of the tokens named in each comment. */
+  --exeris-primary: 90 137 239;        /* --ex-flow-blue-text */
+  --exeris-primary-hover: 37 99 235;   /* --ex-flow-blue */
+  --exeris-secondary: 163 177 198;     /* --ex-fg-3 */
+  --exeris-success: 34 197 94;         /* --ex-ok */
+  --exeris-warning: 242 217 53;        /* --ex-warn */
+  --exeris-danger: 248 113 113;        /* --ex-err */
+  --exeris-info: 6 182 212;            /* --ex-flow-cyan */
+
+  --exeris-bg-primary: 17 24 39;       /* --ex-surface */
+  --exeris-bg-secondary: 22 32 51;     /* --ex-surface-2 */
+  --exeris-bg-tertiary: 30 42 64;      /* --ex-surface-3 */
+
+  --exeris-text-primary: 248 250 252;  /* --ex-fg */
+  --exeris-text-secondary: 203 213 225; /* --ex-fg-2 */
+  --exeris-text-muted: 163 177 198;    /* --ex-fg-3 */
+
+  --exeris-border: 38 50 72;           /* --ex-line-2 */
+  --exeris-border-focus: 90 137 239;   /* --ex-flow-blue-text */
+}
+
+/* Kit rules of the installed theme that read the prototype palette, re-pointed at v6. */
+[data-theme="exeris"] :is(.exeris-btn, .exeris-btn-secondary):hover:not(:disabled) {
+  border-color: var(--ex-flow-blue-text);
+  color: var(--ex-fg);
+}
+[data-theme="exeris"] .exeris-btn-primary {
+  border-color: var(--ex-flow-blue);
+  background-color: var(--ex-flow-blue);
+  color: var(--ex-fg);
+}
+[data-theme="exeris"] .exeris-btn-primary:hover:not(:disabled) {
+  border-color: var(--ex-flow-blue-hover);
+  background-color: var(--ex-flow-blue-hover);
+  color: var(--ex-fg);
+}
+[data-theme="exeris"] .exeris-badge-primary {
+  color: var(--ex-flow-blue-text);
+  border-color: color-mix(in oklch, var(--ex-flow-blue-text) 30%, transparent);
+  background-color: color-mix(in oklch, var(--ex-flow-blue) 8%, transparent);
+}
+[data-theme="exeris"] .exeris-alert-info {
+  border-color: color-mix(in oklch, var(--ex-flow-blue) 32%, transparent);
+  border-left-color: var(--ex-flow-blue);
+  background-color: color-mix(in oklch, var(--ex-flow-blue) 6%, var(--ex-surface));
+}
+[data-theme="exeris"] .exeris-rating {
+  color: var(--ex-fg-2);
+}
+[data-theme="exeris"] .exeris-eyebrow {
+  color: var(--ex-flow-blue-text);
+}
+[data-theme="exeris"] .exeris-link {
+  color: var(--ex-flow-blue-text);
+  border-bottom-color: color-mix(in oklch, var(--ex-flow-blue-text) 50%, transparent);
+}
+[data-theme="exeris"] .exeris-link:hover {
+  color: var(--ex-fg);
+  border-bottom-color: var(--ex-fg);
+}
+[data-theme="exeris"] .exeris-link:focus-visible {
+  outline-color: var(--ex-flow-blue-text);
+}
+
+/* Code tokens: Flow steps and greys only (the installed defaults include an orange string
+   colour, which would read as Evidence Orange). */
+[data-theme="exeris"] .exeris-code-kw { color: #84a7f3; }
+[data-theme="exeris"] .exeris-code-an { color: var(--ex-flow-cyan); }
+[data-theme="exeris"] .exeris-code-ty { color: #67e8f9; }
+[data-theme="exeris"] .exeris-code-str { color: var(--ex-fg-2); }
+[data-theme="exeris"] .exeris-code-num { color: var(--ex-flow-blue-text); }
+[data-theme="exeris"] .exeris-code-fn { color: var(--ex-fg); }
+
+/* v6 primitives */
+[data-theme="exeris"] .exeris-tag-flow {
+  color: var(--ex-flow-blue-text);
+  border-color: color-mix(in oklch, var(--ex-flow-blue-text) 32%, transparent);
+  background-color: color-mix(in oklch, var(--ex-flow-blue) 8%, transparent);
+}
+[data-theme="exeris"] .exeris-tag-cyan {
+  color: var(--ex-flow-cyan);
+  border-color: color-mix(in oklch, var(--ex-flow-cyan) 32%, transparent);
+  background-color: color-mix(in oklch, var(--ex-flow-cyan) 6%, transparent);
+}
+[data-theme="exeris"] .exeris-tag-evidence {
+  color: var(--ex-evidence);
+  border-color: color-mix(in oklch, var(--ex-evidence) 32%, transparent);
+  background-color: color-mix(in oklch, var(--ex-evidence) 6%, transparent);
+}
+[data-theme="exeris"] .exeris-led-flow {
+  background-color: var(--ex-flow-cyan);
+  box-shadow: 0 0 8px var(--ex-flow-cyan);
+}
+[data-theme="exeris"] .exeris-kpi-value-flow { color: var(--ex-flow-blue-text); }
+[data-theme="exeris"] .exeris-kpi-value-cyan { color: var(--ex-flow-cyan); }
+[data-theme="exeris"] .exeris-kpi-value-evidence { color: var(--ex-evidence); }

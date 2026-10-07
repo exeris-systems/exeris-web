@@ -1,17 +1,17 @@
-/* Generated Angular Frontend - Global Styles */
-/* Tailwind CSS v4 */
+/* Global styles. Order matters: the kit's theme-exeris re-themes the kit entries above it, and
+   brand.css re-points theme-exeris at brand kit v6, so each layer is imported after the one it
+   overrides. */
 @import "tailwindcss";
 @import "@exeris/ui-kit/theme";
 @import "@exeris/ui-kit/styles";
+@import "@exeris/ui-kit/preview";
+@import "@exeris/ui-kit/theme-exeris";
+@import "./styles/brand.css";
+@import "./styles/fonts.css";
+@import "./styles/site.css";
+
 @plugin "@tailwindcss/typography";
 
-/* Custom base styles */
-@layer base {
-  html {
-    @apply antialiased;
-  }
-
-  body {
-    @apply font-exeris;
-  }
-}
+/* The generated pages are git-ignored, and Tailwind skips ignored paths when it detects
+   sources, so the generated tree is named explicitly. */
+@source "./app/generated";
