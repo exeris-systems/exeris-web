@@ -31,6 +31,9 @@ export function fuzzyScore(query: string, text: string): number {
   return score - Math.min(first, 20) * 0.25;
 }
 
+/** Pages and products outrank the long tail of capabilities when the match is equally good. */
+const KIND_WEIGHT: Record<SearchEntry['kind'], number> = { page: 6, sku: 5, concept: 3, doc: 2, capability: 0 };
+
 /** Entries matching `query`, best first; the whole index, in order, for an empty query. */
 export function searchIndex(entries: readonly SearchEntry[], query: string, limit = 12): SearchEntry[] {
   if (!query.trim()) return entries.slice(0, limit);
@@ -38,7 +41,9 @@ export function searchIndex(entries: readonly SearchEntry[], query: string, limi
     .map((entry, i) => {
       const title = fuzzyScore(query, entry.title);
       const extra = fuzzyScore(query, `${entry.hint ?? ''} ${entry.keywords ?? ''}`);
-      const score = Math.max(title >= 0 ? title + 5 : -1, extra);
+      const substring = entry.title.toLowerCase().includes(query.trim().toLowerCase()) ? 10 : 0;
+      const best = Math.max(title >= 0 ? title + 5 + substring : -1, extra);
+      const score = best < 0 ? -1 : best + KIND_WEIGHT[entry.kind];
       return { entry, score, i };
     })
     .filter((r) => r.score >= 0)
