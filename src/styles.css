@@ -4,7 +4,6 @@
 @import "tailwindcss";
 @import "@exeris/ui-kit/theme";
 @import "@exeris/ui-kit/styles";
-@import "@exeris/ui-kit/preview";
 @import "@exeris/ui-kit/theme-exeris";
 @import "./styles/brand.css";
 @import "./styles/fonts.css";

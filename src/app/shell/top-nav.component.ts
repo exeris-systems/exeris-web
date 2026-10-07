@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
@@ -40,7 +40,7 @@ import { PaletteService } from './palette.service';
                   <ul class="ex-nav__menu" [id]="'menu-' + item.id" [hidden]="openMenu() !== item.id">
                     @for (child of item.children; track child.href) {
                       <li>
-                        <a [exHref]="child.href" (click)="closeAll()">
+                        <a [exHref]="child.href">
                           <span class="ex-nav__menu-label">{{ child.label }}</span>
                           @if (child.description) {
                             <span class="ex-nav__menu-desc">{{ child.description }}</span>
@@ -89,12 +89,12 @@ import { PaletteService } from './palette.service';
       <nav id="mobile-menu" class="ex-nav__mobile" aria-label="Site" [hidden]="!mobileOpen()">
         @for (item of nav; track item.id) {
           <div class="ex-nav__mobile-group">
-            <a class="ex-nav__mobile-top" [exHref]="item.href" (click)="closeAll()">{{ item.label }}</a>
+            <a class="ex-nav__mobile-top" [exHref]="item.href">{{ item.label }}</a>
             @if (item.children) {
               <ul>
                 @for (child of item.children; track child.href) {
                   @if (child.href !== item.href) {
-                    <li><a [exHref]="child.href" (click)="closeAll()">{{ child.label }}</a></li>
+                    <li><a [exHref]="child.href">{{ child.label }}</a></li>
                   }
                 }
               </ul>
@@ -125,6 +125,14 @@ export class TopNavComponent {
     ),
     { initialValue: this.router.url },
   );
+
+  constructor() {
+    // Any navigation, from a menu link or elsewhere, closes the open menus.
+    effect(() => {
+      this.url();
+      this.closeAll();
+    });
+  }
 
   /** The top-level item whose section the current page belongs to. */
   protected readonly active = computed(() => {

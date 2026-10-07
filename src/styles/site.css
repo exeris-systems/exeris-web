@@ -2177,3 +2177,13 @@ kbd {
   padding: 0;
   list-style: none;
 }
+
+/* Small labels stay at 12 px or more on narrow screens, where they are read at arm's length. */
+@media (max-width: 719px) {
+  .ex-eyebrow, .ex-tag, .ex-card .ex-card__code, .ex-card .ex-card__foot, .ex-capcard__meta,
+  .ex-kpi__label, .ex-claim-id, .ex-arrow-link, .ex-crumbs, .ex-fence, .ex-fence strong,
+  .ex-barchart__sub, .ex-code__bar, .ex-home-hero__meta, .ex-footer__col h2, .ex-capmatrix__label,
+  .ex-lab__meta-row, .ex-lab__artifact, .ex-composition__layer, .ex-composition__legend {
+    font-size: 12px !important;
+  }
+}

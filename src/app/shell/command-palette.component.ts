@@ -64,6 +64,8 @@ const KIND_LABEL: Record<SearchEntry['kind'], string> = {
         </div>
         <ul id="palette-results" class="ex-palette__list" role="listbox" aria-label="Results">
           @for (entry of results(); track entry.href + entry.title; let i = $index) {
+            <!-- Options are reached from the combobox through aria-activedescendant; the click is the pointer path. -->
+            <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
             <li
               role="option"
               [id]="'palette-opt-' + i"
@@ -79,7 +81,7 @@ const KIND_LABEL: Record<SearchEntry['kind'], string> = {
               }
             </li>
           } @empty {
-            <li class="ex-palette__empty" role="option" aria-disabled="true">No match for “{{ query() }}”.</li>
+            <li class="ex-palette__empty" role="option" aria-selected="false" aria-disabled="true">No match for “{{ query() }}”.</li>
           }
         </ul>
         <p class="ex-palette__foot" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd> move · <kbd>↵</kbd> open · <kbd>Esc</kbd> close</p>

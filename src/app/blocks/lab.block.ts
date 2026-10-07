@@ -13,6 +13,7 @@ import {
   upstreamUrl,
 } from '../data/data';
 import { BarChartComponent, type BarRow } from './bar-chart.component';
+import { megabytes, micros, pairsIn, seconds } from './claim-numbers';
 import { ClaimQuoteComponent } from './claim-quote.component';
 import { TextComponent } from './text.component';
 
@@ -33,18 +34,6 @@ export interface LabTab {
 export interface LabProps {
   readonly tabs: readonly LabTab[];
 }
-
-/** Every `(a vs b µs)` / `(a → b µs)` pair in a claim's copy, as numbers. */
-export function pairsIn(copy: string, sep: 'vs' | '→'): [number, number][] {
-  const re = sep === 'vs' ? /\(([\d.]+)(?: µs)? vs ([\d.]+) µs/g : /\(([\d.]+) → ([\d.]+) µs\)/g;
-  const pairs = [...copy.matchAll(re)].map((m) => [Number(m[1]), Number(m[2])] as [number, number]);
-  if (!pairs.length) throw new Error(`no ${sep} pair in claim copy: ${copy}`);
-  return pairs;
-}
-
-const seconds = (ms: number) => `${(ms / 1000).toFixed(2)} s`;
-const megabytes = (mb: number) => `${Math.round(mb)} MB`;
-const micros = (us: number) => `${us.toFixed(1)} µs`;
 
 /**
  * The benchmark laboratory: one tab per evidence category, every figure either a registered
@@ -67,7 +56,7 @@ const micros = (us: number) => `${us.toFixed(1)} µs`;
         </div>
       </div>
       <div class="ex-container">
-        <div class="ex-lab__tabs" role="tablist" aria-label="Evidence categories" (keydown)="onTabKey($event)">
+        <div class="ex-lab__tabs" role="tablist" aria-label="Evidence categories">
           @for (t of props().tabs; track t.id; let i = $index) {
             <button
               type="button"
@@ -77,6 +66,7 @@ const micros = (us: number) => `${us.toFixed(1)} µs`;
               [attr.aria-selected]="active() === t.id"
               [attr.tabindex]="active() === t.id ? 0 : -1"
               (click)="select(t.id)"
+              (keydown)="onTabKey($event)"
             >{{ t.label }}</button>
           }
         </div>

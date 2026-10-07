@@ -1,5 +1,5 @@
 import { type ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
-import { provideClientHydration } from '@angular/platform-browser';
+import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
 import { TitleStrategy, provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { BLOCKS } from './blocks';
@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
     ),
-    provideClientHydration(),
+    provideClientHydration(withNoIncrementalHydration()),
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
     { provide: BLOCK_REGISTRY, useValue: BLOCKS },
   ],
