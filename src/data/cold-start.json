@@ -1,0 +1,137 @@
+{
+  "source": {
+    "repo": "exeris-benchmarks",
+    "commit": "5f8012d210424898cc1882a05ab798f5e5f200fe",
+    "path": "results/cold-start-ttfr/*/20260626T104113Z-n8-res/result.json"
+  },
+  "run": "20260626T104113Z-n8-res",
+  "statistic": "median",
+  "arms": [
+    {
+      "arm": "exeris-community-nocrypto",
+      "label": "Exeris Community",
+      "qualifier": "crypto subsystem off",
+      "exeris": true,
+      "target": "exeris-community",
+      "runId": "cold-start-ttfr-20260626T104113Z-ef6f84e",
+      "claimScope": "exploratory",
+      "transport": "loopback-h1",
+      "tls": false,
+      "executionVm": "jvm",
+      "n": 8,
+      "startupMs": 797.683,
+      "ttfrMs": 62.582,
+      "spawnToFirstRequestMs": 864.315,
+      "peakRssMb": 172.8,
+      "env": {
+        "hardwareProfile": "dev-laptop",
+        "cpu": "AMD Ryzen 5 5600 6-Core Processor",
+        "logicalThreads": 12,
+        "architecture": "x86_64",
+        "jdkMajor": 26,
+        "os": "Linux"
+      },
+      "path": "results/cold-start-ttfr/exeris-community-nocrypto/20260626T104113Z-n8-res/result.json"
+    },
+    {
+      "arm": "quarkus-tuned",
+      "label": "Quarkus (hand-tuned JDBC)",
+      "qualifier": "JVM mode",
+      "target": "quarkus-tuned",
+      "runId": "cold-start-ttfr-20260626T104128Z-ef6f84e",
+      "claimScope": "exploratory",
+      "transport": "loopback-h1",
+      "tls": false,
+      "executionVm": "jvm",
+      "n": 8,
+      "startupMs": 1025.283,
+      "ttfrMs": 161.613,
+      "spawnToFirstRequestMs": 1184.05,
+      "peakRssMb": 213.5,
+      "env": {
+        "hardwareProfile": "dev-laptop",
+        "cpu": "AMD Ryzen 5 5600 6-Core Processor",
+        "logicalThreads": 12,
+        "architecture": "x86_64",
+        "jdkMajor": 26,
+        "os": "Linux"
+      },
+      "path": "results/cold-start-ttfr/quarkus-tuned/20260626T104113Z-n8-res/result.json"
+    },
+    {
+      "arm": "quarkus-hibernate-cleartext",
+      "label": "Quarkus + Hibernate",
+      "qualifier": "JVM mode",
+      "target": "quarkus-hibernate",
+      "runId": "cold-start-ttfr-20260626T104143Z-ef6f84e",
+      "claimScope": "exploratory",
+      "transport": "loopback-h1",
+      "tls": false,
+      "executionVm": "jvm",
+      "n": 8,
+      "startupMs": 1712.258,
+      "ttfrMs": 281.057,
+      "spawnToFirstRequestMs": 1995.623,
+      "peakRssMb": 321.2,
+      "env": {
+        "hardwareProfile": "dev-laptop",
+        "cpu": "AMD Ryzen 5 5600 6-Core Processor",
+        "logicalThreads": 12,
+        "architecture": "x86_64",
+        "jdkMajor": 26,
+        "os": "Linux"
+      },
+      "path": "results/cold-start-ttfr/quarkus-hibernate-cleartext/20260626T104113Z-n8-res/result.json"
+    },
+    {
+      "arm": "spring-on-exeris",
+      "label": "Spring on Exeris",
+      "qualifier": "compatibility mode",
+      "target": "spring-on-exeris",
+      "runId": "cold-start-ttfr-20260626T104249Z-ef6f84e",
+      "claimScope": "exploratory",
+      "transport": "loopback-h1",
+      "tls": false,
+      "executionVm": "jvm",
+      "n": 8,
+      "startupMs": 4154.71,
+      "ttfrMs": 156.451,
+      "spawnToFirstRequestMs": 4311.161,
+      "peakRssMb": 538,
+      "env": {
+        "hardwareProfile": "dev-laptop",
+        "cpu": "AMD Ryzen 5 5600 6-Core Processor",
+        "logicalThreads": 12,
+        "architecture": "x86_64",
+        "jdkMajor": 26,
+        "os": "Linux"
+      },
+      "path": "results/cold-start-ttfr/spring-on-exeris/20260626T104113Z-n8-res/result.json"
+    },
+    {
+      "arm": "spring-hibernate",
+      "label": "Spring Boot + Hibernate",
+      "qualifier": "Tomcat",
+      "target": "spring-hibernate",
+      "runId": "cold-start-ttfr-20260626T104204Z-ef6f84e",
+      "claimScope": "exploratory",
+      "transport": "loopback-h1",
+      "tls": false,
+      "executionVm": "jvm",
+      "n": 8,
+      "startupMs": 4720.438,
+      "ttfrMs": 161.002,
+      "spawnToFirstRequestMs": 4884.417,
+      "peakRssMb": 868.4,
+      "env": {
+        "hardwareProfile": "dev-laptop",
+        "cpu": "AMD Ryzen 5 5600 6-Core Processor",
+        "logicalThreads": 12,
+        "architecture": "x86_64",
+        "jdkMajor": 26,
+        "os": "Linux"
+      },
+      "path": "results/cold-start-ttfr/spring-hibernate/20260626T104113Z-n8-res/result.json"
+    }
+  ]
+}

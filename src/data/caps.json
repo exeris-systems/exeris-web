@@ -1,0 +1,592 @@
+{
+  "source": {
+    "repo": "exeris-docs",
+    "commit": "9193a3f09c90820b83b8ba1823756516949e2bf4",
+    "path": "cap-license-registry.md"
+  },
+  "caps": [
+    {
+      "name": "exeris-caps-gateway-core",
+      "short": "gateway-core",
+      "layer": 1,
+      "layerName": "Substrate aggregates",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-service-boundary-core",
+      "short": "service-boundary-core",
+      "layer": 1,
+      "layerName": "Substrate aggregates",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-route-registry",
+      "short": "route-registry",
+      "layer": 2,
+      "layerName": "Gateway building blocks",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-upstream-pool",
+      "short": "upstream-pool",
+      "layer": 2,
+      "layerName": "Gateway building blocks",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-policy-chain",
+      "short": "policy-chain",
+      "layer": 2,
+      "layerName": "Gateway building blocks",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-backend-health",
+      "short": "backend-health",
+      "layer": 2,
+      "layerName": "Gateway building blocks",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-admin-control-plane",
+      "short": "admin-control-plane",
+      "layer": 2,
+      "layerName": "Gateway building blocks",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-rate-limiting",
+      "short": "rate-limiting",
+      "layer": 3,
+      "layerName": "Gateway policies",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-jwt-validation",
+      "short": "jwt-validation",
+      "layer": 3,
+      "layerName": "Gateway policies",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-tls-termination",
+      "short": "tls-termination",
+      "layer": 3,
+      "layerName": "Gateway policies",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-request-routing",
+      "short": "request-routing",
+      "layer": 3,
+      "layerName": "Gateway policies",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-circuit-breaker",
+      "short": "circuit-breaker",
+      "layer": 3,
+      "layerName": "Gateway policies",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-cors-policy",
+      "short": "cors-policy",
+      "layer": 3,
+      "layerName": "Gateway policies",
+      "licence": "community",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "scaffolded"
+    },
+    {
+      "name": "exeris-caps-waf-rules",
+      "short": "waf-rules",
+      "layer": 3,
+      "layerName": "Gateway policies",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-bot-fingerprinting",
+      "short": "bot-fingerprinting",
+      "layer": 3,
+      "layerName": "Gateway policies",
+      "licence": "enterprise-private",
+      "licenceNote": null,
+      "visibility": "enterprise-private",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-multi-tenancy",
+      "short": "multi-tenancy",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-audit-trail",
+      "short": "audit-trail",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-rbac-policy",
+      "short": "rbac-policy",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-soft-delete",
+      "short": "soft-delete",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-entity-versioning",
+      "short": "entity-versioning",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-i18n",
+      "short": "i18n",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "community",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-attachment-storage",
+      "short": "attachment-storage",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-search-index",
+      "short": "search-index",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-workflow-engine",
+      "short": "workflow-engine",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-notification-dispatch",
+      "short": "notification-dispatch",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-import-export",
+      "short": "import-export",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-rest-emission",
+      "short": "rest-emission",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-graphql-emission",
+      "short": "graphql-emission",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-openapi-emission",
+      "short": "openapi-emission",
+      "layer": 4,
+      "layerName": "Service Boundary platform caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-contact-graph",
+      "short": "contact-graph",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-product-catalog",
+      "short": "product-catalog",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-pricing-engine",
+      "short": "pricing-engine",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-inventory-tracking",
+      "short": "inventory-tracking",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-order-lifecycle",
+      "short": "order-lifecycle",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-payment-gateway",
+      "short": "payment-gateway",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-document-ingestion",
+      "short": "document-ingestion",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-ocr-pipeline",
+      "short": "ocr-pipeline",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-document-classifier",
+      "short": "document-classifier",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-field-extraction",
+      "short": "field-extraction",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-form-recognition",
+      "short": "form-recognition",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-content-types",
+      "short": "content-types",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-content-versioning",
+      "short": "content-versioning",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-asset-management",
+      "short": "asset-management",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-bank-aggregator",
+      "short": "bank-aggregator",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": "BudgetHQ → promotable",
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-ai-llm-abstraction",
+      "short": "ai-llm-abstraction",
+      "layer": 6,
+      "layerName": "AI Abstraction Layer caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-ai-vector-store",
+      "short": "ai-vector-store",
+      "layer": 6,
+      "layerName": "AI Abstraction Layer caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-ai-embedding-pipeline",
+      "short": "ai-embedding-pipeline",
+      "layer": 6,
+      "layerName": "AI Abstraction Layer caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-ai-rag-orchestration",
+      "short": "ai-rag-orchestration",
+      "layer": 6,
+      "layerName": "AI Abstraction Layer caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-ai-prompt-templating",
+      "short": "ai-prompt-templating",
+      "layer": 6,
+      "layerName": "AI Abstraction Layer caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-observability-bridge",
+      "short": "observability-bridge",
+      "layer": 7,
+      "layerName": "Cross-cutting",
+      "licence": "community",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-outbound-credentials",
+      "short": "outbound-credentials",
+      "layer": 7,
+      "layerName": "Cross-cutting",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-service-identity",
+      "short": "service-identity",
+      "layer": 7,
+      "layerName": "Cross-cutting",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-idempotency",
+      "short": "idempotency",
+      "layer": 7,
+      "layerName": "Cross-cutting",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    },
+    {
+      "name": "exeris-caps-usage-metering",
+      "short": "usage-metering",
+      "layer": 7,
+      "layerName": "Cross-cutting",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "status": "specified"
+    }
+  ],
+  "layers": [
+    {
+      "n": 1,
+      "name": "Substrate aggregates",
+      "count": 2
+    },
+    {
+      "n": 2,
+      "name": "Gateway building blocks",
+      "count": 5
+    },
+    {
+      "n": 3,
+      "name": "Gateway policies",
+      "count": 8
+    },
+    {
+      "n": 4,
+      "name": "Service Boundary platform caps",
+      "count": 14
+    },
+    {
+      "n": 5,
+      "name": "Domain primitive caps",
+      "count": 15
+    },
+    {
+      "n": 6,
+      "name": "AI Abstraction Layer caps",
+      "count": 5
+    },
+    {
+      "n": 7,
+      "name": "Cross-cutting",
+      "count": 5
+    }
+  ],
+  "totals": {
+    "community": 3,
+    "commercial": 50,
+    "enterprise-private": 1,
+    "total": 54
+  }
+}
