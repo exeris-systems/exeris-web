@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # Reads the upstream registers; on a network error it keeps the committed JSON.
+      - name: Fetch build-time data
+        run: npm run data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upstream data drift
+        run: |
+          if ! git diff --quiet -- src/data; then
+            echo "::notice::The upstream registers changed since src/data was committed:"
+            git diff --stat -- src/data
+          fi
+
+      - name: Generate pages from the View IR
+        run: npm run generate:views
+
+      - name: Claims and content check
+        run: npm run check:content
+
+      - name: Page generation is deterministic
+        run: npm run check:views
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      # prebuild repeats data / generate / content check; postbuild verifies prerender, SEO
+      # tags and the no-tracking rules on the static output.
+      - name: Build
+        run: npm run build
+        env:
+          SITE_SKIP_FETCH: '1'
+
+      - name: Lighthouse CI
+        run: npx --yes @lhci/cli@0.15.1 autorun
+
+      - name: Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: lighthouse
+          path: .lighthouseci
+          if-no-files-found: ignore

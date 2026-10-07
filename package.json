@@ -14,10 +14,18 @@
     "generate:views": "node scripts/generate-views.mjs",
     "index": "node scripts/build-index.mjs",
     "prepare:site": "npm run data && npm run generate:views && npm run index",
+    "check:content": "node scripts/check-content.mjs",
+    "check:views": "node scripts/check-views-deterministic.mjs",
+    "check": "npm run check:content && npm run check:views",
+    "claims:lock": "node scripts/check-content.mjs --lock",
     "prestart": "npm run prepare:site",
     "start": "ng serve",
-    "prebuild": "npm run prepare:site",
-    "build": "ng build"
+    "prebuild": "npm run prepare:site && npm run check:content",
+    "build": "ng build",
+    "postbuild": "node scripts/postbuild.mjs && node scripts/verify-dist.mjs",
+    "serve:dist": "node scripts/serve-static.mjs",
+    "test": "vitest run",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@angular/common": "~22.2.1",
@@ -37,12 +45,17 @@
     "@angular/build": "~22.2.2",
     "@angular/cli": "~22.2.2",
     "@angular/compiler-cli": "~22.2.1",
+    "@eslint/js": "^10.0.1",
     "@exeris/codegen-ts": "0.9.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^24.0.0",
+    "angular-eslint": "^22.5.0",
+    "eslint": "^10.12.0",
     "postcss": "^8.5.0",
     "tailwindcss": "^4.3.3",
-    "typescript": "~6.0.0"
+    "typescript": "~6.0.0",
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.0.3"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "description": "Digits allowed in authored content outside a claim reference. Every other numeric literal in content/ or src/content/ fails scripts/check-content.mjs. Each entry is a regular expression (case-insensitive) and the source that makes the digits structural rather than a claim.",
+  "entries": [
+    { "pattern": "Apache[- ]2\\.0", "source": "Licence name: Apache License 2.0 (LICENSE; exeris-kernel LICENSING.md)." },
+    { "pattern": "Java 25 LTS", "source": "JDK baseline \"Java 25 LTS or newer\" (site spec, owner decision)." },
+    { "pattern": "HTTP/(1\\.1|2|3)", "source": "Protocol names (RFC 9112, RFC 9113, RFC 9114)." },
+    { "pattern": "JA[34]", "source": "TLS fingerprint method names (HLA §5, Bot Blocker row)." },
+    { "pattern": "Tier [123]", "source": "The three tiers of the platform (HLA §2.2, §6)." },
+    { "pattern": "\\bL[1-7]\\b|Layer [1-7]", "source": "Capability layers 1 to 7 (cap-license-registry.md, HLA §3.2)." },
+    { "pattern": "ADR-\\d{3}", "source": "ADR identifiers (exeris-docs adr-index.md)." },
+    { "pattern": "TRL-3", "source": "Technology readiness level of the platform (site spec)." },
+    { "pattern": "© 2026", "source": "Copyright year (LICENSE, LICENSE-CONTENT)." },
+    { "pattern": "version = \"1\\.0\\.0\"", "source": "The @Provides version in CorsPolicyModule.java of exeris-caps-cors-policy, quoted as code." },
+    { "pattern": "contract[- ]v2", "source": "Name of the saga scenario contract (exeris-benchmarks scenarios/e2e-shop-order-saga/CONTRACT-v2.md)." },
+    { "pattern": "p99\\.9", "source": "Percentile name of the registered L12 tail claim (exeris-benchmarks docs/CLAIMS.md)." }
+  ]
+}

@@ -1,0 +1,5 @@
+# Paths of the previous exeris-landing site.
+/evidence      /lab   301
+/evidence/*    /lab   301
+/evidence-lab  /lab   301
+/docs/research /docs  301
