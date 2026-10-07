@@ -1,0 +1,74 @@
+{
+  "name": "capabilities",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Capabilities",
+  "view": {
+    "name": "capabilities",
+    "kind": "PAGE",
+    "route": "capabilities",
+    "title": "Capabilities",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"Capabilities\"}], \"eyebrow\": \"TIER 2 · CAPABILITIES\", \"title\": \"Capability matrix\", \"lede\": \"{caps.total} capabilities in {layers} layers, generated at build time from the capability licence registry. Filter by layer or licence; each card names the SKUs that compose it.\", \"ctas\": [{\"label\": \"Registry on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/cap-license-registry.md\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCapMatrix",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"legendTitle\": \"Three licences\", \"legend\": [{\"licence\": \"community\", \"terms\": \"Apache 2.0 or MIT. Free for anything, including production.\", \"production\": \"No subscription\"}, {\"licence\": \"commercial\", \"terms\": \"Exeris Commercial License: source-available, public for audit and evaluation.\", \"production\": \"Production use needs a Platform subscription\"}, {\"licence\": \"enterprise-private\", \"terms\": \"Exeris Enterprise License, closed-source. Depends on a kernel-tier SPI extension in the Enterprise driver.\", \"production\": \"Enterprise tier only\"}], \"statusNote\": \"Status follows the registry’s vocabulary: specified, scaffolded, implemented. `exeris-caps-cors-policy` is the first cap repository; the other caps are specified in the HLA with their provides and requires agreed.\"}"
+          },
+          {
+            "type": "CONTAINER",
+            "binding": {
+              "source": "STATIC"
+            },
+            "children": [
+              {
+                "type": "CUSTOM",
+                "customType": "ExSectionHead",
+                "binding": {
+                  "source": "STATIC"
+                },
+                "props": "{\"eyebrow\": \"§ A CAP, DECLARED\", \"title\": \"One annotated class. The build does the rest.\", \"body\": \"The capability declaration of exeris-caps-cors-policy. Its annotations are erased at compile time: the build-time pipeline reads them, resolves the composition graph, emits a stamped cap-manifest.json and scans the bytecode for Wall violations.\"}"
+              },
+              {
+                "type": "CUSTOM",
+                "customType": "ExCodePane",
+                "binding": {
+                  "source": "STATIC"
+                },
+                "props": "{\"title\": \"CorsPolicyModule.java\", \"lang\": \"java\", \"code\": \"// exeris-caps-cors-policy: the whole capability declaration\\n@CapabilityModule\\n@Provides(service = CorsPolicy.class, version = \\\"1.0.0\\\")\\npublic final class CorsPolicyModule {\\n\\n    private CorsPolicyModule() {\\n        // Declaration carrier only — never constructed.\\n    }\\n}\", \"tags\": [{\"label\": \"community\", \"tone\": \"cyan\"}]}"
+              },
+              {
+                "type": "RICH_TEXT",
+                "binding": {
+                  "source": "STATIC"
+                },
+                "props": "The cap requires nothing and owns no resources, so it declares no requires and no lifecycle: an edge that is not true would change the composition order of every SKU that includes it."
+              }
+            ]
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "ai",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Ai",
+  "view": {
+    "name": "ai",
+    "kind": "PAGE",
+    "route": "ai",
+    "title": "AI",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"AI LAYER\", \"title\": \"Intent in. Systems out.\", \"accent\": \"Systems out.\", \"lede\": \"The AI layer turns intent into compositions of capabilities and SKUs, through the same contract the platform enforces.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCardGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"today\", \"head\": {\"eyebrow\": \"§ WHAT EXISTS TODAY\", \"title\": \"Three public repositories.\", \"body\": \"The layer starts with what an agent needs to work on the platform safely: read access to its knowledge, an identity of its own, and a record of what it ran.\"}, \"columns\": 3, \"cards\": [{\"eyebrow\": \"MCP SERVER\", \"title\": \"exeris-ai-bridge\", \"tone\": \"flow\", \"href\": \"https://github.com/exeris-systems/exeris-ai-bridge\", \"linkLabel\": \"GitHub\", \"body\": \"An MCP server exposing the docs and ADR registry, Studio and the LSP, and kernel introspection to AI agents. Read-only (ADR-025).\"}, {\"eyebrow\": \"EXECUTION IDENTITY\", \"title\": \"exeris-agent-harness\", \"tone\": \"flow\", \"href\": \"https://github.com/exeris-systems/exeris-agent-harness\", \"linkLabel\": \"GitHub\", \"body\": \"Gives work carried out by an agent an identity of its own.\"}, {\"eyebrow\": \"RUN CAPTURE\", \"title\": \"exeris-ai-execution\", \"tone\": \"flow\", \"href\": \"https://github.com/exeris-systems/exeris-ai-execution\", \"linkLabel\": \"GitHub\", \"body\": \"Provider-neutral run capture.\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCallout",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"roadmap\", \"alt\": true, \"variant\": \"info\", \"eyebrow\": \"ROADMAP · PLANNED\", \"title\": \"exeris-ai-router\", \"body\": \"Selects the model and the level of intelligence a task needs, and routes the task to the right agent.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCardGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"platform\", \"head\": {\"eyebrow\": \"§ ON THE PLATFORM\", \"title\": \"In Studio and the Console.\"}, \"columns\": 2, \"joined\": true, \"cards\": [{\"eyebrow\": \"PAID OPTION\", \"title\": \"AI in Studio and the Console\", \"tone\": \"flow\", \"href\": \"/pricing#contact\", \"linkLabel\": \"Contact us\", \"body\": \"AI assistance in Studio and the Console is a paid option of the platform.\"}, {\"eyebrow\": \"HUMAN IN THE LOOP\", \"title\": \"Reviewed like any other change\", \"tone\": \"cyan\", \"body\": \"AI proposals go through the same staged edit and review as manual changes. A proposal reaches a composition only through that review.\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

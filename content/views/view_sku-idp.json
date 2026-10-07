@@ -1,0 +1,67 @@
+{
+  "name": "sku-idp",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.SkuIdp",
+  "view": {
+    "name": "sku-idp",
+    "kind": "PAGE",
+    "route": "skus/idp",
+    "title": "IDP",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"sku\": \"idp\", \"hero\": \"Intelligent Document Processing, composed from the Service Boundary platform layer, the document caps of Layer 5 and the AI abstraction layer of Layer 6. Deployable in the cloud or on-prem, and air-gappable.\", \"badges\": [{\"label\": \"AI · on-prem\", \"tone\": \"flow\"}], \"ctas\": [{\"label\": \"Discuss fit →\", \"href\": \"/pricing#contact\", \"variant\": \"solid\"}, {\"label\": \"Architecture\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExStepGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"columns\": 6, \"head\": {\"eyebrow\": \"§ PIPELINE\", \"title\": \"From document intake to structured extraction.\", \"body\": \"Each stage is a capability of its own, so a stage’s backend can change without changing the pipeline’s contract.\"}, \"steps\": [{\"title\": \"Intake\", \"code\": \"document-ingestion\", \"body\": \"Admission, queueing and retry for incoming documents.\", \"tone\": \"cyan\"}, {\"title\": \"OCR\", \"code\": \"ocr-pipeline\", \"body\": \"Text recognition behind a provider-neutral interface.\", \"tone\": \"cyan\"}, {\"title\": \"Classify\", \"code\": \"document-classifier\", \"body\": \"Assigns each document its type.\", \"tone\": \"flow\"}, {\"title\": \"Extract\", \"code\": \"field-extraction\", \"body\": \"Structured fields, with validation.\", \"tone\": \"flow\"}, {\"title\": \"Recognise forms\", \"code\": \"form-recognition\", \"body\": \"Template-bound extraction for known forms.\", \"tone\": \"flow\"}, {\"title\": \"Persist and audit\", \"code\": \"attachment-storage · audit-trail\", \"body\": \"Tenant-scoped storage with an audit trail.\", \"tone\": \"slate\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuComposition",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"sku\": \"idp\", \"alt\": true, \"head\": {\"eyebrow\": \"§ COMPOSITION\", \"title\": \"The full composition, by layer.\", \"body\": \"The manifest from the HLA, grouped by the registry’s layers. The API surface is generated from `@ExerisDomain` types through rest-emission and openapi-emission.\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCardGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"columns\": 3, \"head\": {\"eyebrow\": \"§ AI ABSTRACTION LAYER\", \"title\": \"Swap providers without changing the SKU.\", \"body\": \"IDP composes two of the five Layer 6 caps. The layer abstracts the provider, not the model.\"}, \"cards\": [{\"title\": \"ai-llm-abstraction\", \"tags\": [{\"label\": \"in IDP\", \"tone\": \"flow\"}], \"body\": \"The provider interface for language models.\"}, {\"title\": \"ai-prompt-templating\", \"tags\": [{\"label\": \"in IDP\", \"tone\": \"flow\"}], \"body\": \"A registry of prompts with pinned versions.\"}, {\"title\": \"ai-vector-store\", \"tags\": [{\"label\": \"Layer 6\", \"tone\": \"muted\"}], \"body\": \"A vector-store interface, available to compose.\"}, {\"title\": \"ai-embedding-pipeline\", \"tags\": [{\"label\": \"Layer 6\", \"tone\": \"muted\"}], \"body\": \"Batched embedding generation, available to compose.\"}, {\"title\": \"ai-rag-orchestration\", \"tags\": [{\"label\": \"Layer 6\", \"tone\": \"muted\"}], \"body\": \"Retrieval and generation, available to compose.\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCallout",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"variant\": \"contract\", \"alt\": true, \"eyebrow\": \"AIR-GAPPED\", \"title\": \"The same manifest, offline.\", \"body\": \"Pin a local model backend through the AI abstraction layer and the pipeline runs without external network egress and without telemetry phone-home. The composition manifest is the same in the cloud and in an air-gapped deployment.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

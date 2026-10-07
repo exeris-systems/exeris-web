@@ -1,0 +1,59 @@
+{
+  "name": "sku-bot-blocker",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.SkuBotBlocker",
+  "view": {
+    "name": "sku-bot-blocker",
+    "kind": "PAGE",
+    "route": "skus/bot-blocker",
+    "title": "Bot Blocker",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"sku\": \"bot-blocker\", \"hero\": \"JA3/JA4 TLS fingerprinting at the kernel layer: fingerprint material is extracted before the request reaches the policy chain. Closed-source under the anti-abuse-security exception of ADR-023.\", \"badges\": [{\"label\": \"Enterprise only\", \"tone\": \"muted\"}], \"ctas\": [{\"label\": \"Discuss fit →\", \"href\": \"/pricing#contact\", \"variant\": \"solid\"}, {\"label\": \"ADR index\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/adr-index.md\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCallout",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"variant\": \"warning\", \"eyebrow\": \"THE SINGLE CLOSED-SOURCE EXCEPTION\", \"title\": \"Published detection logic helps adversaries circumvent the protection.\", \"body\": \"Bot Blocker is the only Exeris SKU that is not source-available. The exception is named in ADR-023 and does not generalise to other SKUs. Code Detachment for Bot Blocker grants a perpetual binary-use licence and the manifest, not the source.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExStepGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"columns\": 4, \"head\": {\"eyebrow\": \"§ HOW IT WORKS\", \"title\": \"Fingerprint at the kernel. Decide before the policy chain runs.\", \"body\": \"Bot Blocker depends on a kernel-tier SPI extension, a change to `CoreSslHandles` on the kernel roadmap, that exposes ClientHello fingerprint material to the gateway layer. That extension is why `bot-fingerprinting` is the only enterprise-private cap in Tier 2.\"}, \"steps\": [{\"title\": \"ClientHello captured\", \"body\": \"TLS handshake material is exposed through the Enterprise kernel SPI extension, before any policy runs.\", \"tone\": \"slate\"}, {\"title\": \"JA3 / JA4 computed\", \"body\": \"The fingerprint is computed off-heap and compared against allow and block lists.\", \"tone\": \"flow\"}, {\"title\": \"WAF rules layered\", \"body\": \"The `waf-rules` cap applies signature rules to the same request through the policy chain.\", \"tone\": \"flow\"}, {\"title\": \"Decision\", \"body\": \"Pass, challenge or drop. The decision feeds `rate-limiting`.\", \"tone\": \"cyan\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuComposition",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"sku\": \"bot-blocker\", \"alt\": true, \"head\": {\"eyebrow\": \"§ COMPOSITION\", \"title\": \"The composition, by layer.\", \"body\": \"The manifest from the HLA. The composition itself is commercial-licensed; the enterprise-private cap inside it needs the Enterprise subscription on top of the SKU.\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

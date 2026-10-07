@@ -1,0 +1,67 @@
+{
+  "name": "spring",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Spring",
+  "view": {
+    "name": "spring",
+    "kind": "PAGE",
+    "route": "spring",
+    "title": "Spring Runtime",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"Spring Runtime\"}], \"badges\": [{\"label\": \"Independent Tier 1 product\", \"tone\": \"flow\"}], \"title\": \"Host Spring on the Exeris kernel.\", \"lede\": \"The strongest statement that Exeris is a runtime, not a framework. Spring keeps DI, beans and configuration. Exeris owns ingress, lifecycle, off-heap memory and provider discovery. The dependency arrow never reverses.\", \"ctas\": [{\"label\": \"Spring Runtime on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-spring-runtime\", \"variant\": \"solid\"}, {\"label\": \"Evidence in the Lab\", \"href\": \"/lab#spring\"}], \"code\": {\"title\": \"AccountController.java\", \"lang\": \"java · pure mode\", \"code\": \"// An existing Spring controller. In Pure Mode it runs as written:\\n// the Exeris kernel owns ingress, Spring keeps DI and the bean graph.\\n@RestController\\n@RequestMapping(\\\"/api/accounts\\\")\\npublic class AccountController {\\n\\n    private final AccountService accounts;\\n\\n    public AccountController(AccountService accounts) {\\n        this.accounts = accounts;\\n    }\\n\\n    @GetMapping(\\\"/{id}\\\")\\n    public Account get(@PathVariable UUID id) {\\n        return accounts.find(id);\\n    }\\n}\", \"tags\": [{\"label\": \"@RestController\", \"tone\": \"flow\"}]}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExConsumerTable",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"head\": {\"eyebrow\": \"§ WHO RUNS ON SPRING RUNTIME?\", \"title\": \"Brownfield migration. Not the platform itself.\", \"body\": \"Spring Runtime is a separately purchased Tier 1 product. The platform, every first-party SKU and every future Family product run kernel-direct, with no Spring dependency.\"}, \"caption\": \"Which consumers run on Spring Runtime\", \"rows\": [{\"consumer\": \"The platform\", \"runs\": false, \"note\": \"Kernel-direct. The kernel is Spring-free (ADR-006).\"}, {\"consumer\": \"First-party SKUs\", \"runs\": false, \"note\": \"Gateway SKUs run a kernel-level data plane; Service Boundary SKUs run a generated, kernel-direct API surface.\"}, {\"consumer\": \"Future Family products\", \"runs\": false, \"note\": \"Kernel-direct.\"}, {\"consumer\": \"BudgetHQ\", \"runs\": true, \"note\": \"The dogfooding case: a Spring application on Spring Runtime and the Exeris kernel, built the way a brownfield customer would adopt it.\"}, {\"consumer\": \"Customer brownfield applications\", \"runs\": true, \"note\": \"Existing Spring applications adopting the kernel without rewriting their controllers, services or domain code.\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCardGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"alt\": true, \"columns\": 2, \"joined\": true, \"head\": {\"eyebrow\": \"§ TWO MODES\", \"title\": \"Pure Mode by default. Compatibility Mode where Spring code needs it.\"}, \"cards\": [{\"eyebrow\": \"PURE MODE · RECOMMENDED\", \"title\": \"The application stays as it is.\", \"tone\": \"cyan\", \"body\": \"Exeris owns ingress. Spring controllers execute on Exeris-owned request paths with ScopedValue context propagation, with no servlet or reactive stack underneath (ADR-010, ADR-011).\", \"points\": [\"Off-heap ingress on the kernel data plane\", \"Spring DI and beans on the application plane\", \"`ThreadLocal` banned on hot paths\", \"The same Glass Box telemetry as kernel-direct code\"]}, {\"eyebrow\": \"COMPATIBILITY MODE · OPT-IN\", \"title\": \"For code that needs ThreadLocal bridging.\", \"tone\": \"flow\", \"body\": \"Opt in with `exeris.runtime.web.mode=compatibility` for Spring code that genuinely needs ThreadLocal bridging, such as `SecurityContextHolder`.\", \"points\": [\"Isolated in `*.compat.*` packages\", \"Never active in Pure Mode\", \"JDBC compatibility is opt-in within it (ADR-017)\", \"Gateway-class workloads stay out of scope (ADR-021)\"]}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCallout",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"variant\": \"contract\", \"eyebrow\": \"THE WALL · ADR-006\", \"title\": \"Spring stays above the line.\", \"body\": \"exeris-spring-runtime depends on the kernel; the kernel never depends on Spring. Pure Mode code may not import from the compatibility packages, and architecture guard tests in the repository enforce both rules.\", \"href\": \"/platform#wall\", \"linkLabel\": \"The Wall\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCallout",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"variant\": \"verdict\", \"alt\": true, \"eyebrow\": \"EVIDENCE\", \"title\": \"Measured, and quoted on the Lab page.\", \"body\": \"The Spring-hosting claims of the register are quoted on the Lab page with their fences: CPU per request against Spring Boot on Tomcat, the share of a request the repository layer takes, and the cost of a permitAll security filter chain.\", \"href\": \"/lab#spring\", \"linkLabel\": \"Spring hosting evidence\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}
