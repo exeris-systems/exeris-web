@@ -10,10 +10,11 @@
   },
   "scripts": {
     "ng": "ng",
+    "data": "node scripts/fetch-data.mjs",
     "generate:views": "node scripts/generate-views.mjs",
-    "prestart": "npm run generate:views",
+    "prestart": "npm run data && npm run generate:views",
     "start": "ng serve",
-    "prebuild": "npm run generate:views",
+    "prebuild": "npm run data && npm run generate:views",
     "build": "ng build"
   },
   "dependencies": {
