@@ -96,7 +96,6 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
       { label: 'Kernel', href: LINKS.kernel },
       { label: 'SDK', href: LINKS.sdk },
       { label: 'Tooling', href: LINKS.tooling },
-      { label: 'Studio', href: '/platform#tier-1' },
       { label: 'Spring Runtime', href: '/spring' },
     ],
   },
