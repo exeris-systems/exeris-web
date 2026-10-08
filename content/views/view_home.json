@@ -1,0 +1,67 @@
+{
+  "name": "home",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Home",
+  "view": {
+    "name": "home",
+    "kind": "PAGE",
+    "route": "/",
+    "title": "Define. Compose. Execute.",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExHomeHero",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"pill\": {\"label\": \"NEW\", \"text\": \"Intent in. Systems out. — the AI layer\", \"href\": \"/ai\"}, \"headline\": [\"Define.\", \"Compose.\", \"Execute.\"], \"accent\": \"Compose.\", \"sub\": \"Systems by contract. Compute without waste.\", \"sentence\": \"Substrate, capabilities and SKUs composed against one contract. Replace the runtime underneath the application, not the application on top of it.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Read the whitepaper\", \"href\": \"https://github.com/exeris-systems/exeris-kernel/blob/main/docs/whitepaper.md\"}], \"meta\": [\"APACHE-2.0 COMMUNITY KERNEL\", \"GDYNIA, POLAND\", \"JAVA 25 LTS\", \"PANAMA FFM\", \"LOOM\"]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExEvidenceStrip",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"head\": {\"eyebrow\": \"COMPUTE WITHOUT WASTE\", \"title\": \"Numbers without methodology are marketing.\", \"body\": \"Every figure on this site is a registered copy string from the claims register of exeris-benchmarks, quoted verbatim with its claim id and linked to the report and the raw artifacts behind it. Comparisons with other runtimes stay on the Lab page, beside their fences.\"}, \"cells\": [{\"label\": \"Memory floor\", \"claim\": \"L13.floor\", \"excerpt\": \"128 MiB\"}, {\"label\": \"CPU per request\", \"claim\": \"L12.absolute\", \"excerpt\": \"51.3 µs\"}, {\"label\": \"Open-loop p99.9\", \"claim\": \"L12.tail\", \"excerpt\": \"1.95–2.61 ms\"}, {\"label\": \"Spawn to first response\", \"claim\": \"L14.absolute\", \"excerpt\": \"0.86 s\"}], \"cta\": {\"label\": \"See the comparison →\", \"href\": \"/lab\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExBento",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"head\": {\"eyebrow\": \"THE PLATFORM\", \"title\": \"One contract. Three tiers. No leakage.\", \"body\": \"The kernel is the substrate. Capabilities compose on top of it. SKUs are named compositions of capabilities. Each tier depends only on the one beneath it, and the build fails when anything reaches across.\"}, \"cells\": [{\"size\": \"hero\", \"eyebrow\": \"TIER 1 · SUBSTRATE\", \"title\": \"The kernel\", \"body\": \"An open-core JVM runtime on Panama FFM and virtual threads. Transport, memory, persistence and flow sit behind one Spring-free SPI; the Community driver is Apache-2.0 and the Enterprise driver implements the same contract.\", \"extra\": {\"kind\": \"claim\", \"claim\": \"L13.floor\"}, \"href\": \"/platform#tier-1\", \"linkLabel\": \"The substrate\"}, {\"size\": \"wide\", \"eyebrow\": \"TIER 2 · CAPABILITIES\", \"title\": \"{caps.total} capabilities across {layers} layers\", \"body\": \"Gateway building blocks, Service Boundary platform caps, domain primitives, the AI abstraction layer and cross-cutting concerns. Each cap is its own artefact with declared provides and requires.\", \"extra\": {\"kind\": \"licences\"}, \"href\": \"/capabilities\", \"linkLabel\": \"Capability matrix\"}, {\"size\": \"wide\", \"eyebrow\": \"TIER 3 · SKUS\", \"title\": \"{skus} pre-wired SKUs\", \"body\": \"Named, signed compositions of capabilities, sold as products, in two families: Gateway and Service Boundary.\", \"extra\": {\"kind\": \"skus\"}, \"href\": \"/skus\", \"linkLabel\": \"All SKUs\"}, {\"eyebrow\": \"BROWNFIELD\", \"title\": \"Spring Runtime\", \"body\": \"Host an existing Spring application on the Exeris kernel. Spring keeps DI, beans and configuration; Exeris owns ingress, lifecycle and off-heap memory.\", \"href\": \"/spring\", \"linkLabel\": \"Spring Runtime\"}, {\"eyebrow\": \"OBSERVABILITY\", \"title\": \"Glass Box\", \"body\": \"JFR-first observability. No sidecar. Open wire spec.\", \"href\": \"/platform#tier-1\", \"linkLabel\": \"Telemetry\"}, {\"eyebrow\": \"OWNERSHIP\", \"title\": \"Code Detachment\", \"body\": \"Source-available always. Subscribe to operate. Detach to own: a one-time fee converts a subscription into perpetual use of the detached version.\", \"href\": \"/pricing#detachment\", \"linkLabel\": \"Code Detachment\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExTwoLevels",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"head\": {\"eyebrow\": \"TWO LEVELS\", \"title\": \"One platform, two ways in.\", \"body\": \"Write the system yourself, or state the intent and let the AI layer compose it. Both arrive at the same artefact, checked against the same contract.\"}, \"left\": {\"eyebrow\": \"PLATFORM · KERNEL + SDK + TOOLING\", \"title\": \"Define. Compose. Execute.\", \"body\": \"Define the domain in annotated Java, compose it from capabilities and SKUs, execute it on the kernel. The build generates the kernel handlers, the API surface and the front end, and validates the composition before anything runs.\", \"points\": [\"`@ExerisDomain` types and actions in the SDK\", \"Build-time code generation: handlers, repositories, OpenAPI, an Angular front end\", \"Composition and Wall checks fail the build, not production\"], \"href\": \"/platform\", \"linkLabel\": \"The platform\"}, \"right\": {\"eyebrow\": \"AI LAYER\", \"title\": \"Intent in. Systems out.\", \"body\": \"The AI layer turns intent into compositions of the same capabilities and SKUs, through the same contract the platform enforces.\", \"points\": [\"MCP access to the docs and ADR registry, Studio, the LSP and kernel introspection\", \"An identity of its own for work an agent carries out\", \"Provider-neutral run capture\"], \"href\": \"/ai\", \"linkLabel\": \"The AI layer\"}, \"band\": \"COMPOSED FROM CAPABILITIES AND SKUS\", \"bandBody\": \"Both levels produce a composition of Tier 2 capabilities and Tier 3 SKUs on the Tier 1 substrate.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuCards",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"head\": {\"eyebrow\": \"FEATURED SKUS\", \"title\": \"Pre-wired compositions.\", \"body\": \"A SKU is a signed composition of capabilities with one manifest for both kernel drivers.\"}, \"columns\": 4, \"alt\": true, \"skus\": [{\"id\": \"api-gateway\", \"href\": \"/skus/api-gateway\", \"description\": \"Routing, upstream pools, a policy chain and backend health for an HTTP gateway, on a kernel-direct data plane.\"}, {\"id\": \"idp\", \"href\": \"/skus/idp\", \"description\": \"Intelligent Document Processing: intake, OCR, classification and field extraction through the AI abstraction layer. Cloud or on-prem, air-gappable.\"}, {\"id\": \"oms\", \"href\": \"/skus#sku-oms\", \"description\": \"Order management: catalogue, pricing, inventory, order lifecycle and payment, with saga state in the in-process flow engine.\"}, {\"id\": \"bot-blocker\", \"href\": \"/skus/bot-blocker\", \"description\": \"JA3/JA4 TLS fingerprinting at the kernel layer, before the policy chain runs. The single closed-source SKU.\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

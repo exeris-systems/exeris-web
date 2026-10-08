@@ -1,0 +1,35 @@
+{
+  "name": "docs",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Docs",
+  "view": {
+    "name": "docs",
+    "kind": "PAGE",
+    "route": "docs",
+    "title": "Docs",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"DOCS\", \"title\": \"Documentation\", \"lede\": \"The canonical documents live in the repositories they describe. This page indexes them.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCardGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"columns\": 3, \"cards\": [{\"eyebrow\": \"EXERIS-KERNEL\", \"title\": \"Kernel whitepaper\", \"href\": \"https://github.com/exeris-systems/exeris-kernel/blob/main/docs/whitepaper.md\", \"body\": \"The kernel’s design, its measured results and its contract targets.\"}, {\"eyebrow\": \"EXERIS-DOCS\", \"title\": \"B2B technical whitepaper\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/b2b-technical-whitepaper.md\", \"body\": \"The platform for technical buyers: tiers, licensing, Code Detachment.\"}, {\"eyebrow\": \"EXERIS-DOCS\", \"title\": \"High-level architecture\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md\", \"body\": \"Containers, the capability map, SKU compositions and the open-core split.\"}, {\"eyebrow\": \"EXERIS-DOCS\", \"title\": \"ADR index\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/adr-index.md\", \"body\": \"The single decision registry of the ecosystem.\"}, {\"eyebrow\": \"EXERIS-DOCS\", \"title\": \"Capability licence registry\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/cap-license-registry.md\", \"body\": \"Licence, visibility and status of every capability.\"}, {\"eyebrow\": \"EXERIS-KERNEL\", \"title\": \"Kernel architecture\", \"href\": \"https://github.com/exeris-systems/exeris-kernel/blob/main/docs/architecture.md\", \"body\": \"Modules, subsystems and the SPI.\"}, {\"eyebrow\": \"EXERIS-SDK\", \"title\": \"SDK\", \"href\": \"https://github.com/exeris-systems/exeris-sdk\", \"body\": \"Annotations and the source model.\"}, {\"eyebrow\": \"EXERIS-TOOLING\", \"title\": \"Tooling\", \"href\": \"https://github.com/exeris-systems/exeris-tooling\", \"body\": \"The annotation processor and the code generators.\"}, {\"eyebrow\": \"EXERIS-BENCHMARKS\", \"title\": \"Benchmark methodology\", \"href\": \"https://github.com/exeris-systems/exeris-benchmarks/blob/main/docs/methodology.md\", \"body\": \"How campaigns are run, gated and reported.\"}, {\"eyebrow\": \"EXERIS-BENCHMARKS\", \"title\": \"Claims register\", \"href\": \"https://github.com/exeris-systems/exeris-benchmarks/blob/main/docs/CLAIMS.md\", \"body\": \"Registered copy strings, withdrawn figures and the rules for quoting.\"}, {\"eyebrow\": \"EXERIS-KERNEL\", \"title\": \"Roadmap\", \"href\": \"https://github.com/exeris-systems/exeris-kernel/blob/main/docs/ROADMAP.md\", \"body\": \"What the kernel ships next.\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

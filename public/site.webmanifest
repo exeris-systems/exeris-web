@@ -1,0 +1,11 @@
+{
+  "name": "Exeris",
+  "short_name": "Exeris",
+  "icons": [
+    { "src": "/assets/brand/exeris-icon-core-dark-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/brand/exeris-icon-core-dark-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#0A0F1A",
+  "background_color": "#0A0F1A",
+  "display": "browser"
+}

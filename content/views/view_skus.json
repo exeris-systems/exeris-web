@@ -1,0 +1,51 @@
+{
+  "name": "skus",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Skus",
+  "view": {
+    "name": "skus",
+    "kind": "PAGE",
+    "route": "skus",
+    "title": "SKUs",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"SKUs\"}], \"eyebrow\": \"TIER 3 · SKUS\", \"title\": \"SKUs\", \"lede\": \"Named, signed compositions of capabilities, sold as products. A SKU’s composition manifest is byte-identical across the Community and Enterprise kernel drivers: the driver is a substrate choice, not a manifest change.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuCards",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"groups\": [{\"id\": \"gateway\", \"title\": \"Gateway\", \"description\": \"A kernel-level HTTP data plane with no Spring dependency. The Enterprise driver swap is a Maven-coordinate change.\", \"skus\": [{\"id\": \"api-gateway\", \"href\": \"/skus/api-gateway\", \"description\": \"Routing, upstream pools, a policy chain, backend health and an admin control plane.\", \"enterprise\": \"io_uring ingress, HTTP/3 and QUIC TLS, slab-pool memory.\"}, {\"id\": \"edge-proxy\", \"description\": \"Routing, TLS termination, circuit breaking and backend health at the edge, plus an edge-failover cap of its own. Target topology: multi-region active-active.\", \"enterprise\": \"io_uring and HTTP/3 recommended for edge deployments.\"}, {\"id\": \"bot-blocker\", \"href\": \"/skus/bot-blocker\", \"description\": \"JA3/JA4 TLS fingerprinting at the kernel layer, in line with a Gateway or Edge Proxy.\", \"enterprise\": \"Needs the Enterprise driver’s ClientHello fingerprint extension.\"}]}, {\"id\": \"service-boundary\", \"title\": \"Service Boundary\", \"description\": \"Kernel-direct API surfaces generated at build time from `@ExerisDomain` types and actions.\", \"skus\": [{\"id\": \"idp\", \"href\": \"/skus/idp\", \"description\": \"Intelligent Document Processing over the document caps and the AI abstraction layer. Cloud or on-prem, air-gappable.\", \"enterprise\": \"NUMA-aware allocation under heavy document processing.\"}, {\"id\": \"pim\", \"description\": \"Product information management: catalogue, assets, versioning, search and import/export, over REST and GraphQL.\", \"enterprise\": \"Community driver typically sufficient.\"}, {\"id\": \"oms\", \"description\": \"Order management: catalogue, pricing, inventory, order lifecycle and payment, with saga state in the in-process flow engine.\", \"enterprise\": \"Community driver typically sufficient.\"}, {\"id\": \"content-api\", \"description\": \"Headless CMS API: content types, versioning, assets and search, over REST and GraphQL.\", \"enterprise\": \"Community driver typically sufficient.\"}]}, {\"id\": \"cross-cutting\", \"title\": \"Cross-cutting\", \"description\": \"Domain primitives that several SKUs compose.\", \"notes\": [{\"title\": \"Context-Centric CRM data model\", \"code\": \"exeris-caps-contact-graph\", \"href\": \"/capabilities\", \"description\": \"A Layer 5 domain-primitive cap in which relationships, not accounts, are the primary key. Composed by Service Boundary SKUs; not a standalone SKU.\"}]}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCallout",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"variant\": \"warning\", \"alt\": true, \"eyebrow\": \"ADR-023\", \"title\": \"One closed-source exception.\", \"body\": \"Every SKU repository is source-available under the Exeris Commercial License except Bot Blocker: published detection logic helps adversaries circumvent the protection.\", \"href\": \"/skus/bot-blocker\", \"linkLabel\": \"Bot Blocker\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

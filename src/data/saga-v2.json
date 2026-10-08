@@ -1,0 +1,44 @@
+{
+  "source": {
+    "repo": "exeris-benchmarks",
+    "commit": "5f8012d210424898cc1882a05ab798f5e5f200fe",
+    "path": "results/reports/2026-08-22-tjug-talk-evidence.md"
+  },
+  "front": {
+    "scenario": "e2e-shop-order-saga",
+    "claim_scope": "exploratory",
+    "comparison_axis": "within-tier-cross-framework",
+    "hardware_profile": "perf-box-amd64"
+  },
+  "scopeSentence": "This is one framework against itself, not a cross-stack comparison. The trust note disclaims the second; this is the first.",
+  "rows": [
+    {
+      "figure": "server-backed arm, ceiling",
+      "value": "fails at 60/s, passes 50/s",
+      "artifact": "…/ladderH-…/spring-axon-jdbc-r50-p256/, …-r100-p256/; …/ladderI-…/spring-axon-jdbc-r60-p256/",
+      "state": "CITABLE",
+      "segment": "Segment 2"
+    },
+    {
+      "figure": "serverless arm, ceiling",
+      "value": "fails at 70/s, saturated at 60/s",
+      "artifact": "…/ladderH-…/spring-axon-embedded-jdbc-r50-p256/; …/ladderI-…/spring-axon-embedded-jdbc-r60-p256/, …-r70-p256/",
+      "state": "CITABLE",
+      "segment": "Segment 2"
+    },
+    {
+      "figure": "serverless arm has no external engine",
+      "value": "deployment unit = Postgres + gateway only",
+      "artifact": "…/ladderH-…/spring-axon-embedded-jdbc-r50-p256/deployment-footprint.json → components[]",
+      "state": "CITABLE",
+      "segment": "Segment 2"
+    },
+    {
+      "figure": "Axon Server, post-load resident",
+      "value": "1 075.2 MB",
+      "artifact": "…/ladderI-…/spring-axon-jdbc-r60-p256/post-load-settle.json",
+      "state": "CITABLE",
+      "segment": "Segment 7"
+    }
+  ]
+}

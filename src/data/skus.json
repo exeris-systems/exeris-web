@@ -1,0 +1,184 @@
+{
+  "source": {
+    "repo": "exeris-docs",
+    "commit": "9193a3f09c90820b83b8ba1823756516949e2bf4",
+    "path": "high-level-architecture.md §3.3, §6.3"
+  },
+  "skus": [
+    {
+      "id": "api-gateway",
+      "repo": "exeris-sku-api-gateway",
+      "name": "API Gateway",
+      "family": "Gateway",
+      "closedSource": false,
+      "caps": [
+        "gateway-core",
+        "route-registry",
+        "upstream-pool",
+        "policy-chain",
+        "backend-health",
+        "admin-control-plane",
+        "rate-limiting",
+        "jwt-validation",
+        "tls-termination",
+        "request-routing",
+        "circuit-breaker",
+        "cors-policy",
+        "observability-bridge"
+      ],
+      "skuSpecificCaps": [],
+      "note": null,
+      "capCount": 13
+    },
+    {
+      "id": "edge-proxy",
+      "repo": "exeris-sku-edge-proxy",
+      "name": "Edge Proxy",
+      "family": "Gateway",
+      "closedSource": false,
+      "caps": [
+        "gateway-core",
+        "route-registry",
+        "request-routing",
+        "tls-termination",
+        "circuit-breaker",
+        "backend-health",
+        "observability-bridge"
+      ],
+      "skuSpecificCaps": [
+        "edge-failover cap (SKU-specific)"
+      ],
+      "note": null,
+      "capCount": 8
+    },
+    {
+      "id": "bot-blocker",
+      "repo": "exeris-sku-bot-blocker",
+      "name": "Bot Blocker",
+      "family": "Gateway",
+      "closedSource": true,
+      "caps": [
+        "gateway-core",
+        "tls-termination",
+        "policy-chain",
+        "bot-fingerprinting",
+        "waf-rules",
+        "rate-limiting",
+        "observability-bridge"
+      ],
+      "skuSpecificCaps": [],
+      "note": null,
+      "capCount": 7
+    },
+    {
+      "id": "idp",
+      "repo": "exeris-sku-idp",
+      "name": "IDP",
+      "family": "Service Boundary",
+      "closedSource": false,
+      "caps": [
+        "service-boundary-core",
+        "multi-tenancy",
+        "audit-trail",
+        "rbac-policy",
+        "attachment-storage",
+        "rest-emission",
+        "openapi-emission",
+        "workflow-engine",
+        "document-ingestion",
+        "ocr-pipeline",
+        "document-classifier",
+        "field-extraction",
+        "form-recognition",
+        "ai-llm-abstraction",
+        "ai-prompt-templating",
+        "observability-bridge"
+      ],
+      "skuSpecificCaps": [],
+      "note": null,
+      "capCount": 16
+    },
+    {
+      "id": "pim",
+      "repo": "exeris-sku-pim",
+      "name": "PIM",
+      "family": "Service Boundary",
+      "closedSource": false,
+      "caps": [
+        "service-boundary-core",
+        "multi-tenancy",
+        "audit-trail",
+        "rbac-policy",
+        "i18n",
+        "attachment-storage",
+        "asset-management",
+        "search-index",
+        "entity-versioning",
+        "content-versioning",
+        "product-catalog",
+        "import-export",
+        "rest-emission",
+        "graphql-emission",
+        "openapi-emission",
+        "observability-bridge"
+      ],
+      "skuSpecificCaps": [],
+      "note": null,
+      "capCount": 16
+    },
+    {
+      "id": "oms",
+      "repo": "exeris-sku-oms",
+      "name": "OMS",
+      "family": "Service Boundary",
+      "closedSource": false,
+      "caps": [
+        "service-boundary-core",
+        "multi-tenancy",
+        "audit-trail",
+        "rbac-policy",
+        "workflow-engine",
+        "notification-dispatch",
+        "circuit-breaker",
+        "product-catalog",
+        "pricing-engine",
+        "inventory-tracking",
+        "order-lifecycle",
+        "payment-gateway",
+        "contact-graph",
+        "rest-emission",
+        "openapi-emission",
+        "observability-bridge"
+      ],
+      "skuSpecificCaps": [],
+      "note": "L4 Flow saga engine (ADR-013) consumed via kernel SPI",
+      "capCount": 16
+    },
+    {
+      "id": "content-api",
+      "repo": "exeris-sku-content-api",
+      "name": "Headless CMS API",
+      "family": "Service Boundary",
+      "closedSource": false,
+      "caps": [
+        "service-boundary-core",
+        "multi-tenancy",
+        "audit-trail",
+        "rbac-policy",
+        "i18n",
+        "attachment-storage",
+        "asset-management",
+        "search-index",
+        "content-types",
+        "content-versioning",
+        "rest-emission",
+        "graphql-emission",
+        "openapi-emission",
+        "observability-bridge"
+      ],
+      "skuSpecificCaps": [],
+      "note": null,
+      "capCount": 14
+    }
+  ]
+}
