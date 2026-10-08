@@ -1,0 +1,19 @@
+# Composition and delivery metadata for this repository's agent material.
+#
+# This repository is a bundle CONSUMER and nothing else. It authors no role profile, skill, agent
+# workflow, policy, reference, hook or schema, so those keys are absent rather than empty:
+# `agents_file_check.py` asserts the manifest and the filesystem agree in BOTH directions, and it
+# reads absent and empty the same way. No `adapters:` either — an adapter is generated FROM
+# authored material, and there is none to render.
+version: 2
+repository: exeris-web
+
+# The organisation bundle, pinned and vendored under .agents/vendor/ (agents-md-schema.md rule 8).
+# `ref` is the commit the tree was taken from and `sha256` a digest over every byte of it, so a
+# hand-edit of the vendored copy fails CI instead of becoming a silent local fork. Bumping the
+# version means re-vendoring with `agents_bundle.py vendor`; the pin and the tree land together.
+imports:
+  - bundle: exeris-agents
+    version: 2.1.0
+    ref: abfdbe5336e3c29b807241b0bb00a6091cb42fea
+    sha256: sha256:7454a4e4f8682b664899225551dbf4e827e40a2c8889c989ff24e9ebdf2f960f
