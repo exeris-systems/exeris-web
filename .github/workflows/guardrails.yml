@@ -148,6 +148,10 @@ jobs:
       # with a section per part. `pr` always runs; `docs`, `records`, `code-docs` and `code` run
       # only where their files are in the diff. A part that produces nothing makes the check red.
       review-in-parts: true
+      # This repository's own rules, applied after the shared routine's parts and under its
+      # severity tags and verdict schema. Read at the BASE commit, never at the pull request's ref:
+      # a pull request does not write the rules it is judged by.
+      repo-routine: docs/repo-review-rules.md
     secrets:
       claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
       exeris_bot_app_id: ${{ secrets.EXERIS_BOT_APP_ID }}
