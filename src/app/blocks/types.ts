@@ -1,4 +1,11 @@
-/** Prop shapes shared by several blocks. */
+/**
+ * Prop shapes shared by several blocks.
+ *
+ * A block takes its `props` from the page the generator emits, where they are the JSON of the
+ * IR node's `props` as an object literal: string unions arrive widened to `string`. Each block
+ * therefore declares its `props` input with `transform: (value: unknown) => value as Props`, and
+ * `npm run check:content` and the tests hold the authored JSON to the shape.
+ */
 
 export type Tone = 'flow' | 'cyan' | 'slate' | 'ok' | 'err' | 'evidence' | 'muted';
 

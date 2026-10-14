@@ -32,7 +32,7 @@ export interface ContactProps {
   `,
 })
 export class ContactComponent {
-  readonly props = input.required<ContactProps>();
+  readonly props = input.required<ContactProps, unknown>({ transform: (value: unknown) => value as ContactProps });
   protected readonly email = CONTACT_EMAIL;
   protected readonly href = CONTACT_HREF;
 }

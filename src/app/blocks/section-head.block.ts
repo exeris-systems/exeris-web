@@ -26,5 +26,5 @@ export interface SectionHeadProps {
   `,
 })
 export class SectionHeadComponent {
-  readonly props = input.required<SectionHeadProps>();
+  readonly props = input.required<SectionHeadProps, unknown>({ transform: (value: unknown) => value as SectionHeadProps });
 }

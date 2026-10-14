@@ -40,5 +40,5 @@ export interface RepoProps {
   `,
 })
 export class RepoGridComponent {
-  readonly props = input.required<{ readonly repos: readonly RepoProps[] }>();
+  readonly props = input.required<{ readonly repos: readonly RepoProps[] }, unknown>({ transform: (value: unknown) => value as { readonly repos: readonly RepoProps[] } });
 }

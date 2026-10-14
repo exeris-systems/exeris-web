@@ -58,6 +58,6 @@ export interface HomeHeroProps {
   `,
 })
 export class HomeHeroComponent {
-  readonly props = input.required<HomeHeroProps>();
+  readonly props = input.required<HomeHeroProps, unknown>({ transform: (value: unknown) => value as HomeHeroProps });
   protected readonly btnClass = btnClass;
 }

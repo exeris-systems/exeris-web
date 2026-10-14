@@ -28,7 +28,7 @@ export interface CodePaneProps {
   `,
 })
 export class CodePaneComponent {
-  readonly props = input.required<CodePaneProps>();
+  readonly props = input.required<CodePaneProps, unknown>({ transform: (value: unknown) => value as CodePaneProps });
   protected readonly tagClass = tagClass;
   protected readonly lines = computed(() => highlight(this.props().code, this.props().lang.startsWith('yaml') ? 'yaml' : 'java'));
 }

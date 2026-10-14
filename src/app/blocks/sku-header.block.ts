@@ -66,7 +66,7 @@ export interface SkuHeaderProps {
   `,
 })
 export class SkuHeaderComponent {
-  readonly props = input.required<SkuHeaderProps>();
+  readonly props = input.required<SkuHeaderProps, unknown>({ transform: (value: unknown) => value as SkuHeaderProps });
   protected readonly tagClass = tagClass;
   protected readonly btnClass = btnClass;
   protected readonly hla = LINKS.hla;

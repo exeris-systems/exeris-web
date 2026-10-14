@@ -85,7 +85,7 @@ const LICENCES: readonly { key: Licence; label: string }[] = [
   `,
 })
 export class BentoComponent {
-  readonly props = input.required<BentoProps>();
+  readonly props = input.required<BentoProps, unknown>({ transform: (value: unknown) => value as BentoProps });
   protected readonly licences = LICENCES;
   protected readonly totals = CAP_TOTALS;
   protected readonly skus = SKUS;

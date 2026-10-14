@@ -46,7 +46,7 @@
     "@angular/cli": "~22.2.2",
     "@angular/compiler-cli": "~22.2.1",
     "@eslint/js": "^10.0.1",
-    "@exeris/codegen-ts": "0.9.0",
+    "@exeris/codegen-ts": "0.10.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^24.0.0",

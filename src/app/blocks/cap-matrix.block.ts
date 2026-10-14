@@ -98,7 +98,7 @@ const SKU_PAGES = new Set(['api-gateway', 'idp', 'bot-blocker']);
   `,
 })
 export class CapMatrixComponent {
-  readonly props = input.required<CapMatrixProps>();
+  readonly props = input.required<CapMatrixProps, unknown>({ transform: (value: unknown) => value as CapMatrixProps });
   protected readonly layers = LAYERS;
   protected readonly totals = CAP_TOTALS;
   protected readonly total = CAPS.length;

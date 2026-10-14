@@ -34,6 +34,6 @@ export interface FinalCtaProps {
   `,
 })
 export class FinalCtaComponent {
-  readonly props = input.required<FinalCtaProps>();
+  readonly props = input.required<FinalCtaProps, unknown>({ transform: (value: unknown) => value as FinalCtaProps });
   protected readonly btnClass = btnClass;
 }

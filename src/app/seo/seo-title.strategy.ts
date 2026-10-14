@@ -1,9 +1,9 @@
 import { DOCUMENT, Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { TitleStrategy, type ActivatedRouteSnapshot, type RouterStateSnapshot } from '@angular/router';
+import { TitleStrategy, type RouterStateSnapshot } from '@angular/router';
 import seoJson from '../../../content/meta/seo.json';
 import { SITE_NAME, SITE_URL } from '../../content/site';
-import type { ViewJson } from '../view/view-types';
+import viewRoutesJson from '../../data/view-routes.json';
 
 interface PageSeo {
   readonly title: string;
@@ -14,17 +14,11 @@ interface PageSeo {
 const SEO = seoJson as Readonly<Record<string, PageSeo>>;
 const SOCIAL_IMAGE = `${SITE_URL}/assets/brand/exeris-social-1200x630.png`;
 
-/** The view a route renders: its `view` route data, or the generated page's route path. */
-function viewName(snapshot: RouterStateSnapshot): string {
-  let route: ActivatedRouteSnapshot | null = snapshot.root;
-  let name: string | null = null;
-  while (route) {
-    const view = route.data['view'] as ViewJson | undefined;
-    if (view) name = view.view.name;
-    else if (route.data['viewName']) name = route.data['viewName'] as string;
-    route = route.firstChild;
-  }
-  return name ?? 'not-found';
+const VIEW_BY_ROUTE = viewRoutesJson as Readonly<Record<string, string>>;
+
+/** The view a URL renders, by its route path; any other path is answered by the not-found view. */
+function viewName(url: string): string {
+  return VIEW_BY_ROUTE[url.split(/[?#]/)[0].replace(/^\/+|\/+$/g, '')] ?? 'not-found';
 }
 
 /**
@@ -39,7 +33,7 @@ export class SeoTitleStrategy extends TitleStrategy {
   private readonly document = inject(DOCUMENT);
 
   override updateTitle(snapshot: RouterStateSnapshot): void {
-    const name = viewName(snapshot);
+    const name = viewName(snapshot.url);
     const seo = SEO[name];
     if (!seo) throw new Error(`content/meta/seo.json has no entry for view "${name}"`);
     const path = snapshot.url.split(/[?#]/)[0];

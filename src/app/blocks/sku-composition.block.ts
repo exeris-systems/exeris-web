@@ -58,7 +58,7 @@ export interface SkuCompositionProps {
   `,
 })
 export class SkuCompositionComponent {
-  readonly props = input.required<SkuCompositionProps>();
+  readonly props = input.required<SkuCompositionProps, unknown>({ transform: (value: unknown) => value as SkuCompositionProps });
   protected readonly s = computed(() => sku(this.props().sku));
 
   protected readonly layers = computed(() => {

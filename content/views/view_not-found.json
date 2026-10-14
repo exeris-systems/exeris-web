@@ -12,14 +12,12 @@
         "slot": "main",
         "components": [
           {
-            "type": "HERO",
-            "props": "This address does not exist on exeris.eu.",
-            "children": [
-              {
-                "type": "RICH_TEXT",
-                "props": "Use the navigation above or press / to search the site. Pages from the previous Exeris landing site have moved: the evidence pages are now the Lab."
-              }
-            ]
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"NOT FOUND\", \"title\": \"Page not found\", \"lede\": \"This address does not exist on exeris.eu. Use the navigation above or press / to search the site. Pages from the previous Exeris landing site have moved: the evidence pages are now the Lab.\", \"ctas\": [{\"label\": \"Open the Lab\", \"href\": \"/lab\", \"variant\": \"primary\"}, {\"label\": \"Home\", \"href\": \"/\", \"variant\": \"outline\"}]}"
           }
         ]
       }

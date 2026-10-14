@@ -46,7 +46,7 @@ export interface StepGridProps {
   `,
 })
 export class StepGridComponent {
-  readonly props = input.required<StepGridProps>();
+  readonly props = input.required<StepGridProps, unknown>({ transform: (value: unknown) => value as StepGridProps });
   protected readonly stepLabel = stepLabel;
   protected readonly toneVar = toneVar;
 }

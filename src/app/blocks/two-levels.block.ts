@@ -58,5 +58,5 @@ export interface TwoLevelsProps {
   `,
 })
 export class TwoLevelsComponent {
-  readonly props = input.required<TwoLevelsProps>();
+  readonly props = input.required<TwoLevelsProps, unknown>({ transform: (value: unknown) => value as TwoLevelsProps });
 }

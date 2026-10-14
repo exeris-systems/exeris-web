@@ -48,6 +48,6 @@ export interface WallDiagramProps {
   `,
 })
 export class WallDiagramComponent {
-  readonly props = input.required<WallDiagramProps>();
+  readonly props = input.required<WallDiagramProps, unknown>({ transform: (value: unknown) => value as WallDiagramProps });
   protected readonly toneVar = toneVar;
 }

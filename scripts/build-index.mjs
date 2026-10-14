@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // Builds the command-palette index (src/data/search-index.json) from the authored views, the
 // SEO descriptions, the cap registry, the SKU table and the concept list. Regenerated before
-// every build, so it is never stale and never committed.
+// every build, so it is never stale and never committed. It also writes src/data/view-routes.json,
+// the route path of each view, which the SEO title strategy keys the page tags on: the generated
+// routes carry the view's title, not its name.
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -51,5 +53,13 @@ export function buildIndex() {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const index = buildIndex();
   writeFileSync(join(ROOT, 'src/data/search-index.json'), `${JSON.stringify(index, null, 2)}\n`);
-  console.log(`build-index: ${index.length} entries`);
+  const routes = Object.fromEntries(
+    readdirSync(join(ROOT, 'content/views'))
+      .filter((f) => f.startsWith('view_') && f.endsWith('.json'))
+      .map((f) => read(`content/views/${f}`).view)
+      .map((v) => [(v.route ?? v.name).replace(/^\/+/, ''), v.name])
+      .sort(([a], [b]) => a.localeCompare(b)),
+  );
+  writeFileSync(join(ROOT, 'src/data/view-routes.json'), `${JSON.stringify(routes, null, 2)}\n`);
+  console.log(`build-index: ${index.length} entries, ${Object.keys(routes).length} view routes`);
 }

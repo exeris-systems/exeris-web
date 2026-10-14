@@ -2,9 +2,7 @@ import { type ApplicationConfig, provideZonelessChangeDetection } from '@angular
 import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
 import { TitleStrategy, provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
-import { BLOCKS } from './blocks';
 import { SeoTitleStrategy } from './seo/seo-title.strategy';
-import { BLOCK_REGISTRY } from './view/block-registry';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +14,5 @@ export const appConfig: ApplicationConfig = {
     ),
     provideClientHydration(withNoIncrementalHydration()),
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
-    { provide: BLOCK_REGISTRY, useValue: BLOCKS },
   ],
 };

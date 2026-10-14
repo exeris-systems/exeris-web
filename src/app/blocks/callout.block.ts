@@ -45,5 +45,5 @@ export interface CalloutProps {
   `,
 })
 export class CalloutComponent {
-  readonly props = input.required<CalloutProps>();
+  readonly props = input.required<CalloutProps, unknown>({ transform: (value: unknown) => value as CalloutProps });
 }

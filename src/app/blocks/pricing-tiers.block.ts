@@ -45,6 +45,6 @@ export interface PricingTier {
   `,
 })
 export class PricingTiersComponent {
-  readonly props = input.required<{ readonly tiers: readonly PricingTier[] }>();
+  readonly props = input.required<{ readonly tiers: readonly PricingTier[] }, unknown>({ transform: (value: unknown) => value as { readonly tiers: readonly PricingTier[] } });
   protected readonly toneVar = toneVar;
 }

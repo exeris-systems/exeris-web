@@ -38,12 +38,29 @@ a list of regions holding typed blocks. Authored copy is in the blocks' props; S
 descriptions are in `content/meta/seo.json`. The IR is the source a CMS or Studio can later store
 unchanged.
 
-`prebuild` regenerates `src/app/generated` from those documents with `exeris-gen` (pinned in
-`package.json`); the generated tree is not committed and is not edited. A page whose IR uses
-only the generator's simple blocks is routed to the component the generator emits (the 404
-page). A page that uses `CUSTOM` blocks is rendered from the same document by
-`src/app/view`, which gives simple blocks the markup the generator emits and resolves each
-`CUSTOM` block to a standalone component in `src/app/blocks` through one registry.
+`prebuild` regenerates `src/app/generated` from those documents with `exeris-gen`
+(`@exeris/codegen-ts` 0.10.0, pinned in `package.json`; settings in `exeris-codegen.json`). Every
+page is the component the generator emits, and the generated tree is neither committed nor edited:
+
+- `scaffold: false` writes the pages, their routes and `view.routes.ts` and no app around them;
+  `src/app/app.routes.ts` spreads `viewRoutes`, and the prerender list in `app.routes.server.ts`
+  is built from the same array.
+- `customBlocks` maps each `CUSTOM` block's `customType` to the standalone component in
+  `src/app/blocks` that renders it; the generated page imports the component and binds the
+  block's `props` JSON to its `props` input. A block that lays out children receives them as
+  projected content (`<ng-content />`). The content check fails when a block in
+  `src/app/blocks/names.ts` has no entry or an entry points at a file that does not export its
+  class.
+- `viewHeading: "none"`: the first block of every page carries the page `<h1>`; the generator adds
+  none.
+- The generator owns the files in `src/app/generated/.exeris-codegen-manifest`: it rewrites them
+  when the IR changes and prunes the pages of a deleted view.
+- SEO titles, descriptions and canonical URLs are not part of the IR. `SeoTitleStrategy` sets
+  them from `content/meta/seo.json` by view name; `npm run index` writes
+  `src/data/view-routes.json` (route path to view name) for it.
+- The static prerender setup is the site's own (`main.server.ts`, `app.config.server.ts`,
+  `app.routes.server.ts`): `render: "ssg"` belongs to the generator's app scaffold, which this site
+  does not use.
 
 ## Build-time data
 
@@ -68,7 +85,8 @@ for the GitHub API calls.
   references exists and is quotable; every evidence excerpt is a verbatim part of its claim;
   the copy of every quoted claim matches `content/meta/claims.lock.json`; no numeric literal
   appears in `content/` or `src/content/` outside a claim reference or an entry of
-  `content/meta/number-allowlist.json`, each of which names its source.
+  `content/meta/number-allowlist.json`, each of which names its source; every `CUSTOM` block is
+  mapped to its component in `exeris-codegen.json`.
 - **Output** (`scripts/verify-dist.mjs`): every route has its own HTML with title, description,
   canonical and Open Graph tags; no unresolved content token; no third-party request, tracker,
   inline script or cookie write.

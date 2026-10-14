@@ -118,7 +118,7 @@ interface CardView extends SkuCardProps {
   `,
 })
 export class SkuCardsComponent {
-  readonly props = input.required<SkuCardsProps>();
+  readonly props = input.required<SkuCardsProps, unknown>({ transform: (value: unknown) => value as SkuCardsProps });
 
   protected readonly flat = computed<CardView[]>(() => (this.props().skus ?? []).map((c) => ({ ...c, sku: sku(c.id) })));
 

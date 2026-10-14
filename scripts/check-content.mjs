@@ -8,10 +8,10 @@
 //  - a numeric literal appears in content/ or src/content/ outside a claim reference, a URL or
 //    an entry of content/meta/number-allowlist.json;
 //  - a view names an unknown CUSTOM block, gives children to a block that does not lay them out,
-//    uses an unknown structural-count token, lacks an SEO entry, or is missing from the views
-//    list of the renderer.
+//    uses an unknown structural-count token or lacks an SEO entry;
+//  - exeris-codegen.json customBlocks does not map a CUSTOM block to a component file that exports it.
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -171,14 +171,18 @@ export function checkContent({ lock = readJson('content/meta/claims.lock.json') 
     }, '');
   }
 
-  // The renderer's view list must name every view that is not a generated page.
-  const viewsTs = read('src/app/view/views.ts');
-  const listed = new Set([...viewsTs.matchAll(/view_([a-z0-9-]+)\.json/g)].map((m) => m[1]));
-  const generated = new Set([...viewsTs.matchAll(/GENERATED_VIEWS = \[([^\]]*)\]/g)].flatMap((m) => [...m[1].matchAll(/'([a-z-]+)'/g)].map((x) => x[1])));
-  for (const { json } of loadViews()) {
-    const name = json.view.name;
-    if (!listed.has(name) && !generated.has(name)) errors.push(`src/app/view/views.ts: view ${name} is neither rendered nor generated`);
+  // The generator's customBlocks map must name every CUSTOM block, each from a file that exports it.
+  const codegen = readJson('exeris-codegen.json');
+  const mapped = codegen.customBlocks ?? {};
+  for (const name of blocks.all) {
+    const entry = mapped[name];
+    if (!entry) { errors.push(`exeris-codegen.json: customBlocks has no entry for ${name}`); continue; }
+    // The import is written into src/app/generated/pages/<view>.component.ts, two levels below src/app.
+    const resolved = `${join(ROOT, 'src/app', entry.import.replace(/^\.\.\/\.\.\//, ''))}.ts`;
+    if (!existsSync(resolved)) errors.push(`exeris-codegen.json: ${name} imports ${entry.import}, which does not exist`);
+    else if (!new RegExp(`export class ${entry.symbol}\\b`).test(readFileSync(resolved, 'utf8'))) errors.push(`exeris-codegen.json: ${entry.import} does not export ${entry.symbol}`);
   }
+  for (const name of Object.keys(mapped)) if (!blocks.all.has(name)) errors.push(`exeris-codegen.json: customBlocks names ${name}, which is not in names.ts`);
 
   // Claim lock: the copy of every claim in use must equal the locked copy.
   for (const key of used) {

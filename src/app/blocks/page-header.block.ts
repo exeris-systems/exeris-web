@@ -80,7 +80,7 @@ export interface PageHeaderProps {
   `,
 })
 export class PageHeaderComponent {
-  readonly props = input.required<PageHeaderProps>();
+  readonly props = input.required<PageHeaderProps, unknown>({ transform: (value: unknown) => value as PageHeaderProps });
   protected readonly tagClass = tagClass;
   protected readonly btnClass = btnClass;
 
