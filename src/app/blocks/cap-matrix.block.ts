@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 import { HrefDirective } from '../shell/href.directive';
 import { CAPS, CAP_TOTALS, LAYERS, skusUsingCap, type Licence } from '../data/data';
+import { StatusBadgeComponent } from './status-badge.component';
 import { TextComponent } from './text.component';
 
 export interface LicenceTerm {
@@ -26,7 +27,7 @@ const SKU_PAGES = new Set(['api-gateway', 'idp', 'bot-blocker']);
  */
 @Component({
   selector: 'ex-cap-matrix',
-  imports: [HrefDirective, TextComponent],
+  imports: [HrefDirective, StatusBadgeComponent, TextComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="ex-section ex-capmatrix" id="matrix">
@@ -73,12 +74,13 @@ const SKU_PAGES = new Set(['api-gateway', 'idp', 'bot-blocker']);
                 <span class="ex-mono">L{{ c.layer }} · {{ c.layerName }}</span>
                 <span class="ex-capcard__lic"><span class="ex-capchip__dot" aria-hidden="true"></span>{{ c.licence }}</span>
               </p>
+              <p class="ex-capcard__status"><ex-status-badge [status]="c.status" /></p>
               <h3 class="ex-mono ex-capcard__name">{{ c.short }}</h3>
               <p class="ex-card__code">
-                @if (c.status === 'specified') {
-                  {{ c.name }} · specified
+                @if (c.build === 'specified') {
+                  {{ c.name }} · {{ c.build }}
                 } @else {
-                  <a class="ex-link" [href]="'https://github.com/exeris-systems/' + c.name">{{ c.name }}</a> · {{ c.status }}
+                  <a class="ex-link" [href]="'https://github.com/exeris-systems/' + c.name">{{ c.name }}</a> · {{ c.build }}
                 }
               </p>
               @if (c.usedBy.length) {

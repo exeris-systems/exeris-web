@@ -25,6 +25,9 @@ export interface Claim {
   sources: SourceLink[];
 }
 
+/** Readiness of a cap or SKU, lowest first. */
+export type Readiness = 'poc' | 'snapshot' | 'released';
+
 export type Licence = 'community' | 'commercial' | 'enterprise-private';
 
 export interface Cap {
@@ -35,7 +38,10 @@ export interface Cap {
   licence: Licence;
   licenceNote: string | null;
   visibility: string;
-  status: string;
+  /** Build state: specified, scaffolded or implemented. */
+  build: string;
+  /** Readiness; `poc` unless the registry says otherwise. */
+  status: Readiness;
 }
 
 export interface Layer {
@@ -54,6 +60,8 @@ export interface Sku {
   skuSpecificCaps: string[];
   note: string | null;
   capCount: number;
+  /** The lowest readiness among the SKU's caps. */
+  status: Readiness;
 }
 
 export interface ColdStartArm {
@@ -126,8 +134,11 @@ export const SAGA_V2 = sagaJson as unknown as {
 
 export const BUILD_META = buildMetaJson as {
   kernel: { tag: string; url: string; publishedAt: string };
+  tooling: { group: string; version: string; artifacts: string[]; jarUrl: string; centralUrl: string };
   sources: Record<string, string>;
 };
+
+export const TOOLING = BUILD_META.tooling;
 
 export const SITE_SHA = (siteShaJson as { sha: string | null }).sha;
 
@@ -159,6 +170,32 @@ export function upstreamUrl(source: UpstreamSource, path = source.path): string 
   return `https://github.com/exeris-systems/${source.repo}/blob/main/${path}`;
 }
 
+/** Readiness values, lowest first, with the label a badge shows. */
+export const READINESS: readonly { key: Readiness; label: string; hint: string }[] = [
+  { key: 'poc', label: 'PoC', hint: 'Proof of concept: specified or scaffolded, not published' },
+  { key: 'snapshot', label: 'Snapshot', hint: 'Published as a snapshot build, open to change' },
+  { key: 'released', label: 'Released', hint: 'Published as a release' },
+];
+
+export function readinessLabel(status: Readiness): string {
+  return READINESS.find((r) => r.key === status)?.label ?? 'PoC';
+}
+
+/**
+ * Values that are not authored but come from the data layer: the versions of the published
+ * tooling and the latest kernel release. A page names them as `{tooling.version}` and
+ * `{kernel.version}` in prose and code samples.
+ */
+export const VERSION_TOKENS: Readonly<Record<string, string>> = {
+  'tooling.version': TOOLING.version,
+  'kernel.version': BUILD_META.kernel.tag.replace(/^v/, ''),
+};
+
+/** `text` with every version token replaced; other braces are left as they are. */
+export function fillVersions(text: string): string {
+  return text.replace(/\{((?:tooling|kernel)\.version)\}/g, (_m, key: string) => VERSION_TOKENS[key]);
+}
+
 /**
  * Structural counts a page may show, each derived from a register so no count is typed into
  * the content. Keys are what view props name in `{ "count": "<key>" }`.
@@ -166,6 +203,10 @@ export function upstreamUrl(source: UpstreamSource, path = source.path): string 
 export function structuralCount(key: string): number {
   const [kind, arg] = key.split(':');
   switch (kind) {
+    case 'caps.status':
+      return CAPS.filter((c) => c.status === arg).length;
+    case 'skus.status':
+      return SKUS.filter((s) => s.status === arg).length;
     case 'caps.total':
       return CAP_TOTALS.total;
     case 'caps.community':

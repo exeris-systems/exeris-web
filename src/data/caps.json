@@ -1,7 +1,7 @@
 {
   "source": {
     "repo": "exeris-docs",
-    "commit": "9193a3f09c90820b83b8ba1823756516949e2bf4",
+    "commit": "ba1010775f0437602af0a42c7dd68a833b599d50",
     "path": "cap-license-registry.md"
   },
   "caps": [
@@ -13,7 +13,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-service-boundary-core",
@@ -23,7 +24,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-route-registry",
@@ -33,7 +35,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-upstream-pool",
@@ -43,7 +46,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-policy-chain",
@@ -53,7 +57,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-backend-health",
@@ -63,7 +68,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-admin-control-plane",
@@ -73,7 +79,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-rate-limiting",
@@ -83,7 +90,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-jwt-validation",
@@ -93,7 +101,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-tls-termination",
@@ -103,7 +112,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-request-routing",
@@ -113,7 +123,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-circuit-breaker",
@@ -123,7 +134,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-cors-policy",
@@ -133,7 +145,8 @@
       "licence": "community",
       "licenceNote": null,
       "visibility": "public",
-      "status": "scaffolded"
+      "build": "scaffolded",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-waf-rules",
@@ -143,7 +156,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-bot-fingerprinting",
@@ -153,7 +167,8 @@
       "licence": "enterprise-private",
       "licenceNote": null,
       "visibility": "enterprise-private",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-multi-tenancy",
@@ -163,7 +178,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-audit-trail",
@@ -173,7 +189,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-rbac-policy",
@@ -183,7 +200,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-soft-delete",
@@ -193,7 +211,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-entity-versioning",
@@ -203,7 +222,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-i18n",
@@ -213,7 +233,8 @@
       "licence": "community",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-attachment-storage",
@@ -223,7 +244,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-search-index",
@@ -233,7 +255,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-workflow-engine",
@@ -243,7 +266,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-notification-dispatch",
@@ -253,7 +277,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-import-export",
@@ -263,7 +288,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-rest-emission",
@@ -273,7 +299,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-graphql-emission",
@@ -283,7 +310,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-openapi-emission",
@@ -293,7 +321,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-contact-graph",
@@ -303,7 +332,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-product-catalog",
@@ -313,7 +343,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-pricing-engine",
@@ -323,7 +354,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-inventory-tracking",
@@ -333,7 +365,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-order-lifecycle",
@@ -343,7 +376,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-payment-gateway",
@@ -353,7 +387,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-document-ingestion",
@@ -363,7 +398,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-ocr-pipeline",
@@ -373,7 +409,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-document-classifier",
@@ -383,7 +420,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-field-extraction",
@@ -393,7 +431,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-form-recognition",
@@ -403,7 +442,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-content-types",
@@ -413,7 +453,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-content-versioning",
@@ -423,7 +464,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-asset-management",
@@ -433,7 +475,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-bank-aggregator",
@@ -443,7 +486,74 @@
       "licence": "commercial",
       "licenceNote": "BudgetHQ → promotable",
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
+    },
+    {
+      "name": "exeris-caps-credential-store",
+      "short": "credential-store",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "build": "specified",
+      "status": "poc"
+    },
+    {
+      "name": "exeris-caps-session-management",
+      "short": "session-management",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "build": "specified",
+      "status": "poc"
+    },
+    {
+      "name": "exeris-caps-mfa-totp",
+      "short": "mfa-totp",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "build": "specified",
+      "status": "poc"
+    },
+    {
+      "name": "exeris-caps-federated-login",
+      "short": "federated-login",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "build": "specified",
+      "status": "poc"
+    },
+    {
+      "name": "exeris-caps-token-issuer",
+      "short": "token-issuer",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "community",
+      "licenceNote": null,
+      "visibility": "public",
+      "build": "specified",
+      "status": "poc"
+    },
+    {
+      "name": "exeris-caps-invitations",
+      "short": "invitations",
+      "layer": 5,
+      "layerName": "Domain primitive caps",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-ai-llm-abstraction",
@@ -453,7 +563,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-ai-vector-store",
@@ -463,7 +574,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-ai-embedding-pipeline",
@@ -473,7 +585,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-ai-rag-orchestration",
@@ -483,7 +596,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-ai-prompt-templating",
@@ -493,7 +607,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-observability-bridge",
@@ -503,7 +618,8 @@
       "licence": "community",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-outbound-credentials",
@@ -513,7 +629,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-service-identity",
@@ -523,7 +640,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-idempotency",
@@ -533,7 +651,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     },
     {
       "name": "exeris-caps-usage-metering",
@@ -543,7 +662,8 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "status": "specified"
+      "build": "specified",
+      "status": "poc"
     }
   ],
   "layers": [
@@ -570,7 +690,7 @@
     {
       "n": 5,
       "name": "Domain primitive caps",
-      "count": 15
+      "count": 21
     },
     {
       "n": 6,
@@ -584,9 +704,9 @@
     }
   ],
   "totals": {
-    "community": 3,
-    "commercial": 50,
+    "community": 4,
+    "commercial": 55,
     "enterprise-private": 1,
-    "total": 54
+    "total": 60
   }
 }

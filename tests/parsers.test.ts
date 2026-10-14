@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
-import { benchmarksUrl, parseCapRegistry, parseClaims, parseSkus } from '../scripts/lib/parsers.mjs';
+import { benchmarksUrl, lowestReadiness, parseCapRegistry, parseMavenRelease, readinessOf, parseClaims, parseSkus } from '../scripts/lib/parsers.mjs';
 
 const CLAIMS = `# Benchmark claims
 
@@ -46,6 +46,11 @@ describe('parseClaims', () => {
     expect(neverQuoteAlone).toEqual(['A rule with a link.']);
   });
 
+  it('reads the release of a Maven metadata file', () => {
+    expect(parseMavenRelease('<metadata><versioning><latest>0.10.0</latest><release>0.10.0</release></versioning></metadata>')).toBe('0.10.0');
+    expect(parseMavenRelease('<metadata/>')).toBeNull();
+  });
+
   it('resolves directory links to tree URLs', () => {
     expect(benchmarksUrl('../results/raw/x/')).toBe('https://github.com/exeris-systems/exeris-benchmarks/tree/main/results/raw/x/');
   });
@@ -71,8 +76,41 @@ describe('parseCapRegistry and parseSkus', () => {
   it('parses rows and checks the stated totals', () => {
     const r = parseCapRegistry(REGISTRY);
     expect(r.totals).toMatchObject({ community: 1, commercial: 1, total: 2 });
-    expect(r.caps[1]).toMatchObject({ short: 'b', status: 'scaffolded', layer: 1 });
+    expect(r.caps[1]).toMatchObject({ short: 'b', build: 'scaffolded', status: 'poc', layer: 1 });
     expect(() => parseCapRegistry(REGISTRY.replace('| **total** | **2** |', '| **total** | **3** |'))).toThrow(/stated total/);
+  });
+
+  it('reads the five-column layout by header name', () => {
+    const five = `## Totals
+
+| Licence | Caps |
+|---|---|
+| \`community\` | 1 |
+| \`commercial\` | 1 |
+| **total** | **2** |
+
+### Layer 1 — Substrate aggregates
+
+| Cap | Licence | Visibility | Build | Status |
+|---|---|---|---|---|
+| \`exeris-caps-a\` | \`commercial\` | public | specified | snapshot |
+| \`exeris-caps-b\` | \`community\` | public | **scaffolded** | **Released** |
+`;
+    const r = parseCapRegistry(five);
+    expect(r.caps[0]).toMatchObject({ build: 'specified', status: 'snapshot', licence: 'commercial', visibility: 'public' });
+    expect(r.caps[1]).toMatchObject({ build: 'scaffolded', status: 'released' });
+    expect(() => parseCapRegistry(five.replace('| **total** | **2** |', '| **total** | **5** |'))).toThrow(/stated total/);
+  });
+
+  it('never fails open: an empty or unknown readiness is poc', () => {
+    const five = REGISTRY.replace('| Visibility | Status |', '| Visibility | Build | Status |').replace('|---|---|---|---|', '|---|---|---|---|---|')
+      .replace('public | specified |', 'public | specified | ready |').replace('public | **scaffolded** |', 'public | scaffolded | |');
+    const r = parseCapRegistry(five);
+    expect(r.caps.map((c: { status: string }) => c.status)).toEqual(['poc', 'poc']);
+    expect(readinessOf('RELEASED')).toBe('released');
+    expect(readinessOf(undefined)).toBe('poc');
+    expect(lowestReadiness(['released', 'snapshot'])).toBe('snapshot');
+    expect(lowestReadiness([])).toBe('poc');
   });
 
   it('rejects a SKU composed of a cap the registry does not hold', () => {

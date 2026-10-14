@@ -109,9 +109,30 @@ export function parseClaims(markdown) {
   return { claims, withdrawn, neverQuoteAlone };
 }
 
+/** Readiness values of a cap or SKU, lowest first. Anything else reads as the lowest. */
+export const READINESS = ['poc', 'snapshot', 'released'];
+
+/** A registry cell as a readiness value; a missing or unknown value is `poc`, never higher. */
+export function readinessOf(cell) {
+  const v = String(cell ?? '').replace(/[`*]/g, '').trim().toLowerCase();
+  return READINESS.includes(v) ? v : 'poc';
+}
+
+/** The lowest readiness of a list (an empty list is `poc`). */
+export function lowestReadiness(values) {
+  const ranks = values.map((v) => READINESS.indexOf(readinessOf(v)));
+  return READINESS[ranks.length ? Math.min(...ranks) : 0];
+}
+
 /**
  * Parses exeris-docs/cap-license-registry.md: one row per cap under each `### Layer N — Name`
  * table, plus the stated totals, which must agree with the rows.
+ *
+ * Cells are read by header name. Two layouts exist: `| Cap | Licence | Visibility | Status |`,
+ * where `Status` holds the build state (specified, scaffolded, implemented) and readiness is
+ * unstated, and `| Cap | Licence | Visibility | Build | Status |`, where `Status` is the readiness
+ * (poc, snapshot, released). Each cap carries `build` and `status` (readiness); a missing column or
+ * an unknown value gives `poc`.
  */
 export function parseCapRegistry(markdown) {
   const caps = [];
@@ -119,6 +140,7 @@ export function parseCapRegistry(markdown) {
   const stated = {};
   let layer = null;
   let inTotals = false;
+  let columns = null;
   for (const raw of markdown.split('\n')) {
     const line = raw.trim();
     const h = line.match(/^### Layer (\d+) — (.+)$/);
@@ -135,15 +157,27 @@ export function parseCapRegistry(markdown) {
     }
     const cells = line.startsWith('|') ? line.slice(1, -1).split('|').map((c) => c.trim()) : null;
     if (!cells) continue;
+    if (layer && cells[0].toLowerCase() === 'cap') {
+      const names = cells.map((c) => c.toLowerCase());
+      const hasBuild = names.includes('build');
+      columns = {
+        licence: names.indexOf('licence'),
+        visibility: names.indexOf('visibility'),
+        build: hasBuild ? names.indexOf('build') : names.indexOf('status'),
+        readiness: hasBuild ? names.indexOf('status') : -1,
+      };
+      continue;
+    }
     if (inTotals && cells.length === 2) {
       const key = cells[0].replace(/[`*]/g, '');
       const n = Number(cells[1].replace(/\*/g, ''));
       if (Number.isFinite(n) && key) stated[key] = n;
       continue;
     }
-    if (layer && cells.length === 4 && cells[0].startsWith('`exeris-caps-')) {
+    if (layer && columns && cells[0].startsWith('`exeris-caps-')) {
       const name = cells[0].replace(/`/g, '');
-      const licenceRaw = cells[1].replace(/`/g, '');
+      const cell = (i) => (i >= 0 ? (cells[i] ?? '') : '');
+      const licenceRaw = cell(columns.licence).replace(/`/g, '');
       const licence = licenceRaw.split(' ')[0];
       caps.push({
         name,
@@ -152,8 +186,9 @@ export function parseCapRegistry(markdown) {
         layerName: layer.name,
         licence,
         licenceNote: licenceRaw === licence ? null : licenceRaw.slice(licence.length).trim().replace(/^\(|\)$/g, ''),
-        visibility: cells[2],
-        status: cells[3].replace(/\*/g, ''),
+        visibility: cell(columns.visibility),
+        build: cell(columns.build).replace(/\*/g, ''),
+        status: readinessOf(cell(columns.readiness)),
       });
     }
   }
@@ -190,7 +225,8 @@ export function parseSkus(markdown, capNames) {
     if (!m) continue;
     const name = m[1].trim();
     const compositionCell = m[4];
-    const caps = codeSpans(compositionCell);
+    // The cap list ends at the first sentence break; code spans in a trailing note are not caps.
+    const caps = codeSpans(compositionCell.split(/\.\s/)[0]);
     const unknown = caps.filter((c) => !known.has(`exeris-caps-${c}`));
     if (unknown.length) throw new Error(`HLA §3.3 ${name}: caps not in the registry: ${unknown.join(', ')}`);
     const extra = compositionCell
@@ -301,4 +337,35 @@ export function parseEvidenceBundle(markdown) {
   }
   const scope = markdown.match(/\*\*Scope sentence that must be said aloud\.\*\*\s*([\s\S]*?)\n\n/);
   return { front, rows, scopeSentence: scope ? scope[1].replace(/\s+/g, ' ').trim() : null };
+}
+
+/** The `<release>` version of a Maven Central `maven-metadata.xml`, or null. */
+export function parseMavenRelease(xml) {
+  return xml.match(/<release>\s*([^<\s]+)\s*<\/release>/)?.[1] ?? null;
+}
+
+/**
+ * The single version a set of published artefacts share. Fails when one of them has no release or
+ * the releases differ, so the site never names a version that is not on Central for every
+ * coordinate it shows.
+ */
+export function sharedRelease(releases) {
+  const versions = new Set(Object.values(releases));
+  if (versions.size !== 1 || versions.has(null)) {
+    throw new Error(`published releases disagree: ${JSON.stringify(releases)}`);
+  }
+  return [...versions][0];
+}
+
+/**
+ * Adds `status` to each SKU: the lowest readiness among its registry caps. A SKU-specific cap has
+ * no registry row and counts as `poc`; so does a cap the registry does not hold, and a SKU with
+ * no caps.
+ */
+export function withSkuStatus(skus, caps) {
+  const byShort = new Map(caps.map((c) => [c.short, c.status]));
+  return skus.map((s) => ({
+    ...s,
+    status: lowestReadiness([...s.caps.map((c) => byShort.get(c)), ...s.skuSpecificCaps.map(() => 'poc')]),
+  }));
 }

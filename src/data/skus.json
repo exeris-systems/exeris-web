@@ -1,7 +1,7 @@
 {
   "source": {
     "repo": "exeris-docs",
-    "commit": "9193a3f09c90820b83b8ba1823756516949e2bf4",
+    "commit": "ba1010775f0437602af0a42c7dd68a833b599d50",
     "path": "high-level-architecture.md §3.3, §6.3"
   },
   "skus": [
@@ -28,7 +28,8 @@
       ],
       "skuSpecificCaps": [],
       "note": null,
-      "capCount": 13
+      "capCount": 13,
+      "status": "poc"
     },
     {
       "id": "edge-proxy",
@@ -49,7 +50,8 @@
         "edge-failover cap (SKU-specific)"
       ],
       "note": null,
-      "capCount": 8
+      "capCount": 8,
+      "status": "poc"
     },
     {
       "id": "bot-blocker",
@@ -68,7 +70,8 @@
       ],
       "skuSpecificCaps": [],
       "note": null,
-      "capCount": 7
+      "capCount": 7,
+      "status": "poc"
     },
     {
       "id": "idp",
@@ -96,7 +99,8 @@
       ],
       "skuSpecificCaps": [],
       "note": null,
-      "capCount": 16
+      "capCount": 16,
+      "status": "poc"
     },
     {
       "id": "pim",
@@ -124,7 +128,8 @@
       ],
       "skuSpecificCaps": [],
       "note": null,
-      "capCount": 16
+      "capCount": 16,
+      "status": "poc"
     },
     {
       "id": "oms",
@@ -152,7 +157,8 @@
       ],
       "skuSpecificCaps": [],
       "note": "L4 Flow saga engine (ADR-013) consumed via kernel SPI",
-      "capCount": 16
+      "capCount": 16,
+      "status": "poc"
     },
     {
       "id": "content-api",
@@ -178,7 +184,40 @@
       ],
       "skuSpecificCaps": [],
       "note": null,
-      "capCount": 14
+      "capCount": 14,
+      "status": "poc"
+    },
+    {
+      "id": "identity",
+      "repo": "exeris-sku-identity",
+      "name": "Identity",
+      "family": "Service Boundary",
+      "closedSource": false,
+      "caps": [
+        "service-boundary-core",
+        "rate-limiting",
+        "jwt-validation",
+        "multi-tenancy",
+        "audit-trail",
+        "rbac-policy",
+        "notification-dispatch",
+        "rest-emission",
+        "openapi-emission",
+        "credential-store",
+        "session-management",
+        "mfa-totp",
+        "federated-login",
+        "token-issuer",
+        "invitations",
+        "outbound-credentials",
+        "observability-bridge"
+      ],
+      "skuSpecificCaps": [
+        "and  run as  filters"
+      ],
+      "note": null,
+      "capCount": 18,
+      "status": "poc"
     }
   ]
 }

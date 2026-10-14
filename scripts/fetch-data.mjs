@@ -12,12 +12,26 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseCapRegistry, parseClaims, parseColdStart, parseEvidenceBundle, parseSkus } from './lib/parsers.mjs';
+import {
+  parseCapRegistry,
+  parseClaims,
+  parseColdStart,
+  parseEvidenceBundle,
+  parseMavenRelease,
+  parseSkus,
+  sharedRelease,
+  withSkuStatus,
+} from './lib/parsers.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = join(ROOT, 'src/data');
 const RAW = 'https://raw.githubusercontent.com/exeris-systems';
 const API = 'https://api.github.com/repos/exeris-systems';
+const CENTRAL = 'https://repo1.maven.org/maven2';
+
+/** The tooling coordinates the Get started page shows; all are published under one group. */
+export const TOOLING_GROUP = 'eu.exeris';
+export const TOOLING_ARTIFACTS = ['exeris-initializr', 'exeris-app-parent', 'exeris-app-bom', 'exeris-app-starter'];
 
 /** The cold-start campaign and the five arms the L14 comparison string names, in its order. */
 export const COLD_START_RUN = '20260626T104113Z-n8-res';
@@ -84,7 +98,7 @@ async function fetchAll() {
   const claims = parseClaims(claimsMd);
 
   const registry = parseCapRegistry(await docs('cap-license-registry.md'));
-  const skus = parseSkus(await docs('high-level-architecture.md'), registry.caps.map((c) => c.name));
+  const skus = withSkuStatus(parseSkus(await docs('high-level-architecture.md'), registry.caps.map((c) => c.name)), registry.caps);
 
   const arms = [];
   for (const def of COLD_START_ARMS) {
@@ -102,6 +116,18 @@ async function fetchAll() {
   });
 
   const release = await getJson(`${API}/exeris-kernel/releases/latest`);
+
+  // The version shown for the initializr is the release Maven Central lists for every coordinate
+  // the page names, and the runnable jar must be there.
+  const group = TOOLING_GROUP.replaceAll('.', '/');
+  const releases = {};
+  for (const artifact of TOOLING_ARTIFACTS) {
+    releases[artifact] = parseMavenRelease(await getText(`${CENTRAL}/${group}/${artifact}/maven-metadata.xml`));
+  }
+  const toolingVersion = sharedRelease(releases);
+  const jarUrl = `${CENTRAL}/${group}/exeris-initializr/${toolingVersion}/exeris-initializr-${toolingVersion}.jar`;
+  const jar = await fetch(jarUrl, { method: 'HEAD', headers: headers() });
+  if (!jar.ok) throw new Error(`HEAD ${jarUrl}: HTTP ${jar.status}`);
 
   return {
     'claims.json': {
@@ -132,6 +158,13 @@ async function fetchAll() {
     },
     'build-meta.json': {
       kernel: { tag: release.tag_name, url: release.html_url, publishedAt: release.published_at },
+      tooling: {
+        group: TOOLING_GROUP,
+        version: toolingVersion,
+        artifacts: TOOLING_ARTIFACTS,
+        jarUrl,
+        centralUrl: `https://central.sonatype.com/artifact/${TOOLING_GROUP}/exeris-initializr/${toolingVersion}`,
+      },
       sources: { 'exeris-benchmarks': benchmarksSha, 'exeris-docs': docsSha },
     },
   };
@@ -155,7 +188,7 @@ async function main() {
   }
   for (const [name, value] of Object.entries(files)) write(name, value);
   const meta = JSON.parse(readFileSync(join(DATA, 'build-meta.json'), 'utf8'));
-  console.log(`fetch-data: claims ${Object.keys(files['claims.json'].claims).length}, caps ${files['caps.json'].totals.total}, SKUs ${files['skus.json'].skus.length}, kernel ${meta.kernel.tag}`);
+  console.log(`fetch-data: claims ${Object.keys(files['claims.json'].claims).length}, caps ${files['caps.json'].totals.total}, SKUs ${files['skus.json'].skus.length}, kernel ${meta.kernel.tag}, tooling ${meta.tooling.version}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
