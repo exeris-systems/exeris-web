@@ -51,8 +51,14 @@
     {
       "title": "Contact",
       "href": "/pricing#contact",
-      "hint": "Platform and Enterprise",
-      "keywords": "sales email"
+      "hint": "Design partners",
+      "keywords": "email design partner write"
+    },
+    {
+      "title": "Initializr",
+      "href": "/start",
+      "hint": "Generate a project from Maven Central",
+      "keywords": "maven central coordinates generate project start tooling"
     }
   ],
   "docs": [

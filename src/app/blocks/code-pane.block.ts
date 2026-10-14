@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { fillVersions } from '../data/data';
 import { highlight } from './highlight';
 import { tagClass, type Badge } from './types';
 
@@ -30,5 +31,8 @@ export interface CodePaneProps {
 export class CodePaneComponent {
   readonly props = input.required<CodePaneProps, unknown>({ transform: (value: unknown) => value as CodePaneProps });
   protected readonly tagClass = tagClass;
-  protected readonly lines = computed(() => highlight(this.props().code, this.props().lang.startsWith('yaml') ? 'yaml' : 'java'));
+  protected readonly lines = computed(() => {
+    const lang = this.props().lang;
+    return highlight(fillVersions(this.props().code), lang.startsWith('yaml') ? 'yaml' : lang.startsWith('java') ? 'java' : 'plain');
+  });
 }

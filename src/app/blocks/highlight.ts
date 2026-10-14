@@ -14,8 +14,8 @@ const JAVA_KW = new Set([
  * Comments, strings, annotations, keywords, capitalised type names and YAML keys are coloured;
  * everything else is plain text.
  */
-export function highlight(code: string, lang: string): CodeToken[][] {
-  return code.split('\n').map((line) => (lang === 'yaml' ? yamlLine(line) : javaLine(line)));
+export function highlight(code: string, lang: 'java' | 'yaml' | 'plain'): CodeToken[][] {
+  return code.split('\n').map((line) => (lang === 'plain' ? [{ cls: null, text: line }] : lang === 'yaml' ? yamlLine(line) : javaLine(line)));
 }
 
 function javaLine(line: string): CodeToken[] {

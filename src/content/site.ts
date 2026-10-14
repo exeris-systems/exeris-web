@@ -6,9 +6,6 @@
 export const SITE_URL = 'https://exeris.eu';
 export const SITE_NAME = 'Exeris';
 
-/** The Console (sign-in and onboarding). Nothing auth-related is built on this site. */
-export const CONSOLE_URL = 'https://console.exeris.eu';
-
 export const CONTACT_EMAIL = 'contact@exeris.eu';
 export const CONTACT_HREF = `mailto:${CONTACT_EMAIL}`;
 
@@ -52,6 +49,7 @@ export interface NavItem {
 }
 
 export const NAV: readonly NavItem[] = [
+  { id: 'start', label: 'Get started', href: '/start' },
   {
     id: 'platform',
     label: 'Platform',
@@ -87,12 +85,13 @@ export interface FooterColumn {
   readonly links: readonly NavLink[];
 }
 
-export const FOOTER_TAGLINE = 'European open-core JVM platform. Systems by contract. Compute without waste.';
+export const FOOTER_TAGLINE = 'Intent in. Systems out.';
 
 export const FOOTER_COLUMNS: readonly FooterColumn[] = [
   {
     title: 'Platform',
     links: [
+      { label: 'Get started', href: '/start' },
       { label: 'Kernel', href: LINKS.kernel },
       { label: 'SDK', href: LINKS.sdk },
       { label: 'Tooling', href: LINKS.tooling },
@@ -126,4 +125,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
   },
 ];
 
-export const FOOTER_LEGAL = ['© 2026 Exeris Systems', 'Gdynia, Poland', 'Apache-2.0 (kernel)', 'Commercial (Enterprise)'];
+/** Only repositories that are public on GitHub and carry the Apache-2.0 licence text are named. */
+export const OPEN_SOURCE_REPOS = ['kernel', 'SDK', 'tooling', 'platform', 'benchmarks'] as const;
+
+export const FOOTER_LEGAL = ['© 2026 Exeris Systems', 'Gdynia, Poland', `Apache-2.0: ${OPEN_SOURCE_REPOS.join(', ')}`];

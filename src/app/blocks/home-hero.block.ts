@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { HrefDirective } from '../shell/href.directive';
+import { fillVersions } from '../data/data';
+import { CodePaneComponent, type CodePaneProps } from './code-pane.block';
 import { btnClass, type Cta } from './types';
 
 export interface HomeHeroProps {
@@ -9,13 +11,15 @@ export interface HomeHeroProps {
   readonly accent?: string;
   readonly sub: string;
   readonly sentence?: string;
+  /** The command the visitor can run, shown under the sub line. */
+  readonly command?: CodePaneProps;
   readonly ctas?: readonly Cta[];
   readonly meta?: readonly string[];
 }
 
 @Component({
   selector: 'ex-home-hero',
-  imports: [HrefDirective],
+  imports: [HrefDirective, CodePaneComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="ex-section ex-home-hero">
@@ -25,7 +29,7 @@ export interface HomeHeroProps {
         @if (props().pill; as pill) {
           <a class="ex-home-hero__pill" [exHref]="pill.href">
             <span class="ex-tag ex-tag--flow">{{ pill.label }}</span>
-            <span>{{ pill.text }}</span>
+            <span>{{ pillText() }}</span>
             <span aria-hidden="true">→</span>
           </a>
         }
@@ -42,6 +46,11 @@ export interface HomeHeroProps {
         <p class="ex-home-hero__sub">{{ props().sub }}</p>
         @if (props().sentence) {
           <p class="ex-home-hero__sentence">{{ props().sentence }}</p>
+        }
+        @if (props().command; as command) {
+          <div class="ex-home-hero__command">
+            <ex-code-pane [props]="command" />
+          </div>
         }
         @if (props().ctas?.length) {
           <div class="ex-actions ex-home-hero__actions">
@@ -60,4 +69,5 @@ export interface HomeHeroProps {
 export class HomeHeroComponent {
   readonly props = input.required<HomeHeroProps, unknown>({ transform: (value: unknown) => value as HomeHeroProps });
   protected readonly btnClass = btnClass;
+  protected readonly pillText = computed(() => fillVersions(this.props().pill?.text ?? ''));
 }

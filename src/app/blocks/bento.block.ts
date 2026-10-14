@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { HrefDirective } from '../shell/href.directive';
-import { CAP_TOTALS, SKUS, type Licence } from '../data/data';
+import { BUILD_META, CAPS, CAP_TOTALS, READINESS, SKUS, type Licence, type Readiness } from '../data/data';
 import { ClaimQuoteComponent } from './claim-quote.component';
 import { CodePaneComponent, type CodePaneProps } from './code-pane.block';
+import { StatusBadgeComponent } from './status-badge.component';
 import { SectionHeadComponent, type SectionHeadProps } from './section-head.block';
 import { TextComponent } from './text.component';
 
@@ -10,6 +11,8 @@ export type BentoExtra =
   | { readonly kind: 'claim'; readonly claim: string }
   | { readonly kind: 'licences' }
   | { readonly kind: 'skus' }
+  | { readonly kind: 'readiness'; readonly of: 'caps' | 'skus' }
+  | { readonly kind: 'kernel' }
   | ({ readonly kind: 'code' } & CodePaneProps);
 
 export interface BentoCell {
@@ -35,7 +38,7 @@ const LICENCES: readonly { key: Licence; label: string }[] = [
 
 @Component({
   selector: 'ex-bento',
-  imports: [HrefDirective, ClaimQuoteComponent, CodePaneComponent, SectionHeadComponent, TextComponent],
+  imports: [HrefDirective, ClaimQuoteComponent, CodePaneComponent, SectionHeadComponent, StatusBadgeComponent, TextComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="ex-section ex-section--alt">
@@ -66,6 +69,19 @@ const LICENCES: readonly { key: Licence; label: string }[] = [
                     }
                   </ul>
                 }
+                @case ('kernel') {
+                  <p class="ex-bento__status">
+                    <ex-status-badge status="released" />
+                    <a class="ex-link" [href]="kernel.url">Kernel {{ kernel.tag }} on Maven Central</a>
+                  </p>
+                }
+                @case ('readiness') {
+                  <ul class="ex-tags ex-bento__status" [attr.aria-label]="'Readiness'">
+                    @for (r of readiness($any(cell.extra).of); track r.key) {
+                      <li><ex-status-badge [status]="r.key" /> {{ r.count }}</li>
+                    }
+                  </ul>
+                }
                 @case ('skus') {
                   <ul class="ex-tags">
                     @for (s of skus; track s.id) {
@@ -87,7 +103,12 @@ const LICENCES: readonly { key: Licence; label: string }[] = [
 export class BentoComponent {
   readonly props = input.required<BentoProps, unknown>({ transform: (value: unknown) => value as BentoProps });
   protected readonly licences = LICENCES;
+  protected readonly kernel = BUILD_META.kernel;
   protected readonly totals = CAP_TOTALS;
   protected readonly skus = SKUS;
+  protected readiness(of: 'caps' | 'skus'): { key: Readiness; count: number }[] {
+    const items: readonly { status: Readiness }[] = of === 'caps' ? CAPS : SKUS;
+    return READINESS.map((r) => ({ key: r.key, count: items.filter((i) => i.status === r.key).length }));
+  }
   protected readonly licenceSummary = LICENCES.map((l) => `${CAP_TOTALS[l.key]} ${l.label}`).join(', ');
 }

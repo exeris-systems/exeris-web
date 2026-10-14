@@ -3,6 +3,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { HrefDirective } from '../shell/href.directive';
 import { sku, type Sku } from '../data/data';
 import { SectionHeadComponent, type SectionHeadProps } from './section-head.block';
+import { StatusBadgeComponent } from './status-badge.component';
 import { TextComponent } from './text.component';
 
 export interface SkuCardProps {
@@ -35,12 +36,12 @@ interface CardView extends SkuCardProps {
 }
 
 /**
- * SKU cards from skus.json: name, repository coordinate, cap count and source visibility come
- * from the HLA tables; the description is the content's.
+ * SKU cards from skus.json: name, cap count, readiness and source visibility come from the
+ * registers; the description is the content's.
  */
 @Component({
   selector: 'ex-sku-cards',
-  imports: [NgTemplateOutlet, HrefDirective, SectionHeadComponent, TextComponent],
+  imports: [NgTemplateOutlet, HrefDirective, SectionHeadComponent, StatusBadgeComponent, TextComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="ex-section" [class.ex-section--alt]="props().alt" [attr.id]="props().id ?? null">
@@ -84,14 +85,16 @@ interface CardView extends SkuCardProps {
       <article class="ex-card ex-card--edge ex-sku-card" [attr.id]="'sku-' + c.id" [style.--ex-tone]="c.sku.closedSource ? 'var(--ex-fg-2)' : 'var(--ex-flow-blue-text)'">
         <div class="ex-sku-card__top">
           <span class="ex-eyebrow">{{ c.sku.family }}</span>
-          <span class="ex-tag">{{ c.sku.capCount }} caps</span>
+          <span class="ex-sku-card__badges">
+            <ex-status-badge [status]="c.sku.status" />
+            <span class="ex-tag">{{ c.sku.capCount }} caps</span>
+          </span>
         </div>
         @if (level === 3) {
           <h3 class="ex-sku-card__name"><ng-container *ngTemplateOutlet="name; context: { $implicit: c }" /></h3>
         } @else {
           <h4 class="ex-sku-card__name"><ng-container *ngTemplateOutlet="name; context: { $implicit: c }" /></h4>
         }
-        <p class="ex-card__code">{{ c.sku.repo }}</p>
         <p><ex-text [text]="c.description" /></p>
         @if (c.enterprise) {
           <p class="ex-sku-card__ent"><span class="ex-eyebrow">Enterprise</span> {{ c.enterprise }}</p>

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { LINKS } from '../../content/site';
 import { HrefDirective } from '../shell/href.directive';
 import { capByShort, sku } from '../data/data';
+import { StatusBadgeComponent } from './status-badge.component';
 import { TextComponent } from './text.component';
 import { btnClass, tagClass, type Badge, type Cta } from './types';
 
@@ -15,7 +16,7 @@ export interface SkuHeaderProps {
 /** The SKU detail hero. Family, repository, cap count and licence mix come from the registers. */
 @Component({
   selector: 'ex-sku-header',
-  imports: [HrefDirective, TextComponent],
+  imports: [HrefDirective, StatusBadgeComponent, TextComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="ex-section ex-section--alt ex-page-header">
@@ -37,13 +38,13 @@ export interface SkuHeaderProps {
             } @else {
               <li class="ex-tag ex-tag--cyan">Source-available</li>
             }
+            <li><ex-status-badge [status]="s().status" /></li>
             <li class="ex-tag">{{ s().capCount }} caps</li>
             @for (b of props().badges ?? []; track b.label) {
               <li [class]="tagClass(b.tone)">{{ b.label }}</li>
             }
           </ul>
           <h1 class="ex-page-header__title">{{ s().name }}</h1>
-          <p class="ex-sku-header__code ex-mono">{{ s().repo }}</p>
           <p class="ex-page-header__lede"><ex-text [text]="props().hero" /></p>
           @if (props().ctas?.length) {
             <div class="ex-actions ex-page-header__actions">
@@ -55,9 +56,8 @@ export interface SkuHeaderProps {
         </div>
         <dl class="ex-defs">
           <div class="exeris-def"><dt>Family</dt><dd>{{ s().family }}</dd></div>
-          <div class="exeris-def"><dt>Repository</dt><dd>{{ s().repo }}</dd></div>
-          <div class="exeris-def"><dt>Composition</dt><dd>commercial licence</dd></div>
-          <div class="exeris-def"><dt>Source</dt><dd>{{ s().closedSource ? 'closed-source (private repository)' : 'source-available (public repository)' }}</dd></div>
+          <div class="exeris-def"><dt>Readiness</dt><dd><ex-status-badge [status]="s().status" /></dd></div>
+          <div class="exeris-def"><dt>Source</dt><dd>{{ s().closedSource ? 'closed-source' : 'source-available' }}</dd></div>
           <div class="exeris-def"><dt>Caps</dt><dd>{{ mix() }}</dd></div>
           <div class="exeris-def"><dt>Defined in</dt><dd><a class="ex-link" [href]="hla">HLA §3.3</a></dd></div>
         </dl>

@@ -41,9 +41,17 @@
       "import": "../../blocks/card-grid.block",
       "symbol": "CardGridComponent"
     },
+    "ExCodeExample": {
+      "import": "../../blocks/code-example.block",
+      "symbol": "CodeExampleComponent"
+    },
     "ExCodePane": {
       "import": "../../blocks/code-pane.block",
       "symbol": "CodePaneComponent"
+    },
+    "ExCodeSteps": {
+      "import": "../../blocks/code-steps.block",
+      "symbol": "CodeStepsComponent"
     },
     "ExConsumerTable": {
       "import": "../../blocks/consumer-table.block",
@@ -52,6 +60,10 @@
     "ExContact": {
       "import": "../../blocks/contact.block",
       "symbol": "ContactComponent"
+    },
+    "ExCoordinates": {
+      "import": "../../blocks/coordinates.block",
+      "symbol": "CoordinatesComponent"
     },
     "ExEvidenceStrip": {
       "import": "../../blocks/evidence-strip.block",

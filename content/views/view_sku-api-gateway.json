@@ -18,7 +18,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"sku\": \"api-gateway\", \"hero\": \"An HTTP gateway composed from routing, upstream pooling, a policy chain, backend health and an admin control plane, on a kernel-direct data plane with no Spring dependency. Source-available under the Exeris Commercial License.\", \"ctas\": [{\"label\": \"Discuss fit →\", \"href\": \"/pricing#contact\", \"variant\": \"solid\"}, {\"label\": \"Architecture\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md\"}, {\"label\": \"Evidence\", \"href\": \"/lab\"}]}"
+            "props": "{\"sku\": \"api-gateway\", \"hero\": \"An HTTP gateway composed from routing, upstream pooling, a policy chain, backend health and an admin control plane, on a kernel-direct data plane with no Spring dependency.\", \"ctas\": [{\"label\": \"Design partners →\", \"href\": \"/pricing#design-partners\", \"variant\": \"solid\"}, {\"label\": \"Architecture\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md\"}, {\"label\": \"Evidence\", \"href\": \"/lab\"}]}"
           },
           {
             "type": "CUSTOM",
@@ -58,7 +58,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · OPEN SOURCE ON GITHUB\", \"title\": \"Generate your first application.\", \"ctas\": [{\"label\": \"Get started →\", \"href\": \"/start\", \"variant\": \"solid\"}, {\"label\": \"Become a design partner\", \"href\": \"/pricing#design-partners\"}]}"
           }
         ]
       }

@@ -18,15 +18,15 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"center\": true, \"eyebrow\": \"PRICING\", \"title\": \"Start free. Subscribe to operate. Detach to own.\", \"lede\": \"Three tiers in pricing, the same three tiers as the platform. No marketing bundles. The commercial licence is source-available; production use requires an active subscription.\"}"
+            "props": "{\"center\": true, \"eyebrow\": \"PRICING\", \"title\": \"Open source today. Design partners first.\", \"lede\": \"Everything public today is Apache-2.0. The commercial caps and SKUs are proofs of concept, so there are no prices and no plans yet. What exists is an invitation to build with them.\"}"
           },
           {
             "type": "CUSTOM",
-            "customType": "ExPricingTiers",
+            "customType": "ExCardGrid",
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"tiers\": [{\"name\": \"Community\", \"sub\": \"Apache-2.0 · open core\", \"price\": \"Free\", \"tone\": \"cyan\", \"cta\": {\"label\": \"Start with the kernel\", \"href\": \"/platform\"}, \"points\": [\"The kernel: SPI, Core, the Community driver, the TCK\", \"The community-licensed caps: `cors-policy`, `i18n`, `observability-bridge`\", \"SDK, tooling and the annotation processor\", \"JFR-first observability\", \"The reproducible benchmark lab\", \"No telemetry phone-home, no feature gating\"], \"foot\": \"Self-supported\"}, {\"name\": \"Platform\", \"sub\": \"Commercial subscription\", \"price\": \"Contact us\", \"tone\": \"flow\", \"featured\": true, \"cta\": {\"label\": \"Contact us\", \"href\": \"/pricing#contact\"}, \"points\": [\"Everything in Community\", \"The hosted control plane\", \"The {caps.commercial} commercial-licensed caps, source-available\", \"Every Platform SKU of the Gateway and Service Boundary families\", \"Studio organisation features: multi-environment promotion, audit dashboards\", \"Production support and CVE notification\", \"Code Detachment on request\"], \"foot\": \"Production runtime licence\"}, {\"name\": \"Enterprise\", \"sub\": \"Acceleration paths\", \"price\": \"Contact us\", \"tone\": \"slate\", \"cta\": {\"label\": \"Contact us\", \"href\": \"/pricing#contact\"}, \"points\": [\"Everything in Platform\", \"The Enterprise kernel driver: io_uring, HTTP/3, QUIC TLS\", \"NUMA-aware allocation and slab pools\", \"Enterprise observability: decoder and forensics CLI\", \"Bot Blocker and the enterprise-private `bot-fingerprinting` cap\", \"On-prem deployment and SSO\"], \"foot\": \"For workloads where syscalls, NUMA or ingress dominate\"}]}"
+            "props": "{\"id\": \"design-partners\", \"head\": {\"eyebrow\": \"DESIGN PARTNERS\", \"title\": \"Looking for two or three teams to build with.\", \"body\": \"The commercial caps and SKUs are proofs of concept. Before they are anything more, Exeris wants to build them against real use cases, with a few teams that have one.\"}, \"columns\": 2, \"joined\": true, \"cards\": [{\"eyebrow\": \"WHAT YOU GET\", \"title\": \"Direct work with the author\", \"tone\": \"flow\", \"points\": [\"Direct work with the author, not a queue\", \"Early access to capabilities and SKUs as they mature\", \"Influence on the roadmap, starting with your use case\"]}, {\"eyebrow\": \"WHAT IS EXPECTED\", \"title\": \"A real use case and honest feedback\", \"tone\": \"cyan\", \"points\": [\"A real use case that the platform can be tried on\", \"Feedback: what worked, what broke, what is missing\", \"Permission to talk about it, in the repositories, on the blog and here\"]}]}"
           },
           {
             "type": "CUSTOM",
@@ -34,7 +34,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"id\": \"detachment\", \"alt\": true, \"head\": {\"eyebrow\": \"§ CODE DETACHMENT\", \"title\": \"No silent lock-in. Detach to own.\", \"body\": \"A one-time fee grants perpetual use of the detached version: the unsigned composition manifest and the build artifacts needed to operate it independently. The Wall guarantees there is no hidden classpath glue.\"}, \"steps\": [{\"title\": \"Source-available always\", \"body\": \"Every commercial-licensed cap and every source-available SKU is readable in a public repository before you subscribe.\", \"tone\": \"cyan\"}, {\"title\": \"Subscribe to operate\", \"body\": \"An active Platform subscription is the production runtime licence. Code visibility does not depend on it.\", \"tone\": \"flow\"}, {\"title\": \"Detach to own\", \"body\": \"A one-time fee converts to perpetual use of the detached version: unsigned manifest, full build artifacts.\", \"tone\": \"slate\"}]}"
+            "props": "{\"id\": \"detachment\", \"alt\": true, \"head\": {\"eyebrow\": \"§ CODE DETACHMENT\", \"title\": \"No silent lock-in. Detach to own.\", \"body\": \"This applies to the commercial caps and SKUs only; everything that is Apache-2.0 is already yours to use and fork. The principle is that nothing you rely on is reachable only through Exeris, and the Wall guarantees there is no hidden classpath glue.\"}, \"steps\": [{\"title\": \"Source-available by design\", \"body\": \"Commercial caps and SKUs are designed to be source-available, with one named exception, so you can read what you depend on.\", \"tone\": \"cyan\"}, {\"title\": \"Operate independently\", \"body\": \"Detachment is the right to operate a version of a commercial cap or SKU without Exeris: the unsigned composition manifest and the build artifacts it needs.\", \"tone\": \"flow\"}, {\"title\": \"Terms arrive with the first release\", \"body\": \"The terms of detachment are published together with the first release of a commercial cap or SKU. Until then nothing is offered.\", \"tone\": \"slate\"}]}"
           },
           {
             "type": "CUSTOM",
@@ -42,7 +42,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"id\": \"contact\", \"eyebrow\": \"CONTACT\", \"title\": \"Talk to us about Platform or Enterprise.\", \"body\": \"Tell us what you run today and what you want to replace underneath it.\", \"label\": \"Contact us\"}"
+            "props": "{\"id\": \"contact\", \"eyebrow\": \"WRITE TO US\", \"title\": \"Become a design partner.\", \"body\": \"Tell us what you run today and what you would build first.\", \"label\": \"Write to us\"}"
           }
         ]
       }

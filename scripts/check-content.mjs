@@ -9,6 +9,8 @@
 //    an entry of content/meta/number-allowlist.json;
 //  - a view names an unknown CUSTOM block, gives children to a block that does not lay them out,
 //    uses an unknown structural-count token or lacks an SEO entry;
+//  - authored copy uses readiness or commercial wording (see READINESS_RULES below) outside an
+//    allow-listed technical use or the copy of a released SKU;
 //  - exeris-codegen.json customBlocks does not map a CUSTOM block to a component file that exports it.
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -24,7 +26,92 @@ const NON_PROSE_KEYS = new Set(['href', 'claim', 'excerpt', 'id', 'sku', 'tone',
 /** Keys whose value may be a JSON number: layout only. */
 const NUMBER_KEYS = new Set(['columns']);
 const COUNT_TOKEN = /\{([a-z.:-]+)\}/g;
-const COUNT_KEYS = /^(caps\.(total|community|commercial|enterprise-private)|layers|licences|skus|sku\.caps:[a-z-]+)$/;
+const COUNT_KEYS = /^(caps\.(total|community|commercial|enterprise-private)|caps\.status:[a-z]+|skus\.status:[a-z]+|layers|licences|skus|sku\.caps:[a-z-]+|tooling\.version|kernel\.version)$/;
+
+/**
+ * Readiness and commercial wording. Nothing is released as a product today, so copy that says a
+ * thing is sold, supported, hosted or licensed for production, or invites a sales conversation,
+ * says something untrue. Each rule has an id, which an entry of content/meta/readiness-allowlist.json
+ * names to permit one technical use.
+ */
+export const READINESS_RULES = [
+  { id: 'sold', re: /\b(sold|sell|sells|selling|sale|sales)\b/i },
+  { id: 'buy', re: /\b(buy|buyer|buyers|buying|bought)\b/i },
+  { id: 'purchase', re: /\bpurchas(e|es|ed|ing)\b/i },
+  { id: 'production', re: /\bproduction\b/i },
+  { id: 'support', re: /\b(production|commercial|enterprise|paid|premium|priority|long-term|self)[- ]support(ed)?\b|\bsupport (contract|plan|tier|team|offering)s?\b|\band support\b/i },
+  { id: 'sla', re: /\bSLAs?\b/ },
+  { id: 'cve', re: /\bCVEs?\b/ },
+  { id: 'hosted', re: /\b(hosted|managed) (control plane|service|platform|console|version|offering|cloud|option)\b|\bSaaS\b/i },
+  { id: 'control-plane', re: /\bcontrol plane\b/i },
+  { id: 'licence', re: /\b(production|runtime|perpetual|commercial|enterprise)[- ](use )?licen[cs]e\b|\blicen[cs]e (key|fee)s?\b|\bExeris (Commercial|Enterprise) License\b|\bsubscri(be|bed|ption|ptions)\b|\bone-time fee\b/i },
+  { id: 'air-gapped', re: /\bair-?gap(ped|pable)?\b|\bon-prem(ises)?\b/i },
+  { id: 'contact-sales', re: /\bContact (us|sales)\b|\bDiscuss (Enterprise )?fit\b|\b(request|book) a demo\b|\bget a quote\b/i },
+  { id: 'console', re: /console\.exeris\.eu/i },
+];
+
+/** Keys whose value is a link: the rules that name an address still apply to it. */
+const LINK_KEYS = new Set(['href']);
+
+/** The readiness rules a piece of copy trips, after the allow-listed uses are taken out. */
+export function readinessHits(text, { view = null, allow = [], isLink = false } = {}) {
+  const hits = [];
+  for (const rule of READINESS_RULES) {
+    if (isLink && rule.id !== 'console') continue;
+    const allowed = allow.filter((e) => e.rule === rule.id && (!e.view || e.view === view));
+    let probe = text;
+    for (const e of allowed) probe = probe.replace(new RegExp(e.pattern, 'gi'), ' ');
+    const m = probe.match(rule.re);
+    if (m) hits.push({ rule: rule.id, match: m[0] });
+  }
+  return hits;
+}
+
+function readinessAllowlist() {
+  return readJson('content/meta/readiness-allowlist.json').entries;
+}
+
+/**
+ * Readiness errors of one view. Copy attached to a SKU whose status is `released` is exempt: a
+ * node that names the SKU in `sku`, or an element of a `skus` list with that `id`. Everything
+ * else, site-wide copy included, is held to the rules.
+ */
+export function viewReadinessErrors(file, view, { skus, allow }) {
+  const released = new Set(skus.filter((s) => s.status === 'released').map((s) => s.id));
+  const errors = [];
+  const scan = (value, key, where, exempt) => {
+    if (exempt || typeof value !== 'string') return;
+    for (const h of readinessHits(value, { view: view.name, allow, isLink: LINK_KEYS.has(key) })) {
+      errors.push(`${file}: ${where}: "${h.match}" reads as ${h.rule}; nothing is released as a product (see "Readiness wording" in README)`);
+    }
+  };
+  const walk = (value, key, where, exempt) => {
+    if (Array.isArray(value)) value.forEach((v, i) => walk(v, key, `${where}[${i}]`, key === 'skus' && v && released.has(v.id) ? true : exempt));
+    else if (value && typeof value === 'object') {
+      const own = exempt || (typeof value.sku === 'string' && released.has(value.sku));
+      for (const [k, v] of Object.entries(value)) walk(v, k, `${where}.${k}`, own);
+    } else if (!NON_PROSE_KEYS.has(key) || LINK_KEYS.has(key)) scan(value, key, where, exempt);
+  };
+  scan(view.title ?? '', 'title', 'title', false);
+  (view.regions ?? []).forEach((region, r) =>
+    walkNodes(region.components, (node, at) => {
+      if (node.type !== 'CUSTOM' || !node.props) return;
+      try {
+        walk(JSON.parse(node.props), null, `regions[${r}]${at} props`, false);
+      } catch {
+        // props that are not JSON are reported by the main check
+      }
+    }, '.components'),
+  );
+  return errors;
+}
+
+function walkDir(dir) {
+  return readdirSync(join(ROOT, dir)).flatMap((f) => {
+    const p = `${dir}/${f}`;
+    return statSync(join(ROOT, p)).isDirectory() ? walkDir(p) : [p];
+  });
+}
 
 export function loadViews() {
   return readdirSync(join(ROOT, 'content/views'))
@@ -149,17 +236,32 @@ export function checkContent({ lock = readJson('content/meta/claims.lock.json') 
     );
   }
 
+  // Readiness wording: every view, the site-wide content and the meta files.
+  const skusData = readJson('src/data/skus.json').skus;
+  const allow = readinessAllowlist();
+  for (const { file, json } of loadViews()) errors.push(...viewReadinessErrors(file, json.view, { skus: skusData, allow }));
+  const siteScan = (file, text, where, isLink) => {
+    for (const h of readinessHits(text, { allow, isLink })) errors.push(`${file}${where}: "${h.match}" reads as ${h.rule}; nothing is released as a product (see "Readiness wording" in README)`);
+  };
+  for (const file of ['content/meta/seo.json', 'content/meta/index-extra.json']) {
+    walkProps(readJson(file), (value, p, key) => {
+      if (typeof value === 'string') siteScan(file, value, p, key === 'href');
+    }, '');
+  }
+
+  // No component or public file links the Console, whatever the copy says.
+  const sources = [...walkDir('src/app').filter((f) => f.endsWith('.ts') && !f.startsWith('src/app/generated/')), ...walkDir('public')];
+  for (const file of sources) {
+    if (/console\.exeris\.eu/i.test(read(file))) errors.push(`${file}: links console.exeris.eu; the console is not a live offering`);
+  }
+
   // src/content: string literals of the typed site content.
-  const walkDir = (dir) =>
-    readdirSync(join(ROOT, dir)).flatMap((f) => {
-      const p = `${dir}/${f}`;
-      return statSync(join(ROOT, p)).isDirectory() ? walkDir(p) : [p];
-    });
   for (const file of walkDir('src/content').filter((f) => f.endsWith('.ts'))) {
     const src = read(file).replace(/\/\*[\s\S]*?\*\/|^\s*\/\/.*$/gm, '');
     for (const m of src.matchAll(/'([^'\n]*)'|"([^"\n]*)"|`([^`]*)`/g)) {
       const text = m[1] ?? m[2] ?? m[3];
       for (const s of strayNumbers(text, patterns)) errors.push(`${file}: numeric literal "${s}"`);
+      siteScan(file, text, '', /^https?:\/\//.test(text));
     }
   }
   // Meta content (SEO, palette concepts) is prose too.

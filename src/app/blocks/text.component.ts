@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { structuralCount } from '../data/data';
+import { VERSION_TOKENS, structuralCount } from '../data/data';
 
 interface Segment {
   readonly kind: 'text' | 'code' | 'count';
@@ -8,7 +8,7 @@ interface Segment {
 
 /**
  * Splits authored text into plain runs, `code` spans (between backticks) and structural counts
- * (`{caps.total}`, resolved from the registers). Only text nodes are created: content never
+ * (`{caps.total}`, resolved from the registers) and version tokens (`{tooling.version}`). Only text nodes are created: content never
  * reaches the DOM as HTML.
  */
 export function segments(text: string): Segment[] {
@@ -18,7 +18,7 @@ export function segments(text: string): Segment[] {
   for (const m of text.matchAll(re)) {
     if (m.index > last) out.push({ kind: 'text', value: text.slice(last, m.index) });
     if (m[1] !== undefined) out.push({ kind: 'code', value: m[1] });
-    else out.push({ kind: 'count', value: String(structuralCount(m[2])) });
+    else out.push({ kind: 'count', value: m[2] in VERSION_TOKENS ? VERSION_TOKENS[m[2]] : String(structuralCount(m[2])) });
     last = m.index + m[0].length;
   }
   if (last < text.length) out.push({ kind: 'text', value: text.slice(last) });

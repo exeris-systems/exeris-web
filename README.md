@@ -70,10 +70,23 @@ page is the component the generator emits, and the generated tree is neither com
 |---|---|
 | `src/data/claims.json` | `exeris-benchmarks/docs/CLAIMS.md`, registered copy strings keyed `L12.absolute`, `L13.floor`, … |
 | `src/data/cold-start.json` | `exeris-benchmarks/results/cold-start-ttfr/<arm>/20260626T104113Z-n8-res/result.json`, medians for the five arms of L14 |
-| `src/data/caps.json` | `exeris-docs/cap-license-registry.md` |
-| `src/data/skus.json` | `exeris-docs/high-level-architecture.md` §3.3 and §6.3 |
+| `src/data/caps.json` | `exeris-docs/cap-license-registry.md`: licence, visibility, `Build` state and readiness `Status` (`poc`, `snapshot` or `released`) per cap, read by header name |
+| `src/data/skus.json` | `exeris-docs/high-level-architecture.md` §3.3 and §6.3, plus `status`: the lowest readiness of the SKU's caps |
 | `src/data/saga-v2.json` | the CITABLE contract-v2 rows of the tJUG evidence bundle in `exeris-benchmarks` |
-| `src/data/build-meta.json` | the latest `exeris-kernel` release and the source commits |
+| `src/data/build-meta.json` | the latest `exeris-kernel` release, the version of the tooling published on Maven Central and the source commits |
+
+Readiness is read from the registry's `Status` column by header name. The older four-column
+layout, whose fourth `Status` column holds the build state, is still accepted and reads as `poc`.
+A missing column, an empty cell or an unknown value is `poc`, the lowest value: readiness is never
+assumed. A SKU is as ready as the least ready cap in it; a SKU-specific cap, which has no registry
+row, counts as `poc`.
+
+The tooling version on the Get started page and in the hero is not typed into the content. The
+fetch reads Maven Central's `maven-metadata.xml` for `exeris-initializr`, `exeris-app-parent`,
+`exeris-app-bom` and `exeris-app-starter`, requires them to agree on one release, checks that the
+runnable jar exists, and writes the result to `build-meta.json`. Copy and code samples name it as
+`{tooling.version}` (the latest kernel release as `{kernel.version}`); the check fails on any other
+version literal.
 
 The JSON is committed, so an offline build works. `SITE_SKIP_FETCH=1` keeps it without fetching;
 a network error falls back to it unless `SITE_FETCH_STRICT=1`. `GITHUB_TOKEN`, when set, is used
@@ -87,11 +100,34 @@ for the GitHub API calls.
   appears in `content/` or `src/content/` outside a claim reference or an entry of
   `content/meta/number-allowlist.json`, each of which names its source; every `CUSTOM` block is
   mapped to its component in `exeris-codegen.json`.
+- **Readiness wording** (`scripts/check-content.mjs`, also a unit test): see below.
 - **Output** (`scripts/verify-dist.mjs`): every route has its own HTML with title, description,
   canonical and Open Graph tags; no unresolved content token; no third-party request, tracker,
   inline script or cookie write.
 - **Lighthouse CI** (`lighthouserc.json`): performance ≥ 0.8, accessibility ≥ 0.9,
   best practices ≥ 0.9, SEO ≥ 0.9 on the static output.
+
+### Readiness wording
+
+Nothing is released as a product today, so copy must not say that something is sold, supported,
+hosted or licensed for production, or invite a sales conversation. The check scans every authored
+string: view props and titles (links included), the typed site content, the SEO and search-index
+meta files, and rejects the phrases of `READINESS_RULES` in `scripts/check-content.mjs`: sold or
+sale, buy and purchase, `production`, support as an offering, a service-level agreement, `CVE`, a hosted or managed
+service, a control plane, a production, runtime, perpetual or commercial licence, a subscription or
+one-time fee, air-gapped and on-prem, "Contact us" and "Contact sales", "Discuss fit", and any
+address on `console.exeris.eu` (which no component or public file may carry either).
+
+Two things keep a legitimate technical use from failing the build:
+
+- Copy attached to a SKU whose `status` is `released` is exempt: a node whose `sku` prop names it, or
+  an element of a `skus` list with its `id`. Copy attached to a `poc` or `snapshot` SKU, and all
+  site-wide copy, is held to the rules. Quoted claim copy is not authored text and is gated by the
+  claims lock.
+- `content/meta/readiness-allowlist.json` permits one phrase for one rule, optionally for one view,
+  with the reason. The API Gateway's own `admin-control-plane` capability is the one entry today.
+
+When a SKU is released, its exemption follows from the registry; nothing else in the site changes.
 
 `.github/workflows/ci.yml` runs install, data (with fallback), generation, the content check,
 the determinism check, lint, tests, the build and Lighthouse CI.
@@ -125,6 +161,13 @@ The look is brand kit v6 on top of [`@exeris/ui-kit`](https://www.npmjs.com/pack
 - Brand assets (mark, lockups, icons, social card) are the shipped files of the brand kit, in
   `src/assets/brand/`; they are never redrawn.
 - IBM Plex Sans and Mono are self-hosted from `@fontsource`.
+
+## Licences named on the site
+
+The footer names only repositories that are public on GitHub and carry the Apache-2.0 text in their
+`LICENSE`: `exeris-kernel`, `exeris-sdk`, `exeris-tooling`, `exeris-platform` and
+`exeris-benchmarks`. `OPEN_SOURCE_REPOS` in `src/content/site.ts` is that list; a repository joins it
+only after both facts are checked.
 
 ## Licence
 

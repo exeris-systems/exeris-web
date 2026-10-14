@@ -18,7 +18,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"sku\": \"bot-blocker\", \"hero\": \"JA3/JA4 TLS fingerprinting at the kernel layer: fingerprint material is extracted before the request reaches the policy chain. Closed-source under the anti-abuse-security exception of ADR-023.\", \"badges\": [{\"label\": \"Enterprise only\", \"tone\": \"muted\"}], \"ctas\": [{\"label\": \"Discuss fit →\", \"href\": \"/pricing#contact\", \"variant\": \"solid\"}, {\"label\": \"ADR index\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/adr-index.md\"}]}"
+            "props": "{\"sku\": \"bot-blocker\", \"hero\": \"JA3/JA4 TLS fingerprinting at the kernel layer: fingerprint material is extracted before the request reaches the policy chain. Closed-source under the anti-abuse-security exception of ADR-023.\", \"badges\": [{\"label\": \"Needs the Enterprise driver\", \"tone\": \"muted\"}], \"ctas\": [{\"label\": \"Design partners →\", \"href\": \"/pricing#design-partners\", \"variant\": \"solid\"}, {\"label\": \"ADR index\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/adr-index.md\"}]}"
           },
           {
             "type": "CUSTOM",
@@ -26,7 +26,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"variant\": \"warning\", \"eyebrow\": \"THE SINGLE CLOSED-SOURCE EXCEPTION\", \"title\": \"Published detection logic helps adversaries circumvent the protection.\", \"body\": \"Bot Blocker is the only Exeris SKU that is not source-available. The exception is named in ADR-023 and does not generalise to other SKUs. Code Detachment for Bot Blocker grants a perpetual binary-use licence and the manifest, not the source.\"}"
+            "props": "{\"variant\": \"warning\", \"eyebrow\": \"THE SINGLE CLOSED-SOURCE EXCEPTION\", \"title\": \"Published detection logic helps adversaries circumvent the protection.\", \"body\": \"Bot Blocker is the only Exeris SKU that is not source-available. The exception is named in ADR-023 and does not generalise to other SKUs. Code Detachment for Bot Blocker covers the binary and the manifest, not the source.\"}"
           },
           {
             "type": "CUSTOM",
@@ -42,7 +42,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"sku\": \"bot-blocker\", \"alt\": true, \"head\": {\"eyebrow\": \"§ COMPOSITION\", \"title\": \"The composition, by layer.\", \"body\": \"The manifest from the HLA. The composition itself is commercial-licensed; the enterprise-private cap inside it needs the Enterprise subscription on top of the SKU.\"}}"
+            "props": "{\"sku\": \"bot-blocker\", \"alt\": true, \"head\": {\"eyebrow\": \"§ COMPOSITION\", \"title\": \"The composition, by layer.\", \"body\": \"The manifest from the HLA. The enterprise-private cap inside it depends on the Enterprise kernel driver.\"}}"
           },
           {
             "type": "CUSTOM",
@@ -50,7 +50,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · COMMUNITY ON GITHUB\", \"title\": \"Replace the runtime underneath. Keep the application on top.\", \"ctas\": [{\"label\": \"Start with the kernel →\", \"href\": \"/platform\", \"variant\": \"solid\"}, {\"label\": \"Discuss Enterprise fit\", \"href\": \"/pricing#contact\"}]}"
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · OPEN SOURCE ON GITHUB\", \"title\": \"Generate your first application.\", \"ctas\": [{\"label\": \"Get started →\", \"href\": \"/start\", \"variant\": \"solid\"}, {\"label\": \"Become a design partner\", \"href\": \"/pricing#design-partners\"}]}"
           }
         ]
       }

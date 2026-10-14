@@ -1,7 +1,11 @@
 {
   "home": {
-    "title": "Define. Compose. Execute.",
-    "description": "Exeris is a European open-core JVM platform: a kernel, capabilities and SKUs composed against one contract. Systems by contract. Compute without waste."
+    "title": "Intent in. Systems out.",
+    "description": "An open-source JVM platform for Java 25: describe the domain in annotated Java, get the handlers, API and front end generated at build time, and run them on a Spring-free kernel."
+  },
+  "start": {
+    "title": "Get started",
+    "description": "Generate an Exeris application with the initializr from Maven Central: a Maven backend and an Angular front end from one command."
   },
   "platform": {
     "title": "Platform",
@@ -21,7 +25,7 @@
   },
   "sku-idp": {
     "title": "IDP",
-    "description": "The Exeris Intelligent Document Processing SKU: pipeline, composition and the AI abstraction layer, cloud or air-gapped."
+    "description": "The Exeris Intelligent Document Processing SKU: pipeline, composition and the AI abstraction layer."
   },
   "sku-bot-blocker": {
     "title": "Bot Blocker",
@@ -37,7 +41,7 @@
   },
   "pricing": {
     "title": "Pricing",
-    "description": "Exeris pricing: Community, Platform and Enterprise tiers, and Code Detachment."
+    "description": "Exeris has no prices yet: it is looking for design partners, and Code Detachment applies to the commercial caps and SKUs."
   },
   "docs": {
     "title": "Docs",

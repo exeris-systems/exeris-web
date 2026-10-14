@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, injec
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
-import { CONSOLE_URL, NAV, type NavItem } from '../../content/site';
+import { LINKS, NAV, type NavItem } from '../../content/site';
 import { HrefDirective } from './href.directive';
 import { LogoComponent } from './logo.component';
 import { PaletteService } from './palette.service';
@@ -67,8 +67,7 @@ import { PaletteService } from './palette.service';
           <span class="ex-nav__search-label">Search</span>
           <kbd>⌘K</kbd>
         </button>
-        <a class="ex-nav__signin" [href]="consoleUrl">Sign in</a>
-        <a class="ex-btn ex-btn--solid ex-btn--sm ex-nav__cta" [href]="consoleUrl">Get started →</a>
+        <a class="ex-btn ex-btn--solid ex-btn--sm ex-nav__cta" [href]="github">GitHub</a>
         <button
           type="button"
           class="ex-nav__burger"
@@ -102,8 +101,7 @@ import { PaletteService } from './palette.service';
           </div>
         }
         <div class="ex-nav__mobile-actions">
-          <a class="ex-btn ex-btn--sm" [href]="consoleUrl">Sign in</a>
-          <a class="ex-btn ex-btn--solid ex-btn--sm" [href]="consoleUrl">Get started →</a>
+          <a class="ex-btn ex-btn--solid ex-btn--sm" [href]="github">GitHub</a>
         </div>
       </nav>
     </header>
@@ -111,7 +109,7 @@ import { PaletteService } from './palette.service';
 })
 export class TopNavComponent {
   protected readonly nav: readonly NavItem[] = NAV;
-  protected readonly consoleUrl = CONSOLE_URL;
+  protected readonly github = LINKS.github;
   protected readonly palette = inject(PaletteService);
   protected readonly openMenu = signal<string | null>(null);
   protected readonly mobileOpen = signal(false);
