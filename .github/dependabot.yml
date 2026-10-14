@@ -1,0 +1,56 @@
+version: 2
+
+# GitHub Actions and npm, weekly. The Angular packages share one minor line (`~22.x`) and move
+# together; a major of any of them arrives on its own so the framework upgrade is a deliberate
+# change. `@exeris/codegen-ts` is pinned exactly: it writes `src/app/generated`, so a bot PR moving
+# it would change the site's output with no change to a page. It moves by a deliberate change.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci(actions)"
+    labels:
+      - dependencies
+    groups:
+      # Routine minors and patches of GitHub's own actions travel together; a major arrives on its own.
+      github-owned:
+        patterns:
+          - "actions/*"
+          - "github/*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build(deps)"
+    labels:
+      - dependencies
+    ignore:
+      - dependency-name: "@exeris/codegen-ts"
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+        update-types:
+          - minor
+          - patch
+      lint-and-test:
+        patterns:
+          - "eslint*"
+          - "@eslint/*"
+          - "typescript-eslint"
+          - "vitest*"
+        update-types:
+          - minor
+          - patch
