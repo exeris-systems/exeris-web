@@ -1,9 +1,9 @@
 version: 2
 
-# GitHub Actions and npm, weekly. The Angular packages share one minor line (`~22.x`) and move
-# together; a major of any of them arrives on its own so the framework upgrade is a deliberate
-# change. `@exeris/codegen-ts` is pinned exactly: it writes `src/app/generated`, so a bot PR moving
-# it would change the site's output with no change to a page. It moves by a deliberate change.
+# GitHub Actions and npm, weekly. The Angular packages are grouped so they move together, and a
+# major of any of them arrives on its own so the framework upgrade is a deliberate change.
+# `@exeris/codegen-ts` is ignored: it writes the generated pages, so a bot PR moving it would change
+# the site's output with no change to a page.
 updates:
   - package-ecosystem: github-actions
     directory: /

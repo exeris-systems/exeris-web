@@ -117,5 +117,5 @@ The cost is that these rules are prose a reviewer applies, not a program. The re
 diff, not the registers: the claim register and the capability registry live in other
 repositories, and `src/data/*.json` is their committed copy. A rule that can only be settled by
 reading the live register, or by running the build or the Lighthouse run, is reported as unchecked,
-not as passing. Whether a figure is the right one to put on a page is an editorial choice for
+not as passing. So is a rule whose named file or setting is absent from the checkout under review. Whether a figure is the right one to put on a page is an editorial choice for
 the owner, and no rule here decides it.
