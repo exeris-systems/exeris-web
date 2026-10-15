@@ -28,7 +28,8 @@ The output is `dist/exeris-web/browser/`: one `index.html` per route, `404.html`
 | `npm run check:content` | The claims and content gate |
 | `npm run check:views` | Fails if two page generations differ |
 | `npm run claims:lock` | Accepts the current copy of every quoted claim after review |
-| `npm run build` | All of the above before `ng build`; `postbuild` adds 404/sitemap/robots and verifies the output |
+| `npm run lighthouse` | Lighthouse CI against `dist/`; repeats the run once when Lighthouse reports a runtime error, never on a failed assertion |
+| `npm run build` | `prebuild` (`prepare:site`: data, `generate:views`, index; then `check:content`), `ng build`, then `postbuild`: 404/sitemap/robots and output verification. `check:views` and `claims:lock` are run separately |
 
 ## How the pages are made
 
@@ -94,8 +95,11 @@ runnable jar exists, and writes the result to `build-meta.json`. Copy and code s
 version literal.
 
 The JSON is committed, so an offline build works. `SITE_SKIP_FETCH=1` keeps it without fetching;
-a network error falls back to it unless `SITE_FETCH_STRICT=1`. `GITHUB_TOKEN`, when set, is used
-for the GitHub API calls.
+a fetch error (network failure or HTTP status) falls back to it unless `SITE_FETCH_STRICT=1`; a
+parser or consistency failure (a duplicate claim key, an unknown licence, tooling artefacts on
+different releases, a missing initializr jar, a missing CITABLE row) always fails the build.
+`GITHUB_TOKEN`, when set, is sent to `api.github.com` only, never to Maven Central or
+`raw.githubusercontent.com`.
 
 ## Gates
 
@@ -137,8 +141,9 @@ Two things keep a legitimate technical use from failing the build:
 
 When a SKU is released, its exemption follows from the registry; nothing else in the site changes.
 
-`.github/workflows/ci.yml` runs install, data (with fallback), generation, the content check,
-the determinism check, lint, tests, the build and Lighthouse CI.
+`.github/workflows/ci.yml` runs install, data (fetch errors fall back to the committed JSON),
+generation, the content check, the determinism check, lint, tests, the build and Lighthouse CI
+(`npm run lighthouse`).
 
 ## Cloudflare Pages
 
@@ -173,8 +178,8 @@ The look is brand kit v6 on top of [`@exeris/ui-kit`](https://www.npmjs.com/pack
 ## Licences named on the site
 
 The footer names only repositories that are public on GitHub and carry the Apache-2.0 text in their
-`LICENSE`: `exeris-kernel`, `exeris-sdk`, `exeris-tooling`, `exeris-platform` and
-`exeris-benchmarks`. `OPEN_SOURCE_REPOS` in `src/content/site.ts` is that list; a repository joins it
+`LICENSE`, by short name: kernel, SDK, tooling, platform and benchmarks (`exeris-kernel`,
+`exeris-sdk`, `exeris-tooling`, `exeris-platform`, `exeris-benchmarks`). `OPEN_SOURCE_REPOS` in `src/content/site.ts` is that list; a repository joins it
 only after both facts are checked.
 
 ## Licence

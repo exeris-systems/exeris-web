@@ -44,6 +44,7 @@ function loadHeaders() {
 }
 const rules = loadHeaders();
 
+/** The file for a request path, null when none exists; throws URIError on a malformed escape. */
 function resolve(urlPath) {
   const clean = normalize(decodeURIComponent(urlPath.split('?')[0])).replace(/^(\.\.[/\\])+/, '');
   const candidates = [join(root, clean), join(root, clean, 'index.html'), join(root, `${clean}.html`)];
@@ -52,7 +53,15 @@ function resolve(urlPath) {
 
 createServer((req, res) => {
   const path = req.url ?? '/';
-  let file = resolve(path);
+  let file;
+  try {
+    file = resolve(path);
+  } catch (err) {
+    if (!(err instanceof URIError)) throw err;
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Bad request');
+    return;
+  }
   let status = 200;
   if (!file) {
     file = join(root, '404.html');
