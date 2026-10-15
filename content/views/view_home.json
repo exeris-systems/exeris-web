@@ -1,0 +1,67 @@
+{
+  "name": "home",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Home",
+  "view": {
+    "name": "home",
+    "kind": "PAGE",
+    "route": "/",
+    "title": "Intent in. Systems out.",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExHomeHero",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"pill\": {\"label\": \"NEW\", \"text\": \"Exeris Initializr {tooling.version} is on Maven Central\", \"href\": \"/start\"}, \"headline\": [\"Intent in.\", \"Systems out.\"], \"accent\": \"Systems out.\", \"sub\": \"An open-source JVM platform for Java 25: describe the domain in annotated Java, get the handlers, API and front end generated at build time, and run them on a Spring-free kernel built on Loom and Panama.\", \"command\": {\"title\": \"Terminal\", \"lang\": \"shell\", \"label\": \"Commands that write a new project\", \"code\": \"# Java 25 or newer. The jar is on Maven Central.\\ncurl -fLO https://repo1.maven.org/maven2/eu/exeris/exeris-initializr/{tooling.version}/exeris-initializr-{tooling.version}.jar\\njava -jar exeris-initializr-{tooling.version}.jar --topology=e2e --group-id=com.example --artifact-id=orders\"}, \"ctas\": [{\"label\": \"Get started →\", \"href\": \"/start\", \"variant\": \"solid\"}, {\"label\": \"Browse the source\", \"href\": \"https://github.com/exeris-systems\"}], \"meta\": [\"APACHE-2.0 OPEN SOURCE\", \"GDYNIA, POLAND\", \"JAVA 25 LTS\", \"PANAMA FFM\", \"LOOM\"]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExEvidenceStrip",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"head\": {\"eyebrow\": \"MEASURED\", \"title\": \"Numbers without methodology are marketing.\", \"body\": \"Every figure on this site is a registered copy string from the claims register of exeris-benchmarks, quoted verbatim with its claim id and linked to the report and the raw artifacts behind it. Comparisons with other runtimes stay on the Lab page, beside their fences.\"}, \"cells\": [{\"label\": \"Memory floor\", \"claim\": \"L13.floor\", \"excerpt\": \"128 MiB\"}, {\"label\": \"CPU per request\", \"claim\": \"L12.absolute\", \"excerpt\": \"51.3 µs\"}, {\"label\": \"Open-loop p99.9\", \"claim\": \"L12.tail\", \"excerpt\": \"1.95–2.61 ms\"}, {\"label\": \"Spawn to first response\", \"claim\": \"L14.absolute\", \"excerpt\": \"0.86 s\"}], \"cta\": {\"label\": \"See the comparison →\", \"href\": \"/lab\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCodeExample",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"in-code\", \"head\": {\"eyebrow\": \"WHAT IT LOOKS LIKE IN CODE\", \"title\": \"One annotated class. A backend and a front end.\", \"body\": \"This is the entity the initializr writes. The build reads it and generates the rest of the backend beside it; the front end is generated from the same metadata.\"}, \"code\": {\"title\": \"Item.java\", \"lang\": \"java\", \"tags\": [{\"label\": \"@ExerisDomain\", \"tone\": \"flow\"}], \"label\": \"The Item entity written by the initializr\", \"code\": \"import eu.exeris.sdk.annotation.ExerisDomain;\\nimport eu.exeris.sdk.annotation.Field;\\n\\n@ExerisDomain(module = \\\"items\\\", path = \\\"/items\\\")\\npublic class Item {\\n\\n    private UUID id;\\n\\n    @Field(label = \\\"Title\\\", required = true, filterable = true)\\n    private String title;\\n\\n    @Field(label = \\\"Description\\\")\\n    private String description;\\n\\n    // getters and setters\\n}\"}, \"generatedTitle\": \"What the build writes from it\", \"groups\": [{\"title\": \"Backend, from the Maven build\", \"items\": [{\"name\": \"ItemHandler\", \"what\": \"the HTTP handler for `/items`\"}, {\"name\": \"ItemService\", \"what\": \"and its repository, with a list query and a page type\"}, {\"name\": \"ItemClient\", \"what\": \"a client for the same API\"}, {\"name\": \"V<n>__create_items.sql\", \"what\": \"the PostgreSQL migration\"}, {\"name\": \"item-api.yaml\", \"what\": \"the OpenAPI document\"}, {\"name\": \"Application\", \"what\": \"the entry point\"}, {\"name\": \"ItemHandlerTest\", \"what\": \"and tests for the service and the repository, over recording test doubles\"}]}, {\"title\": \"Front end, with the e2e topology\", \"items\": [{\"name\": \"item-list.component.ts\", \"what\": \"Angular list, detail and form components\"}, {\"name\": \"item.service.ts\", \"what\": \"the HTTP service\"}, {\"name\": \"item.store.ts\", \"what\": \"a signal store\"}, {\"name\": \"item.schema.ts\", \"what\": \"and the types and the validation schema of the entity\"}]}], \"note\": \"The list is what a build of the initializr's project writes for this one entity.\", \"cta\": {\"label\": \"Run it yourself\", \"href\": \"/start\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExBento",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"head\": {\"eyebrow\": \"THE PLATFORM\", \"title\": \"Three tiers, each with a status.\", \"body\": \"The kernel is the substrate. Capabilities compose on top of it. SKUs are named compositions of capabilities. Each tier depends only on the one beneath it, and the build fails when anything reaches across. Readiness comes from the capability registry: PoC, Snapshot or Released.\"}, \"cells\": [{\"size\": \"hero\", \"eyebrow\": \"TIER 1 · SUBSTRATE\", \"title\": \"The kernel\", \"body\": \"An open-source JVM runtime on Panama FFM and virtual threads. Transport, memory, persistence and flow sit behind one Spring-free SPI; the Community driver is Apache-2.0.\", \"extra\": {\"kind\": \"kernel\"}, \"href\": \"/platform#tier-1\", \"linkLabel\": \"The substrate\"}, {\"size\": \"wide\", \"eyebrow\": \"TIER 2 · CAPABILITIES\", \"title\": \"{caps.total} capabilities across {layers} layers\", \"body\": \"Gateway building blocks, Service Boundary platform caps, domain primitives, the AI abstraction layer and cross-cutting concerns. Each cap is its own artefact with declared provides and requires.\", \"extra\": {\"kind\": \"readiness\", \"of\": \"caps\"}, \"href\": \"/capabilities\", \"linkLabel\": \"Capability matrix\"}, {\"size\": \"wide\", \"eyebrow\": \"TIER 3 · SKUS\", \"title\": \"{skus} pre-wired SKUs\", \"body\": \"Named compositions of capabilities in two families, Gateway and Service Boundary. A SKU is as ready as the least ready capability in it.\", \"extra\": {\"kind\": \"readiness\", \"of\": \"skus\"}, \"href\": \"/skus\", \"linkLabel\": \"All SKUs\"}, {\"eyebrow\": \"THE WALL\", \"title\": \"The kernel never sees Spring\", \"body\": \"SPI and Core are Spring-free, and architecture tests check the boundary; it is not a convention.\", \"href\": \"/platform#wall\", \"linkLabel\": \"The Wall\"}, {\"eyebrow\": \"OBSERVABILITY\", \"title\": \"Glass Box\", \"body\": \"JFR-first observability. No sidecar. Open wire spec.\", \"href\": \"/platform#tier-1\", \"linkLabel\": \"Telemetry\"}, {\"eyebrow\": \"LICENCE\", \"title\": \"Everything public today is Apache-2.0\", \"body\": \"Code Detachment, the promise of no silent lock-in, concerns only the commercial caps and SKUs.\", \"href\": \"/pricing#detachment\", \"linkLabel\": \"No silent lock-in\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCardGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"design-partners\", \"head\": {\"eyebrow\": \"DESIGN PARTNERS\", \"title\": \"Looking for two or three teams to build with.\", \"body\": \"The commercial caps and SKUs are proofs of concept. Before they are anything more, Exeris wants to build them against real use cases, with a few teams that have one.\"}, \"columns\": 2, \"joined\": true, \"cards\": [{\"eyebrow\": \"WHAT YOU GET\", \"title\": \"Direct work with the author\", \"tone\": \"flow\", \"points\": [\"Direct work with the author, not a queue\", \"Early access to capabilities and SKUs as they mature\", \"Influence on the roadmap, starting with your use case\"]}, {\"eyebrow\": \"WHAT IS EXPECTED\", \"title\": \"A real use case and honest feedback\", \"tone\": \"cyan\", \"points\": [\"A real use case that the platform can be tried on\", \"Feedback: what worked, what broke, what is missing\", \"Permission to talk about it, in the repositories, on the blog and here\"]}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExContact",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"contact\", \"eyebrow\": \"WRITE TO US\", \"title\": \"Become a design partner.\", \"body\": \"Tell us what you run today and what you would build first.\", \"label\": \"Write to us\"}"
+          }
+        ]
+      }
+    ]
+  }
+}

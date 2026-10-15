@@ -1,0 +1,17 @@
+{
+  "description": "Technical uses of a word the readiness check of scripts/check-content.mjs would otherwise reject. Each entry names the rule id, a case-insensitive regular expression for the exact phrase, optionally the view it is limited to, and the reason the phrase is not a readiness or commercial claim. Copy of a released SKU needs no entry; copy of any other item, and site-wide copy, does.",
+  "entries": [
+    {
+      "rule": "control-plane",
+      "view": "skus",
+      "pattern": "an admin control plane",
+      "reason": "The same capability, named in the API Gateway card."
+    },
+    {
+      "rule": "licence",
+      "view": "skus",
+      "pattern": "Source-available under the Exeris Commercial License at first release",
+      "reason": "Names the licence under which the source of a SKU is published at its first release; it states no production, runtime or perpetual licence."
+    }
+  ]
+}
