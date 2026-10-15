@@ -27,7 +27,8 @@ jobs:
       - name: Install
         run: npm ci
 
-      # Reads the upstream registers; on a network error it keeps the committed JSON.
+      # Reads the upstream registers. A fetch error (network, HTTP status) keeps the committed JSON;
+      # a parser or consistency failure fails the step.
       - name: Fetch build-time data
         run: npm run data
         env:
@@ -63,7 +64,9 @@ jobs:
           SITE_SKIP_FETCH: '1'
 
       - name: Lighthouse CI
-        run: npx --yes @lhci/cli@0.15.1 autorun
+        # Repeats the run once when Lighthouse reports a runtime error such as NO_NAVSTART; an
+        # assertion failure fails at once.
+        run: npm run lighthouse
 
       - name: Lighthouse reports
         if: always()

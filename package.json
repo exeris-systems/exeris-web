@@ -23,6 +23,7 @@
     "prebuild": "npm run prepare:site && npm run check:content",
     "build": "ng build",
     "postbuild": "node scripts/postbuild.mjs && node scripts/verify-dist.mjs",
+    "lighthouse": "node scripts/lighthouse-ci.mjs",
     "serve:dist": "node scripts/serve-static.mjs",
     "test": "vitest run",
     "lint": "eslint ."
