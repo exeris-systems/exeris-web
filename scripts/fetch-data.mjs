@@ -3,7 +3,11 @@
 // src/data/. Runs before every build; the JSON is committed so an offline build works.
 //
 //   SITE_SKIP_FETCH=1   keep the committed JSON, fetch nothing
-//   SITE_FETCH_STRICT=1 fail on a network error instead of falling back to the committed JSON
+//   SITE_FETCH_STRICT=1 fail on a fetch error instead of falling back to the committed JSON
+//
+// A fetch error (network failure, non-2xx status) falls back to the committed JSON. A parser or
+// consistency failure on content that did arrive always fails the build: falling back would ship
+// stale claims, readiness and tooling versions behind a warning.
 //
 // The site's own commit SHA is written on every run (src/data/site-sha.json, not committed):
 // it needs no network, and committing it would make every build dirty the tree.
@@ -52,17 +56,39 @@ export const SAGA_FIGURES = [
   'Axon Server, post-load resident',
 ];
 
-function headers() {
-  const h = { 'User-Agent': 'exeris-web-build', Accept: 'application/vnd.github+json' };
-  const token = process.env.GITHUB_TOKEN;
-  if (token) h.Authorization = `Bearer ${token}`;
+/** The upstream could not be reached or answered with an error status; the only fallback case. */
+export class FetchError extends Error {
+  constructor(message, options) {
+    super(message, options);
+    this.name = 'FetchError';
+  }
+}
+
+/** Request headers for `url`: the token goes to the GitHub API host only, never to a CDN or mirror. */
+export function headersFor(url, env = process.env) {
+  const h = { 'User-Agent': 'exeris-web-build' };
+  if (new URL(url).hostname === 'api.github.com') {
+    h.Accept = 'application/vnd.github+json';
+    if (env.GITHUB_TOKEN) h.Authorization = `Bearer ${env.GITHUB_TOKEN}`;
+  } else {
+    h.Accept = '*/*';
+  }
   return h;
 }
 
+async function request(url, method = 'GET') {
+  let res;
+  try {
+    res = await fetch(url, { method, headers: headersFor(url) });
+  } catch (err) {
+    throw new FetchError(`${method} ${url}: ${err.message}`, { cause: err });
+  }
+  if (!res.ok) throw new FetchError(`${method} ${url}: HTTP ${res.status}`);
+  return res;
+}
+
 async function getText(url) {
-  const res = await fetch(url, { headers: headers() });
-  if (!res.ok) throw new Error(`GET ${url}: HTTP ${res.status}`);
-  return res.text();
+  return (await request(url)).text();
 }
 
 async function getJson(url) {
@@ -126,8 +152,13 @@ async function fetchAll() {
   }
   const toolingVersion = sharedRelease(releases);
   const jarUrl = `${CENTRAL}/${group}/exeris-initializr/${toolingVersion}/exeris-initializr-${toolingVersion}.jar`;
-  const jar = await fetch(jarUrl, { method: 'HEAD', headers: headers() });
-  if (!jar.ok) throw new Error(`HEAD ${jarUrl}: HTTP ${jar.status}`);
+  // A 404 from Central means the shared release has no runnable jar: a consistency failure.
+  try {
+    await request(jarUrl, 'HEAD');
+  } catch (err) {
+    if (!(err instanceof FetchError) || !err.message.endsWith('HTTP 404')) throw err;
+    throw new Error(`the initializr jar of the shared release is not on Maven Central: ${err.message}`, { cause: err });
+  }
 
   return {
     'claims.json': {
@@ -170,6 +201,20 @@ async function fetchAll() {
   };
 }
 
+/**
+ * Runs `fetchAll`; on a FetchError keeps the committed data (returns null) unless `strict` or
+ * nothing is committed. Any other error is a parser or consistency failure and propagates.
+ */
+export async function loadUpstream(fetchAll, { strict, committed, warn = console.warn }) {
+  try {
+    return await fetchAll();
+  } catch (err) {
+    if (!(err instanceof FetchError) || strict || !committed) throw err;
+    warn(`fetch-data: ${err.message}; keeping the committed data`);
+    return null;
+  }
+}
+
 async function main() {
   write('site-sha.json', { sha: siteSha() });
 
@@ -177,15 +222,11 @@ async function main() {
     console.log('fetch-data: SITE_SKIP_FETCH=1, keeping the committed data');
     return;
   }
-  let files;
-  try {
-    files = await fetchAll();
-  } catch (err) {
-    const committed = existsSync(join(DATA, 'claims.json'));
-    if (process.env.SITE_FETCH_STRICT === '1' || !committed) throw err;
-    console.warn(`fetch-data: ${err.message}; keeping the committed data`);
-    return;
-  }
+  const files = await loadUpstream(fetchAll, {
+    strict: process.env.SITE_FETCH_STRICT === '1',
+    committed: existsSync(join(DATA, 'claims.json')),
+  });
+  if (!files) return;
   for (const [name, value] of Object.entries(files)) write(name, value);
   const meta = JSON.parse(readFileSync(join(DATA, 'build-meta.json'), 'utf8'));
   console.log(`fetch-data: claims ${Object.keys(files['claims.json'].claims).length}, caps ${files['caps.json'].totals.total}, SKUs ${files['skus.json'].skus.length}, kernel ${meta.kernel.tag}, tooling ${meta.tooling.version}`);
