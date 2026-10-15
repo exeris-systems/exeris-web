@@ -7,7 +7,6 @@
   "skus": [
     {
       "id": "api-gateway",
-      "repo": "exeris-sku-api-gateway",
       "name": "API Gateway",
       "family": "Gateway",
       "closedSource": false,
@@ -33,7 +32,6 @@
     },
     {
       "id": "edge-proxy",
-      "repo": "exeris-sku-edge-proxy",
       "name": "Edge Proxy",
       "family": "Gateway",
       "closedSource": false,
@@ -55,7 +53,6 @@
     },
     {
       "id": "bot-blocker",
-      "repo": "exeris-sku-bot-blocker",
       "name": "Bot Blocker",
       "family": "Gateway",
       "closedSource": true,
@@ -75,7 +72,6 @@
     },
     {
       "id": "idp",
-      "repo": "exeris-sku-idp",
       "name": "IDP",
       "family": "Service Boundary",
       "closedSource": false,
@@ -104,7 +100,6 @@
     },
     {
       "id": "pim",
-      "repo": "exeris-sku-pim",
       "name": "PIM",
       "family": "Service Boundary",
       "closedSource": false,
@@ -133,7 +128,6 @@
     },
     {
       "id": "oms",
-      "repo": "exeris-sku-oms",
       "name": "OMS",
       "family": "Service Boundary",
       "closedSource": false,
@@ -162,7 +156,6 @@
     },
     {
       "id": "content-api",
-      "repo": "exeris-sku-content-api",
       "name": "Headless CMS API",
       "family": "Service Boundary",
       "closedSource": false,
@@ -189,7 +182,6 @@
     },
     {
       "id": "identity",
-      "repo": "exeris-sku-identity",
       "name": "Identity",
       "family": "Service Boundary",
       "closedSource": false,

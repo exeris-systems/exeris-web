@@ -26,7 +26,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"id\": \"map\", \"head\": {\"eyebrow\": \"§ PLATFORM MAP\", \"title\": \"Three tiers, one direction of dependency.\", \"body\": \"Every arrow points down. A tier uses the one beneath it and nothing else, and the reverse edge does not build.\"}, \"tiers\": [{\"label\": \"TIER 3\", \"title\": \"SKUs\", \"body\": \"Named compositions of capabilities, each with a status.\", \"items\": \"skus\", \"arrow\": \"composed of\"}, {\"label\": \"TIER 2\", \"title\": \"Capabilities\", \"body\": \"{caps.total} caps in {layers} layers, under {licences} licences.\", \"items\": \"layers\", \"arrow\": \"runs on\"}, {\"label\": \"TIER 1\", \"title\": \"Substrate\", \"body\": \"The kernel, its drivers, the host runtime and the build-time tooling.\", \"items\": [\"Kernel SPI and Core\", \"Community driver\", \"Enterprise driver\", \"TCK\", \"Spring Runtime\", \"SDK\", \"Tooling\", \"LSP and composition runtime\"]}], \"family\": {\"title\": \"FAMILY PRODUCTS\", \"body\": \"BudgetHQ runs on Spring Runtime and the Exeris kernel as the dogfooding case for that combination. It is a proprietary product outside the open-core taxonomy.\"}}"
+            "props": "{\"id\": \"map\", \"head\": {\"eyebrow\": \"§ PLATFORM MAP\", \"title\": \"Three tiers, one direction of dependency.\", \"body\": \"Every arrow points down. A tier uses the one beneath it and nothing else, and the reverse edge does not build.\"}, \"tiers\": [{\"label\": \"TIER 3\", \"title\": \"SKUs\", \"body\": \"Named compositions of capabilities, each with a status.\", \"items\": \"skus\", \"arrow\": \"composed of\"}, {\"label\": \"TIER 2\", \"title\": \"Capabilities\", \"body\": \"{caps.total} caps in {layers} layers, under {licences} licences.\", \"items\": \"layers\", \"arrow\": \"runs on\"}, {\"label\": \"TIER 1\", \"title\": \"Substrate\", \"body\": \"The kernel, its drivers, the host runtime and the build-time tooling.\", \"items\": [\"Kernel SPI and Core\", \"Community driver\", \"Enterprise driver\", \"TCK\", \"Spring Runtime\", \"SDK\", \"Tooling\", \"LSP and composition runtime\"]}], \"family\": {\"title\": \"FAMILY PRODUCTS\", \"body\": \"BudgetHQ: a Spring Boot application moved onto the Exeris kernel with Spring Runtime, the migration case we run ourselves. It is a proprietary product outside the open-core taxonomy.\", \"href\": \"https://budgethq.app\", \"linkLabel\": \"budgethq.app\"}}"
           },
           {
             "type": "CUSTOM",
@@ -70,17 +70,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"id\": \"tier-3\", \"label\": \"Tier 3\", \"eyebrow\": \"SKUS\", \"title\": \"{skus} SKUs in two families.\", \"alt\": true, \"body\": \"A SKU is a composition manifest over capabilities, and takes the lowest readiness of the capabilities in it. SKUs are source-available by design, except Bot Blocker, which is closed-source on anti-abuse-security grounds.\"}",
-            "children": [
-              {
-                "type": "CUSTOM",
-                "customType": "ExRepoGrid",
-                "binding": {
-                  "source": "STATIC"
-                },
-                "props": "{\"repos\": [{\"name\": \"Api Gateway\", \"label\": \"Source-available\", \"description\": \"Gateway family.\"}, {\"name\": \"Edge Proxy\", \"label\": \"Source-available\", \"description\": \"Gateway family. The Enterprise driver is recommended for edge deployments.\"}, {\"name\": \"Bot Blocker\", \"label\": \"Closed-source\", \"description\": \"Gateway family.\"}, {\"name\": \"IDP\", \"label\": \"Source-available\", \"description\": \"Service Boundary family. Includes the AI abstraction caps.\"}, {\"name\": \"PIM\", \"label\": \"Source-available\", \"description\": \"Service Boundary family.\"}, {\"name\": \"OMS\", \"label\": \"Source-available\", \"description\": \"Service Boundary family. Composes the flow saga engine through the kernel SPI.\"}, {\"name\": \"Content API\", \"label\": \"Source-available\", \"description\": \"Service Boundary family: the Headless CMS API.\"}]}"
-              }
-            ]
+            "props": "{\"id\": \"tier-3\", \"label\": \"Tier 3\", \"eyebrow\": \"SKUS\", \"title\": \"{skus} SKUs in two families.\", \"alt\": true, \"body\": \"A SKU is a composition manifest over capabilities, and takes the lowest readiness of the capabilities in it. The SKUs page lists the ones that have a repository and names the planned ones.\"}"
           },
           {
             "type": "CUSTOM",

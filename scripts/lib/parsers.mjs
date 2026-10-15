@@ -262,7 +262,6 @@ export function parseSkus(markdown, capNames) {
     if (!repo) throw new Error(`HLA §6.3: no repository row for SKU ${s.name}`);
     return {
       id: repo.repo.replace(/^exeris-sku-/, ''),
-      repo: repo.repo,
       ...s,
       capCount: s.caps.length + s.skuSpecificCaps.length,
     };

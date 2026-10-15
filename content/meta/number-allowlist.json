@@ -14,10 +14,6 @@
       "source": "Protocol names (RFC 9112, RFC 9113, RFC 9114)."
     },
     {
-      "pattern": "JA[34]",
-      "source": "TLS fingerprint method names (HLA §5, Bot Blocker row)."
-    },
-    {
       "pattern": "Tier [123]",
       "source": "The three tiers of the platform (HLA §2.2, §6)."
     },

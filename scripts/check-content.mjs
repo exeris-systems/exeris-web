@@ -11,6 +11,7 @@
 //    uses an unknown structural-count token or lacks an SEO entry;
 //  - authored copy uses readiness or commercial wording (see READINESS_RULES below) outside an
 //    allow-listed technical use or the copy of a released SKU;
+//  - content/meta/sku-repos.json names an id the SKU registry lacks, or a SKU card is rendered for an id it does not list;
 //  - exeris-codegen.json customBlocks does not map a CUSTOM block to a component file that exports it.
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -103,6 +104,35 @@ export function viewReadinessErrors(file, view, { skus, allow }) {
       }
     }, '.components'),
   );
+  return errors;
+}
+
+/**
+ * The SKUs-with-a-repository list (content/meta/sku-repos.json) against the registry and the
+ * pages: every listed id is a SKU of the registry, and an ExSkuCards block carries a card only
+ * for a listed id.
+ */
+export function skuRepoErrors({ repos, skus, views }) {
+  const errors = [];
+  const registry = new Set(skus.map((s) => s.id));
+  const listed = new Set(repos);
+  for (const id of repos) if (!registry.has(id)) errors.push(`content/meta/sku-repos.json: "${id}" is not a SKU of the registry (skus.json)`);
+  for (const { file, json } of views) {
+    (json.view.regions ?? []).forEach((region, r) =>
+      walkNodes(region.components, (node, at) => {
+        if (node.type !== 'CUSTOM' || node.customType !== 'ExSkuCards' || !node.props) return;
+        let props;
+        try {
+          props = JSON.parse(node.props);
+        } catch {
+          return;
+        }
+        (props.skus ?? []).forEach((c, i) => {
+          if (!listed.has(c.id)) errors.push(`${file} regions[${r}]${at} props.skus[${i}]: a SKU card for "${c.id}", which content/meta/sku-repos.json does not list`);
+        });
+      }, '.components'),
+    );
+  }
   return errors;
 }
 
@@ -240,6 +270,7 @@ export function checkContent({ lock = readJson('content/meta/claims.lock.json') 
   const skusData = readJson('src/data/skus.json').skus;
   const allow = readinessAllowlist();
   for (const { file, json } of loadViews()) errors.push(...viewReadinessErrors(file, json.view, { skus: skusData, allow }));
+  errors.push(...skuRepoErrors({ repos: readJson('content/meta/sku-repos.json').skus, skus: skusData, views: loadViews() }));
   const siteScan = (file, text, where, isLink) => {
     for (const h of readinessHits(text, { allow, isLink })) errors.push(`${file}${where}: "${h.match}" reads as ${h.rule}; nothing is released as a product (see "Readiness wording" in README)`);
   };

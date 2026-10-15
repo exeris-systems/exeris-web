@@ -62,17 +62,7 @@ export const NAV: readonly NavItem[] = [
     ],
   },
   { id: 'capabilities', label: 'Capabilities', href: '/capabilities' },
-  {
-    id: 'skus',
-    label: 'SKUs',
-    href: '/skus',
-    children: [
-      { label: 'All SKUs', href: '/skus', description: 'Gateway and Service Boundary families' },
-      { label: 'API Gateway', href: '/skus/api-gateway', description: 'Gateway family' },
-      { label: 'IDP', href: '/skus/idp', description: 'Intelligent Document Processing' },
-      { label: 'Bot Blocker', href: '/skus/bot-blocker', description: 'Closed-source exception' },
-    ],
-  },
+  { id: 'skus', label: 'SKUs', href: '/skus' },
   { id: 'ai', label: 'AI', href: '/ai' },
   { id: 'spring', label: 'Spring Runtime', href: '/spring' },
   { id: 'docs', label: 'Docs', href: '/docs' },

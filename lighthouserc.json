@@ -9,7 +9,7 @@
         "http://127.0.0.1:4173/start",
         "http://127.0.0.1:4173/platform",
         "http://127.0.0.1:4173/capabilities",
-        "http://127.0.0.1:4173/skus/api-gateway",
+        "http://127.0.0.1:4173/skus",
         "http://127.0.0.1:4173/lab",
         "http://127.0.0.1:4173/pricing"
       ],

@@ -11,7 +11,7 @@ describe('views', () => {
   it('cover exactly the routes of the site spec', () => {
     const routes = views.map((v) => (v.view.route ?? v.view.name).replace(/^\/+/, '')).sort();
     expect(routes).toEqual(
-      ['', '404', 'ai', 'capabilities', 'docs', 'lab', 'platform', 'pricing', 'skus', 'skus/api-gateway', 'skus/bot-blocker', 'skus/idp', 'spring', 'start'].sort(),
+      ['', '404', 'ai', 'capabilities', 'docs', 'lab', 'platform', 'pricing', 'skus', 'spring', 'start'].sort(),
     );
   });
 

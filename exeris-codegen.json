@@ -109,14 +109,6 @@
       "import": "../../blocks/sku-cards.block",
       "symbol": "SkuCardsComponent"
     },
-    "ExSkuComposition": {
-      "import": "../../blocks/sku-composition.block",
-      "symbol": "SkuCompositionComponent"
-    },
-    "ExSkuHeader": {
-      "import": "../../blocks/sku-header.block",
-      "symbol": "SkuHeaderComponent"
-    },
     "ExStepGrid": {
       "import": "../../blocks/step-grid.block",
       "symbol": "StepGridComponent"

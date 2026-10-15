@@ -32,7 +32,7 @@
     },
     {
       "title": "Driver swap",
-      "href": "/skus/api-gateway",
+      "href": "/skus",
       "hint": "Community and Enterprise drivers",
       "keywords": "io_uring enterprise community maven"
     },

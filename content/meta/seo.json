@@ -17,19 +17,7 @@
   },
   "skus": {
     "title": "SKUs",
-    "description": "Exeris SKUs: signed compositions of capabilities in the Gateway and Service Boundary families."
-  },
-  "sku-api-gateway": {
-    "title": "API Gateway",
-    "description": "The Exeris API Gateway SKU: its composition of capabilities, the kernel driver swap and its deployment shapes."
-  },
-  "sku-idp": {
-    "title": "IDP",
-    "description": "The Exeris Intelligent Document Processing SKU: pipeline, composition and the AI abstraction layer."
-  },
-  "sku-bot-blocker": {
-    "title": "Bot Blocker",
-    "description": "The Exeris Bot Blocker SKU: JA3/JA4 TLS fingerprinting at the kernel layer, and why it is the one closed-source SKU."
+    "description": "Exeris SKUs: the compositions of capabilities that have a repository today, and the ones that are planned."
   },
   "spring": {
     "title": "Spring Runtime",

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { HrefDirective } from '../shell/href.directive';
 import { LAYERS, SKUS } from '../data/data';
 import { SectionHeadComponent, type SectionHeadProps } from './section-head.block';
 import { TextComponent } from './text.component';
@@ -16,13 +17,13 @@ export interface PlatformMapProps {
   readonly id?: string;
   readonly head: SectionHeadProps;
   readonly tiers: readonly MapTier[];
-  readonly family?: { readonly title: string; readonly body: string };
+  readonly family?: { readonly title: string; readonly body: string; readonly href?: string; readonly linkLabel?: string };
   readonly alt?: boolean;
 }
 
 @Component({
   selector: 'ex-platform-map',
-  imports: [SectionHeadComponent, TextComponent],
+  imports: [HrefDirective, SectionHeadComponent, TextComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="ex-section" [class.ex-section--alt]="props().alt" [attr.id]="props().id ?? null">
@@ -51,7 +52,12 @@ export interface PlatformMapProps {
           @if (props().family; as f) {
             <aside class="ex-map__family">
               <p class="ex-eyebrow">{{ f.title }}</p>
-              <p><ex-text [text]="f.body" /></p>
+              <p>
+                <ex-text [text]="f.body" />
+                @if (f.href) {
+                  <a [exHref]="f.href">{{ f.linkLabel ?? f.href }}</a>
+                }
+              </p>
             </aside>
           }
         </div>

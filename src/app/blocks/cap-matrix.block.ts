@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 import { HrefDirective } from '../shell/href.directive';
-import { CAPS, CAP_TOTALS, LAYERS, skusUsingCap, type Licence } from '../data/data';
+import { CAPS, CAP_TOTALS, LAYERS, SKUS_WITH_REPO, skusUsingCap, type Licence } from '../data/data';
 import { StatusBadgeComponent } from './status-badge.component';
 import { TextComponent } from './text.component';
 
@@ -17,9 +17,6 @@ export interface CapMatrixProps {
 }
 
 const LICENCE_FILTERS: readonly (Licence | 'all')[] = ['all', 'community', 'commercial', 'enterprise-private'];
-
-/** SKUs that have a detail page; other SKUs link to their card on the index. */
-const SKU_PAGES = new Set(['api-gateway', 'idp', 'bot-blocker']);
 
 /**
  * The capability matrix, generated from cap-license-registry.md: a filter bar (layer, licence,
@@ -117,6 +114,6 @@ export class CapMatrixComponent {
   );
 
   protected skuHref(id: string): string {
-    return SKU_PAGES.has(id) ? `/skus/${id}` : `/skus#sku-${id}`;
+    return SKUS_WITH_REPO.includes(id) ? `/skus#sku-${id}` : '/skus';
   }
 }

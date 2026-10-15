@@ -9,6 +9,7 @@ import coldStartJson from '../../data/cold-start.json';
 import sagaJson from '../../data/saga-v2.json';
 import buildMetaJson from '../../data/build-meta.json';
 import siteShaJson from '../../data/site-sha.json';
+import skuReposJson from '../../../content/meta/sku-repos.json';
 
 export interface SourceLink {
   label: string;
@@ -52,7 +53,6 @@ export interface Layer {
 
 export interface Sku {
   id: string;
-  repo: string;
   name: string;
   family: string;
   closedSource: boolean;
@@ -116,6 +116,8 @@ export const CAP_TOTALS = capsJson.totals as Readonly<Record<Licence | 'total', 
 export const CAPS_SOURCE = capsJson.source as UpstreamSource;
 
 export const SKUS = skusJson.skus as readonly Sku[];
+/** Ids of the SKUs that have a repository (content/meta/sku-repos.json). */
+export const SKUS_WITH_REPO: readonly string[] = skuReposJson.skus;
 export const SKUS_SOURCE = skusJson.source as UpstreamSource;
 
 export const COLD_START = coldStartJson as unknown as {

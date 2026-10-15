@@ -1505,42 +1505,30 @@ kbd {
 .ex-sku-card__name a:hover {
   color: var(--ex-flow-blue-text);
 }
-.ex-sku-card__ent {
-  font-size: 12.5px !important;
-  color: var(--ex-fg-3) !important;
-}
-.ex-sku-card__ent .ex-eyebrow {
-  font-size: 10px;
-  margin-right: 6px;
-  color: var(--ex-fg-4);
-}
 .ex-sku-card__vis {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
 }
-.ex-sku-group + .ex-sku-group {
-  margin-top: 48px;
+.ex-sku-card__caps-label {
+  margin: 4px 0 0;
 }
-.ex-sku-group__head {
+.ex-sku-card__caps {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 16px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--ex-line);
-}
-.ex-sku-group__head h3 {
+  gap: 4px 6px;
   margin: 0;
-  font-size: 22px;
-  font-weight: 700;
+  padding: 0;
+  list-style: none;
 }
-.ex-sku-group__head p {
+.ex-sku-card__caps li {
   margin: 0;
-  font-size: 13.5px;
-  color: var(--ex-fg-3);
+}
+.ex-sku-planned {
+  margin: 24px 0 0;
+  font-size: 14px;
+  color: var(--ex-fg-2);
 }
 
 /* ── Final CTA, contact ─────────────────────────────────────────────────── */
@@ -1631,12 +1619,6 @@ kbd {
   font-size: 12.5px;
   color: var(--ex-fg);
   overflow-wrap: anywhere;
-}
-.ex-sku-header__code {
-  margin: 12px 0 0;
-  font-size: 12.5px;
-  letter-spacing: 0.04em;
-  color: var(--ex-fg-3);
 }
 
 /* ── Composition ────────────────────────────────────────────────────────── */

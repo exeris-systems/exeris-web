@@ -61,7 +61,7 @@ describe('readiness wording', () => {
 const view = (props: unknown, name = 'sku-x') => ({
   name,
   title: 'T',
-  regions: [{ slot: 'main', components: [{ type: 'CUSTOM', customType: 'ExSkuHeader', props: JSON.stringify(props) }] }],
+  regions: [{ slot: 'main', components: [{ type: 'CUSTOM', customType: 'ExSkuCards', props: JSON.stringify(props) }] }],
 });
 const sku = (id: string, status: string) => ({ id, status });
 

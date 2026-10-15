@@ -24,8 +24,6 @@ export const CUSTOM_BLOCKS = [
   'ExRepoGrid',
   'ExSectionHead',
   'ExSkuCards',
-  'ExSkuComposition',
-  'ExSkuHeader',
   'ExStepGrid',
   'ExTierDeep',
   'ExTwoLevels',

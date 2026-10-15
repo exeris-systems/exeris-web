@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => JSON.parse(readFileSync(join(ROOT, p), 'utf8'));
 
-const SKU_PAGES = new Set(['api-gateway', 'idp', 'bot-blocker']);
+const SKUS_WITH_REPO = new Set(read('content/meta/sku-repos.json').skus);
 
 export function buildIndex() {
   const seo = read('content/meta/seo.json');
@@ -32,8 +32,8 @@ export function buildIndex() {
   const skuEntries = skus.skus.map((s) => ({
     kind: 'sku',
     title: s.name,
-    href: SKU_PAGES.has(s.id) ? `/skus/${s.id}` : `/skus#sku-${s.id}`,
-    hint: `${s.family} · ${s.repo}`,
+    href: SKUS_WITH_REPO.has(s.id) ? `/skus#sku-${s.id}` : '/skus',
+    hint: s.family,
     keywords: s.caps.join(' '),
   }));
 

@@ -75,6 +75,11 @@ page is the component the generator emits, and the generated tree is neither com
 | `src/data/saga-v2.json` | the CITABLE contract-v2 rows of the tJUG evidence bundle in `exeris-benchmarks` |
 | `src/data/build-meta.json` | the latest `exeris-kernel` release, the version of the tooling published on Maven Central and the source commits |
 
+`content/meta/sku-repos.json` lists the SKUs that have a repository. The SKUs page shows a card for
+each of them and names every other SKU of the registry as planned; `check-content` fails on a listed
+id the registry does not hold and on a card for an id the list does not name. Add an id only when
+the repository exists.
+
 Readiness is read from the registry's `Status` column by header name. The older four-column
 layout, whose fourth `Status` column holds the build state, is still accepted and reads as `poc`.
 A missing column, an empty cell or an unknown value is `poc`, the lowest value: readiness is never
@@ -100,6 +105,8 @@ for the GitHub API calls.
   appears in `content/` or `src/content/` outside a claim reference or an entry of
   `content/meta/number-allowlist.json`, each of which names its source; every `CUSTOM` block is
   mapped to its component in `exeris-codegen.json`.
+- **SKU list** (`scripts/check-content.mjs`): the ids of `content/meta/sku-repos.json` are SKUs of
+  the registry, and a SKU card is rendered only for a listed id.
 - **Readiness wording** (`scripts/check-content.mjs`, also a unit test): see below.
 - **Output** (`scripts/verify-dist.mjs`): every route has its own HTML with title, description,
   canonical and Open Graph tags; no unresolved content token; no third-party request, tracker,
@@ -125,7 +132,8 @@ Two things keep a legitimate technical use from failing the build:
   site-wide copy, is held to the rules. Quoted claim copy is not authored text and is gated by the
   claims lock.
 - `content/meta/readiness-allowlist.json` permits one phrase for one rule, optionally for one view,
-  with the reason. The API Gateway's own `admin-control-plane` capability is the one entry today.
+  with the reason. Two entries today, both for the SKUs page: the API Gateway's own `admin-control-plane`
+  capability, and the name of the licence under which a SKU's source is published at its first release.
 
 When a SKU is released, its exemption follows from the registry; nothing else in the site changes.
 
@@ -144,7 +152,7 @@ the determinism check, lint, tests, the build and Lighthouse CI.
 Pages builds on every push through its Git integration; the repository has no deploy job.
 `public/_headers` sets the security headers (a same-origin Content-Security-Policy with no
 inline script) and long caching for hashed assets; `public/_redirects` maps the paths of the
-previous landing site.
+previous landing site and of the SKU pages merged into `/skus`.
 
 ## Brand and theme
 
