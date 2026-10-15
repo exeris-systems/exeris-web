@@ -1588,39 +1588,6 @@ kbd {
   color: var(--ex-fg-3);
 }
 
-/* ── Defs (dt/dd) ───────────────────────────────────────────────────────── */
-
-.ex-defs {
-  margin: 0;
-  padding: 8px 20px;
-  background: var(--ex-surface);
-  border: 1px solid var(--ex-line);
-}
-.ex-defs .exeris-def {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 16px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--ex-line);
-}
-.ex-defs .exeris-def:last-child {
-  border-bottom: 0;
-}
-.ex-defs dt {
-  font-family: var(--ex-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ex-fg-4);
-}
-.ex-defs dd {
-  margin: 0;
-  font-family: var(--ex-mono);
-  font-size: 12.5px;
-  color: var(--ex-fg);
-  overflow-wrap: anywhere;
-}
-
 /* ── Composition ────────────────────────────────────────────────────────── */
 
 .ex-composition {
