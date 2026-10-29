@@ -22,7 +22,8 @@ page is the component the generator emits, and the generated tree is neither com
 The generator writes the pages, their routes and the binding of each block's props; it does not
 write what renders the blocks or the application around them. Almost every block of the IR is a
 `CUSTOM` block, rendered by a component of `src/app/blocks/`, because the generator's built-in
-block types carry no brand theme. The shell (navigation, footer, command palette), the SEO
+block types are generic containers: a `HERO`, `CARD` or `GRID` lays out its children with the UI
+kit's classes and has no typed props such as an eyebrow, a lede or a list of calls to action. The shell (navigation, footer, command palette), the SEO
 strategy, the build-time data the blocks read and the static prerender setup are the site's own
 code. Each of those moves into the generator once it can emit it, and the site then deletes its
 copy.
