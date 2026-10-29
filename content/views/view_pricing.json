@@ -18,7 +18,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"center\": true, \"eyebrow\": \"PRICING\", \"title\": \"Open source today. Design partners first.\", \"lede\": \"Everything public today is Apache-2.0. The commercial caps and SKUs are proofs of concept, so there are no prices and no plans yet. What exists is an invitation to build with them.\"}"
+            "props": "{\"center\": true, \"eyebrow\": \"PRICING\", \"title\": \"Open source today. Design partners first.\", \"lede\": \"The kernel, SDK, tooling, platform and benchmarks are Apache-2.0. The commercial caps and SKUs are public to read and are proofs of concept, so there are no prices and no plans yet. What exists is an invitation to build with them.\"}"
           },
           {
             "type": "CUSTOM",
