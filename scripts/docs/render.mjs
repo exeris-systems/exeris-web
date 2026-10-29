@@ -51,12 +51,38 @@ function resolvePath(from, target) {
 }
 
 /**
- * Where a link in a published document points: an absolute URL or an in-page anchor stays as it
- * is; a relative link to another published document becomes its route; any other relative link
- * goes to the file on GitHub at the commit the build read.
+ * The repository path an organisation URL names, when it names a ref the site reads: `{ repo, path }`
+ * for `https://github.com/exeris-systems/<repo>/blob/<ref>/<path>` with `<ref>` one of `refs(repo)`.
+ * A ref may contain a slash, so the path is what follows a known ref, never a guess at where the ref ends.
  */
-export function rewriteHref(href, { path, published, blob }) {
-  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('#') || href.startsWith('//')) return href;
+export function orgTarget(href, refs) {
+  let url;
+  try {
+    url = new URL(href);
+  } catch {
+    return undefined;
+  }
+  if (url.protocol !== 'https:' || url.host !== 'github.com') return undefined;
+  const m = url.pathname.match(/^\/exeris-systems\/([^/]+)\/blob\/(.+)$/);
+  if (!m) return undefined;
+  const rest = decodeURIComponent(m[2]);
+  const ref = refs(m[1]).find((r) => rest.startsWith(`${r}/`));
+  return ref ? { repo: m[1], path: rest.slice(ref.length + 1), hash: url.hash.slice(1) } : undefined;
+}
+
+/**
+ * Where a link in a published document points: an in-page anchor stays as it is; a relative link
+ * to another published document, or an organisation URL naming a published document at a ref the
+ * site reads, becomes its route; any other relative link goes to the file on GitHub at the commit
+ * the build read; any other absolute URL stays as it is.
+ */
+export function rewriteHref(href, { path, published, blob, site }) {
+  if (href.startsWith('#') || href.startsWith('//')) return href;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(href)) {
+    const org = site && orgTarget(href, site.refs);
+    const route = org && site.route(org.repo, org.path);
+    return route ? `/${route}${org.hash ? `#${org.hash}` : ''}` : href;
+  }
   const [target, hash] = href.split('#');
   const resolved = resolvePath(path, decodeURIComponent(target));
   const route = published.get(resolved);
@@ -90,7 +116,7 @@ export const SANITIZE = {
  * a Mermaid block is shown as its source, marked as a diagram; links are rewritten by
  * `rewriteHref`; raw HTML in the markdown is reduced to the tags and attributes of SANITIZE.
  */
-export function renderDoc(body, { path, published, blob }) {
+export function renderDoc(body, { path, published, blob, site }) {
   const md = new MarkdownIt({ html: true, linkify: false, typographer: false });
   const seen = new Map();
   const headings = [];
@@ -110,7 +136,7 @@ export function renderDoc(body, { path, published, blob }) {
       }
       if (t.type === 'inline') {
         for (const c of t.children ?? []) {
-          if (c.type === 'link_open') c.attrSet('href', rewriteHref(c.attrGet('href') ?? '', { path, published, blob }));
+          if (c.type === 'link_open') c.attrSet('href', rewriteHref(c.attrGet('href') ?? '', { path, published, blob, site }));
         }
       }
     }

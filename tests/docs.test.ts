@@ -49,6 +49,30 @@ describe('links', () => {
     expect(rewriteHref('#overview', ctx)).toBe('#overview');
     expect(rewriteHref('mailto:a@b.c', ctx)).toBe('mailto:a@b.c');
   });
+
+  const site = {
+    refs: (repo: string) => (repo === 'exeris-kernel' ? ['main', 'v1'] : []),
+    route: (repo: string, p: string) => (repo === 'exeris-kernel' ? published.get(p) : undefined),
+  };
+  const org = (ref: string, p: string) => `https://github.com/exeris-systems/exeris-kernel/blob/${ref}/${p}`;
+
+  it('sends an organisation URL to a published document at a ref the site reads to its route', () => {
+    expect(rewriteHref(org('main', 'docs/subsystems/memory.md#leaks'), { ...ctx, site })).toBe('/kernel/subsystems/memory#leaks');
+    expect(rewriteHref(org('v1', 'docs/architecture.md'), { ...ctx, site })).toBe('/kernel/architecture');
+  });
+
+  it('keeps an organisation URL at another ref, to an unpublished file or to another repository', () => {
+    for (const href of [
+      org('development/0.12.0', 'docs/architecture.md'),
+      org('main', 'docs/adr/ADR-007.md'),
+      'https://github.com/exeris-systems/exeris-sdk/blob/main/docs/architecture.md',
+      'https://github.com/exeris-systems/exeris-kernel/tree/main/docs',
+      'https://github.com.evil.test/exeris-systems/exeris-kernel/blob/main/docs/architecture.md',
+      'http://github.com/exeris-systems/exeris-kernel/blob/main/docs/architecture.md',
+    ]) {
+      expect(rewriteHref(href, { ...ctx, site })).toBe(href);
+    }
+  });
 });
 
 describe('rendering', () => {

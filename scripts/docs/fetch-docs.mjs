@@ -65,10 +65,21 @@ export async function buildDocs(config, { read, refs }) {
   const published = new Map(Object.keys(config.sources).map((k) => [k, new Map()]));
   for (const f of files) published.get(f.key).set(f.path, f.route);
 
+  // An organisation URL to a published document is followed on the site when it names the ref the
+  // source is configured with (`main`) or the commit or tag the build resolved that to.
+  const byRepo = new Map(Object.entries(config.sources).map(([k, src]) => [src.repo, k]));
+  const site = {
+    refs: (repo) => {
+      const key = byRepo.get(repo);
+      return key ? [...new Set([config.sources[key].ref, refs[key]])].filter((r) => r && r !== 'release') : [];
+    },
+    route: (repo, path) => published.get(byRepo.get(repo))?.get(path),
+  };
+
   const pages = files.map((f) => {
     const ref = refs[f.key];
     const blob = (p) => `${GITHUB}/${f.source.repo}/blob/${ref}/${p}`;
-    const { html, tree, headings, description } = renderDoc(f.body, { path: f.path, published: published.get(f.key), blob });
+    const { html, tree, headings, description } = renderDoc(f.body, { path: f.path, published: published.get(f.key), blob, site });
     // A title is shown as plain text in the navigation, the contents and <title>.
     const title = (f.data.title || headings.find((h) => h.level === 1)?.text || f.path).replace(/`/g, '');
     return {

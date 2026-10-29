@@ -54,7 +54,11 @@ markdown:
 - Headings get GitHub's anchor ids, numbered when a heading repeats, so links into a section of a
   document keep working. The contents beside a page list its second- and third-level headings.
 - A relative link to another published document becomes its route, anchor kept; any other
-  relative link goes to the file on GitHub at the ref the build read. Absolute links are kept.
+  relative link goes to the file on GitHub at the ref the build read. An absolute link of the form
+  `https://github.com/exeris-systems/<repo>/blob/<ref>/<path>`, the form the documentation
+  standards prescribe between repositories, becomes the route of `<path>` when `<repo>` is a source,
+  `<path>` is published and `<ref>` is the ref the source is read at (`main`) or the commit or tag
+  it resolved to. Any other absolute link is kept.
 - A Mermaid block is drawn as a diagram in the browser: `mermaid.component.ts` loads Mermaid from
   this site, only on a page that has a diagram, renders it with `securityLevel: "strict"` one
   diagram at a time, and appends the SVG as parsed nodes. The prerendered page, a browser without
