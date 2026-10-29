@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FOOTER_COLUMNS, FOOTER_LEGAL, FOOTER_TAGLINE } from '../../content/site';
-import { BUILD_META, SITE_SHA } from '../data/data';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { SHELL_CONFIG } from './config';
 import { HrefDirective } from './href.directive';
 import { LogoComponent } from './logo.component';
 
@@ -41,9 +40,10 @@ import { LogoComponent } from './logo.component';
   `,
 })
 export class FooterComponent {
-  protected readonly tagline = FOOTER_TAGLINE;
-  protected readonly columns = FOOTER_COLUMNS;
-  protected readonly legal = FOOTER_LEGAL;
-  protected readonly kernel = BUILD_META.kernel;
-  protected readonly sha = SITE_SHA;
+  private readonly config = inject(SHELL_CONFIG);
+  protected readonly tagline = this.config.footer.tagline;
+  protected readonly columns = this.config.footer.columns;
+  protected readonly legal = this.config.footer.legal;
+  protected readonly kernel = this.config.build.kernel;
+  protected readonly sha = this.config.build.siteSha;
 }

@@ -11,12 +11,10 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import indexJson from '../../data/search-index.json';
+import { SHELL_CONFIG } from './config';
 import { isExternal } from './href.directive';
 import { searchIndex, type SearchEntry } from './fuzzy';
 import { PaletteService } from './palette.service';
-
-const INDEX = indexJson as readonly SearchEntry[];
 
 const KIND_LABEL: Record<SearchEntry['kind'], string> = {
   page: 'Page',
@@ -91,10 +89,11 @@ const KIND_LABEL: Record<SearchEntry['kind'], string> = {
 })
 export class CommandPaletteComponent {
   protected readonly palette = inject(PaletteService);
+  private readonly index = inject(SHELL_CONFIG).searchIndex;
   protected readonly kindLabel = KIND_LABEL;
   protected readonly query = signal('');
   protected readonly cursor = signal(0);
-  protected readonly results = computed(() => searchIndex(INDEX, this.query()));
+  protected readonly results = computed(() => searchIndex(this.index, this.query()));
 
   private readonly field = viewChild<ElementRef<HTMLInputElement>>('field');
   private readonly router = inject(Router);

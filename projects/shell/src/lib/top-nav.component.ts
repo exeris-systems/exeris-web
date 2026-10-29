@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, injec
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
-import { LINKS, NAV, type NavItem } from '../../content/site';
+import { SHELL_CONFIG, type NavItem } from './config';
 import { HrefDirective } from './href.directive';
 import { LogoComponent } from './logo.component';
 import { PaletteService } from './palette.service';
@@ -108,8 +108,9 @@ import { PaletteService } from './palette.service';
   `,
 })
 export class TopNavComponent {
-  protected readonly nav: readonly NavItem[] = NAV;
-  protected readonly github = LINKS.github;
+  private readonly config = inject(SHELL_CONFIG);
+  protected readonly nav: readonly NavItem[] = this.config.nav;
+  protected readonly github = this.config.github;
   protected readonly palette = inject(PaletteService);
   protected readonly openMenu = signal<string | null>(null);
   protected readonly mobileOpen = signal(false);
@@ -135,7 +136,7 @@ export class TopNavComponent {
   /** The top-level item whose section the current page belongs to. */
   protected readonly active = computed(() => {
     const path = this.url().split(/[?#]/)[0];
-    const hit = NAV.find((item) => path === item.href || path.startsWith(`${item.href}/`));
+    const hit = this.nav.find((item) => path === item.href || path.startsWith(`${item.href}/`));
     return hit?.id ?? null;
   });
 

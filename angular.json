@@ -32,11 +32,15 @@
             "assets": [
               {
                 "glob": "**/*",
+                "input": "projects/shell/public"
+              },
+              {
+                "glob": "**/*",
                 "input": "public"
               },
               {
                 "glob": "**/*",
-                "input": "src/assets",
+                "input": "projects/shell/assets",
                 "output": "assets"
               }
             ],
@@ -83,6 +87,178 @@
             },
             "development": {
               "buildTarget": "exeris-web:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    },
+    "docs": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "css",
+          "standalone": true,
+          "changeDetection": "OnPush"
+        }
+      },
+      "root": "projects/docs",
+      "sourceRoot": "projects/docs/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/docs",
+            "index": "projects/docs/src/index.html",
+            "browser": "projects/docs/src/main.ts",
+            "polyfills": [],
+            "tsConfig": "projects/docs/tsconfig.app.json",
+            "inlineStyleLanguage": "css",
+            "styles": [
+              "projects/docs/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/shell/public"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/shell/assets",
+                "output": "assets"
+              }
+            ],
+            "server": "projects/docs/src/main.server.ts",
+            "outputMode": "static"
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "700kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kB",
+                  "maximumError": "4kB"
+                }
+              ],
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              }
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "docs:build:production"
+            },
+            "development": {
+              "buildTarget": "docs:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    },
+    "lab": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "css",
+          "standalone": true,
+          "changeDetection": "OnPush"
+        }
+      },
+      "root": "projects/lab",
+      "sourceRoot": "projects/lab/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/lab",
+            "index": "projects/lab/src/index.html",
+            "browser": "projects/lab/src/main.ts",
+            "polyfills": [],
+            "tsConfig": "projects/lab/tsconfig.app.json",
+            "inlineStyleLanguage": "css",
+            "styles": [
+              "projects/lab/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/shell/public"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/shell/assets",
+                "output": "assets"
+              }
+            ],
+            "server": "projects/lab/src/main.server.ts",
+            "outputMode": "static"
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "700kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kB",
+                  "maximumError": "4kB"
+                }
+              ],
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              }
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "lab:build:production"
+            },
+            "development": {
+              "buildTarget": "lab:build:development"
             }
           },
           "defaultConfiguration": "development"

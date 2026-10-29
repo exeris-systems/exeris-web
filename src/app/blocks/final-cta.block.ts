@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { HrefDirective } from '../shell/href.directive';
+import { HrefDirective } from '@exeris-web/shell';
 import { btnClass, type Cta } from './types';
 
 export interface FinalCtaProps {

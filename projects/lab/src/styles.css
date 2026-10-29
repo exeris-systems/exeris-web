@@ -1,0 +1,8 @@
+/* Global styles: the shared shell over the UI kit, in the order exeris.eu imports them. */
+@import "tailwindcss";
+@import "@exeris/ui-kit/theme";
+@import "@exeris/ui-kit/styles";
+@import "@exeris/ui-kit/theme-exeris";
+@import "../../shell/styles/brand.css";
+@import "../../shell/styles/fonts.css";
+@import "../../shell/styles/shell.css";

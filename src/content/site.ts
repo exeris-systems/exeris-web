@@ -2,6 +2,7 @@
  * Site-wide content and link targets: navigation, footer, external URLs. Page content lives in
  * the view documents under content/views; this file holds what every page shares.
  */
+import type { FooterColumn, NavItem } from '@exeris-web/shell';
 
 export const SITE_URL = 'https://exeris.eu';
 export const SITE_NAME = 'Exeris';
@@ -35,19 +36,6 @@ export const LINKS = {
   blog: 'https://blog.arkstack.dev',
 } as const;
 
-export interface NavLink {
-  readonly label: string;
-  readonly href: string;
-  readonly description?: string;
-}
-
-export interface NavItem {
-  readonly id: string;
-  readonly label: string;
-  readonly href: string;
-  readonly children?: readonly NavLink[];
-}
-
 export const NAV: readonly NavItem[] = [
   { id: 'start', label: 'Get started', href: '/start' },
   {
@@ -69,11 +57,6 @@ export const NAV: readonly NavItem[] = [
   { id: 'lab', label: 'Lab', href: '/lab' },
   { id: 'pricing', label: 'Pricing', href: '/pricing' },
 ];
-
-export interface FooterColumn {
-  readonly title: string;
-  readonly links: readonly NavLink[];
-}
 
 export const FOOTER_TAGLINE = 'Intent in. Systems out.';
 

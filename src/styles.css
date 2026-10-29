@@ -5,8 +5,9 @@
 @import "@exeris/ui-kit/theme";
 @import "@exeris/ui-kit/styles";
 @import "@exeris/ui-kit/theme-exeris";
-@import "./styles/brand.css";
-@import "./styles/fonts.css";
+@import "../projects/shell/styles/brand.css";
+@import "../projects/shell/styles/fonts.css";
+@import "../projects/shell/styles/shell.css";
 @import "./styles/site.css";
 
 @plugin "@tailwindcss/typography";

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { HrefDirective } from '../shell/href.directive';
+import { HrefDirective } from '@exeris-web/shell';
 import { SectionHeadComponent, type SectionHeadProps } from './section-head.block';
 import { TextComponent } from './text.component';
 
