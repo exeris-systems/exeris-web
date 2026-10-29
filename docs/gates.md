@@ -23,9 +23,11 @@ last-verified: 2026-10-29
   held to the readiness rules.
 - **Readiness wording** (`scripts/check-content.mjs`, also a unit test): see below.
 - **Output** (`scripts/verify-dist.mjs`, with `docs` or `lab` as an argument for those
-  applications): every site route has its own HTML with title, description, canonical and Open
-  Graph tags and no unresolved content token; every application carries `_headers` and makes no
-  third-party request, names no tracker, runs no inline script and writes no cookie.
+  applications): every route of the site and of the docs has its own HTML with title,
+  description, canonical and Open Graph tags on its own host and no unresolved content token;
+  every application carries `_headers` and makes no third-party request, names no tracker (by
+  its host or script name, so an ordinary word in a document's prose is not one), runs no inline
+  script and writes no cookie.
 - **Lighthouse CI** (`lighthouserc.json`): performance ≥ 0.8, accessibility ≥ 0.9,
   best practices ≥ 0.9, SEO ≥ 0.9 on the static output.
 
