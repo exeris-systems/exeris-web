@@ -60,8 +60,10 @@ previous landing site and of the SKU pages merged into `/skus`.
 ## Licences named on the site
 
 The footer names only repositories that are public on GitHub and carry the Apache-2.0 text in their
-`LICENSE`, by short name: kernel, SDK, tooling, platform and benchmarks (`exeris-kernel`,
-`exeris-sdk`, `exeris-tooling`, `exeris-platform`, `exeris-benchmarks`). `OPEN_SOURCE_REPOS` in `src/content/site.ts` is that list; a repository joins it
+`LICENSE`, by short name: kernel, SDK, tooling, platform, Spring Runtime, benchmarks and docs
+(`exeris-kernel`, `exeris-sdk`, `exeris-tooling`, `exeris-platform`, `exeris-spring-runtime`,
+`exeris-benchmarks`, `exeris-docs`). This repository is left out: its code is Apache-2.0 but its
+copy is not. `OPEN_SOURCE_REPOS` in `src/content/site.ts` is that list; a repository joins it
 only after both facts are checked.
 
 ## Licence
