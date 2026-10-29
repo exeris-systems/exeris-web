@@ -18,7 +18,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"eyebrow\": \"PLATFORM\", \"title\": \"One platform, three tiers.\", \"lede\": \"Ingress, memory, persistence, flow and observability are the kernel’s job, behind a Spring-free SPI. Capabilities compose on that substrate, SKUs are named compositions of capabilities, and the build checks every edge between them.\", \"ctas\": [{\"label\": \"Kernel on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-kernel\", \"variant\": \"solid\"}, {\"label\": \"High-level architecture\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md\"}]}"
+            "props": "{\"eyebrow\": \"PLATFORM\", \"title\": \"One platform, three tiers.\", \"lede\": \"Ingress, memory, persistence, flow and observability are the kernel’s job, behind a Spring-free SPI. Capabilities compose on that substrate, SKUs are named compositions of capabilities, and the build checks every edge between them.\", \"ctas\": [{\"label\": \"Kernel on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-kernel\", \"variant\": \"solid\"}, {\"label\": \"High-level architecture\", \"href\": \"https://docs.exeris.eu/platform/high-level-architecture\"}]}"
           },
           {
             "type": "CUSTOM",
