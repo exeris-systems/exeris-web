@@ -2,8 +2,8 @@
 // Reads the documents projects/docs/sources.json lists from their repositories, renders the
 // published ones and writes the docs application's generated tree (projects/docs/src/app/generated,
 // not committed): an index of every page, one module per page holding its document tree, so each
-// page is its own lazily loaded chunk, and the routes. The kernel is read at its latest release tag, exeris-docs
-// at the commit main points to.
+// page is its own lazily loaded chunk, and the routes. Each source is read at the ref
+// sources.json gives it: the commit `main` points to, or the latest release tag.
 //
 // There is no committed copy to fall back to: a fetch error fails the build.
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -18,7 +18,7 @@ const API = 'https://api.github.com/repos/exeris-systems';
 const RAW = 'https://raw.githubusercontent.com/exeris-systems';
 const GITHUB = 'https://github.com/exeris-systems';
 
-/** The ref each source is read at: the latest release tag, or the commit `main` points to. */
+/** The ref a source is read at: the commit `main` points to, or the latest release tag. */
 async function resolveRef(source) {
   if (source.ref === 'release') return (await getJson(`${API}/${source.repo}/releases/latest`)).tag_name;
   if (source.ref === 'main') return (await getJson(`${API}/${source.repo}/commits/main`)).sha;

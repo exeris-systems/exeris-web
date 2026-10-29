@@ -26,10 +26,15 @@ review rules do not appear on the site.
 
 | Source | Repository | Read at | Route prefix |
 |---|---|---|---|
-| `kernel` | `exeris-kernel` | its latest release tag | `/kernel/` |
-| `sdk` | `exeris-sdk` | its latest release tag | `/sdk/` |
-| `tooling` | `exeris-tooling` | its latest release tag | `/tooling/` |
+| `kernel` | `exeris-kernel` | the commit `main` points to | `/kernel/` |
+| `sdk` | `exeris-sdk` | the commit `main` points to | `/sdk/` |
+| `tooling` | `exeris-tooling` | the commit `main` points to | `/tooling/` |
 | `platform` | `exeris-docs` | the commit `main` points to | `/platform/` |
+
+Until the 1.0 releases the site follows `main`, so a fix to a document is published by the next
+build, and each page names the commit it was read at. From 1.0 the kernel, SDK and tooling are
+read at their release tags, with one version of the site per release; there is no versioning
+before then, because the 0.x releases would all need their own.
 
 A page's route is its path in the repository without `docs/` and `.md`:
 `exeris-kernel/docs/subsystems/memory.md` is `/kernel/subsystems/memory`. A README is its
