@@ -7,7 +7,7 @@ const ROOT = join(__dirname, '..');
 function files(dir: string): string[] {
   return readdirSync(join(ROOT, dir)).flatMap((f) => {
     const p = `${dir}/${f}`;
-    if (p === 'src/app/generated') return [];
+    if (p === 'src/app/generated' || p === 'projects/docs/src/app/generated') return [];
     return statSync(join(ROOT, p)).isDirectory() ? files(p) : [p];
   });
 }

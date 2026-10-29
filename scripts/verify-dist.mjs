@@ -2,35 +2,33 @@
 // Verifies the static output of one application (site, docs or lab; site by default): every
 // route emitted its own HTML with title, description, canonical and Open Graph tags; the page
 // markup leaves no unresolved content token; and the application makes no third-party request
-// and runs no inline script (the no-tracking check). The route and SEO checks read the site's
-// views; an application without that list is held to the shared headers and the no-tracking check.
+// and runs no inline script (the no-tracking check). The route and SEO checks cover an
+// application with a route list (APPS in postbuild.mjs); one without it is held to the shared
+// headers and the no-tracking check.
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { OUT, SITE_URL, indexableRoutes } from './postbuild.mjs';
+import { APPS } from './postbuild.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-/** Each application's output directory and the one host its pages may load from. */
-export const APPS = {
-  site: { out: OUT, host: 'exeris.eu' },
-  docs: { out: join(ROOT, 'dist/docs/browser'), host: 'docs.exeris.eu' },
-  lab: { out: join(ROOT, 'dist/lab/browser'), host: 'lab.exeris.eu' },
-};
+/** The tags every prerendered page of an application served at `url` must carry. */
+function required(url) {
+  const at = url.replace(/[.]/g, '\\.').replace(/\//g, '\\/');
+  return [
+    [/<title>[^<]{3,}<\/title>/, '<title>'],
+    [/<meta name="description" content="[^"]{20,}"/, 'meta description'],
+    [new RegExp(`<link rel="canonical" href="${at}\\/[^"]*"`), 'canonical'],
+    [/<meta property="og:title" content="[^"]+"/, 'og:title'],
+    [/<meta property="og:description" content="[^"]+"/, 'og:description'],
+    [new RegExp(`<meta property="og:url" content="${at}\\/[^"]*"`), 'og:url'],
+    [new RegExp(`<meta property="og:image" content="${at}\\/[^"]+"`), 'og:image'],
+    [/<meta name="twitter:card"/, 'twitter:card'],
+    [/<h1[\s>]/, 'an h1'],
+  ];
+}
 
-const REQUIRED = [
-  [/<title>[^<]{3,}<\/title>/, '<title>'],
-  [/<meta name="description" content="[^"]{20,}"/, 'meta description'],
-  [/<link rel="canonical" href="https:\/\/exeris\.eu\/[^"]*"/, 'canonical'],
-  [/<meta property="og:title" content="[^"]+"/, 'og:title'],
-  [/<meta property="og:description" content="[^"]+"/, 'og:description'],
-  [/<meta property="og:url" content="https:\/\/exeris\.eu\/[^"]*"/, 'og:url'],
-  [/<meta property="og:image" content="https:\/\/exeris\.eu\/[^"]+"/, 'og:image'],
-  [/<meta name="twitter:card"/, 'twitter:card'],
-  [/<h1[\s>]/, 'an h1'],
-];
-
-const TRACKERS = /google-analytics|googletagmanager|gtag\(|doubleclick|facebook\.net|plausible|hotjar|segment\.(io|com)|clarity\.ms|fonts\.googleapis|fonts\.gstatic|cloudflareinsights/i;
+const TRACKERS = /google-analytics|googletagmanager|gtag\(|doubleclick|facebook\.net|plausible\.io|hotjar|segment\.(io|com)|clarity\.ms|fonts\.googleapis|fonts\.gstatic|cloudflareinsights/i;
 
 function files(dir) {
   return readdirSync(dir).flatMap((f) => {
@@ -40,31 +38,33 @@ function files(dir) {
 }
 
 export function verify(app = 'site') {
-  const { out, host } = APPS[app] ?? {};
-  if (!out) return { errors: [`unknown application ${app}`], routes: [] };
+  const config = APPS[app];
+  if (!config) return { errors: [`unknown application ${app}`], routes: [] };
+  const { out, url } = config;
   const errors = [];
   if (!existsSync(out)) return { errors: [`missing ${relative(ROOT, out)}; build ${app} first`], routes: [] };
-  const routes = app === 'site' ? [...indexableRoutes(), '404'] : [];
-  errors.push(...siteErrors(routes));
+  const routes = config.routes ? [...config.routes(), '404'] : [];
+  errors.push(...routeErrors(config, routes));
   if (!existsSync(join(out, '_headers'))) errors.push('missing _headers');
-  errors.push(...noTrackingErrors(out, new Set([host])));
+  errors.push(...noTrackingErrors(out, new Set([new URL(url).hostname])));
   return { errors, routes };
 }
 
-/** Route, SEO and token checks of the site's prerendered pages. */
-function siteErrors(routes) {
+/** Route, SEO and token checks of an application's prerendered pages. */
+function routeErrors({ out, url, redirects }, routes) {
   const errors = [];
   const seenTitles = new Map();
+  const REQUIRED = required(url);
   for (const route of routes) {
-    const file = join(OUT, route, 'index.html');
+    const file = join(out, route, 'index.html');
     if (!existsSync(file)) {
-      errors.push(`missing ${relative(OUT, file)}`);
+      errors.push(`missing ${relative(out, file)}`);
       continue;
     }
     const html = readFileSync(file, 'utf8');
     for (const [re, what] of REQUIRED) if (!re.test(html)) errors.push(`/${route}: no ${what}`);
     const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
-    if (route !== '404' && canonical !== `${SITE_URL}/${route}`) errors.push(`/${route}: canonical is ${canonical}`);
+    if (route !== '404' && canonical !== `${url}/${route}`) errors.push(`/${route}: canonical is ${canonical}`);
     if (route === '404' && !/<meta name="robots" content="noindex"/.test(html)) errors.push('/404: not noindex');
     const title = html.match(/<title>([^<]*)<\/title>/)?.[1];
     if (seenTitles.has(title)) errors.push(`/${route}: same title as /${seenTitles.get(title)}`);
@@ -74,8 +74,8 @@ function siteErrors(routes) {
     if (token) errors.push(`/${route}: unresolved content token ${token[0]}`);
   }
   if (routes.length) {
-    for (const extra of ['404.html', 'sitemap.xml', 'robots.txt', '_redirects']) {
-      if (!existsSync(join(OUT, extra))) errors.push(`missing ${extra}`);
+    for (const extra of ['404.html', 'sitemap.xml', 'robots.txt', ...(redirects ? ['_redirects'] : [])]) {
+      if (!existsSync(join(out, extra))) errors.push(`missing ${extra}`);
     }
   }
   return errors;
