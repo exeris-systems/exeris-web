@@ -52,5 +52,6 @@ total the rows do not give, a SKU cap the registry lacks, tooling artefacts on d
 a missing initializr jar, a missing CITABLE row) always fails the build. A public repository whose
 README the parser cannot read is the one exception: its card links it without a summary or kernel
 version, and the fetch prints a warning.
-`GITHUB_TOKEN`, when set, is sent to `api.github.com` only, never to Maven Central or
-`raw.githubusercontent.com`.
+The token is `SITE_GITHUB_TOKEN`, or `GITHUB_TOKEN` when that is unset (CI passes the token
+Actions provides under that name; a secret store that reserves the `GITHUB_` prefix takes the
+first). It is sent to `api.github.com` only, never to Maven Central or `raw.githubusercontent.com`.

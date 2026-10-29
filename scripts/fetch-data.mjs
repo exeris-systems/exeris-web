@@ -5,6 +5,7 @@
 //   SITE_SKIP_FETCH=1   keep the committed JSON, fetch nothing
 //   SITE_FETCH_STRICT=1 fail on a fetch error instead of falling back to the committed JSON
 //   CF_PAGES=1          set by Cloudflare Pages: the build publishes, so it is strict as well
+//   SITE_GITHUB_TOKEN   a token for api.github.com; GITHUB_TOKEN, which Actions provides, when unset
 //
 // Outside a publishing build, a fetch error (network failure, non-2xx status) falls back to the
 // committed JSON, so a local or offline build works. A parser or
@@ -69,12 +70,17 @@ export class FetchError extends Error {
   }
 }
 
-/** Request headers for `url`: the token goes to the GitHub API host only, never to a CDN or mirror. */
+/**
+ * Request headers for `url`: the token goes to the GitHub API host only, never to a CDN or mirror.
+ * The token is SITE_GITHUB_TOKEN, a name a secret store accepts where the GITHUB_ prefix is
+ * reserved, or else GITHUB_TOKEN.
+ */
 export function headersFor(url, env = process.env) {
   const h = { 'User-Agent': 'exeris-web-build' };
   if (new URL(url).hostname === 'api.github.com') {
     h.Accept = 'application/vnd.github+json';
-    if (env.GITHUB_TOKEN) h.Authorization = `Bearer ${env.GITHUB_TOKEN}`;
+    const token = env.SITE_GITHUB_TOKEN || env.GITHUB_TOKEN;
+    if (token) h.Authorization = `Bearer ${token}`;
   } else {
     h.Accept = '*/*';
   }
