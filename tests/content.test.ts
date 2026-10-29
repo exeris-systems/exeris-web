@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
-import { checkContent, skuRepoErrors, strayNumbers } from '../scripts/check-content.mjs';
+import { checkContent, propsNumberErrors, skuRepoErrors, strayNumbers } from '../scripts/check-content.mjs';
 
 describe('content gate', () => {
   it('passes on the committed content', () => {
@@ -30,6 +30,13 @@ describe('content gate', () => {
     for (const ok of ['Java 25 LTS or newer', 'HTTP/1.1 and HTTP/2', 'Tier 2', 'Layer 6 caps', 'ADR-023', 'TRL-3 (PLATFORM)', 'Apache-2.0', 'B2B', '`i18n`', '/platform#tier-1']) {
       expect(strayNumbers(ok), ok).toEqual([]);
     }
+  });
+
+  it('checks the strings of an items list for numbers', () => {
+    const tier = { tiers: [{ items: ['Kernel SPI and Core', '40× faster driver'] }, { items: 'skus' }] };
+    const errors = propsNumberErrors(tier, 'f');
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toContain('props.tiers[0].items[1]: numeric literal "40"');
   });
 
   it('fails when a quoted claim string changes upstream', () => {

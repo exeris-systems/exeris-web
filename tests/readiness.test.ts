@@ -100,6 +100,13 @@ describe('readiness of the copy attached to a SKU', () => {
     expect(viewReadinessErrors('f', under('y'), { skus, allow: [] }).length).toBeGreaterThan(0);
   });
 
+  it('holds the strings of an items list to the rules', () => {
+    const map = { tiers: [{ items: ['Kernel SPI and Core', 'Production support'] }, { items: 'skus' }] };
+    const errors = viewReadinessErrors('f', view(map), { skus: [], allow: [] });
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors.every((e: string) => e.includes('tiers[0].items[1]'))).toBe(true);
+  });
+
   it('checks links as well as prose', () => {
     const errors = viewReadinessErrors('f', view({ ctas: [{ label: 'Open', href: 'https://console.exeris.eu' }] }), { skus: [], allow: [] });
     expect(errors).toHaveLength(1);

@@ -23,7 +23,7 @@ const read = (p) => readFileSync(join(ROOT, p), 'utf8');
 const readJson = (p) => JSON.parse(read(p));
 
 /** Keys whose string value is not prose: links, claim references and their excerpts. */
-const NON_PROSE_KEYS = new Set(['href', 'claim', 'excerpt', 'id', 'sku', 'tone', 'variant', 'kind', 'size', 'items', 'lang']);
+const NON_PROSE_KEYS = new Set(['href', 'claim', 'excerpt', 'id', 'sku', 'tone', 'variant', 'kind', 'size', 'lang']);
 /** Keys whose value may be a JSON number: layout only. */
 const NUMBER_KEYS = new Set(['columns']);
 const COUNT_TOKEN = /\{([a-z.:-]+)\}/g;
@@ -83,7 +83,7 @@ export function viewReadinessErrors(file, view, { skus, allow }) {
   const scan = (value, key, where, exempt) => {
     if (exempt || typeof value !== 'string') return;
     for (const h of readinessHits(value, { view: view.name, allow, isLink: LINK_KEYS.has(key) })) {
-      errors.push(`${file}: ${where}: "${h.match}" reads as ${h.rule}; nothing is released as a product (see "Readiness wording" in README)`);
+      errors.push(`${file}: ${where}: "${h.match}" reads as ${h.rule}; nothing is released as a product (see "Readiness wording" in docs/gates.md)`);
     }
   };
   const walk = (value, key, where, exempt) => {
@@ -206,6 +206,32 @@ function walkProps(value, visit, path, key = null) {
   } else visit(value, path, key);
 }
 
+/**
+ * Numeric-literal and count-token errors of one CUSTOM block's props. Claim references are handed
+ * to `useClaim`, which checks them against the register; every other string that is not under a
+ * NON_PROSE_KEYS key is prose.
+ */
+export function propsNumberErrors(props, at, { patterns = allowlist(), useClaim = () => {} } = {}) {
+  const errors = [];
+  walkProps(props, (value, p, key) => {
+    const where = `${at} props${p}`;
+    if (typeof value === 'number' && !NUMBER_KEYS.has(key)) errors.push(`${where}: numeric literal ${value}`);
+    if (typeof value !== 'string') return;
+    if (key === 'claim' || key === 'claims' || (key === null && /\.claims\[\d+\]$/.test(p))) {
+      useClaim(value, where);
+      return;
+    }
+    if (NON_PROSE_KEYS.has(key)) return;
+    if (key !== 'code') {
+      for (const m of value.matchAll(COUNT_TOKEN)) {
+        if (!COUNT_KEYS.test(m[1])) errors.push(`${where}: unknown count token {${m[1]}}`);
+      }
+    }
+    for (const s of strayNumbers(value, patterns)) errors.push(`${where}: numeric literal "${s}"`);
+  }, '');
+  return errors;
+}
+
 export function checkContent({ lock = readJson('content/meta/claims.lock.json') } = {}) {
   const errors = [];
   const claims = readJson('src/data/claims.json').claims;
@@ -239,26 +265,7 @@ export function checkContent({ lock = readJson('content/meta/claims.lock.json') 
             errors.push(`${at}: props are not JSON (${e.message})`);
             return;
           }
-          walkProps(props, (value, p, key) => {
-            const where = `${at} props${p}`;
-            if (typeof value === 'number' && !NUMBER_KEYS.has(key)) errors.push(`${where}: numeric literal ${value}`);
-            if (typeof value !== 'string') return;
-            if (key === 'claim' || (key === null && /\.claims\[\d+\]$/.test(p))) {
-              useClaim(value, where);
-              return;
-            }
-            if (key === 'claims') {
-              useClaim(value, where);
-              return;
-            }
-            if (NON_PROSE_KEYS.has(key)) return;
-            if (key !== 'code') {
-              for (const m of value.matchAll(COUNT_TOKEN)) {
-                if (!COUNT_KEYS.test(m[1])) errors.push(`${where}: unknown count token {${m[1]}}`);
-              }
-            }
-            for (const s of strayNumbers(value, patterns)) errors.push(`${where}: numeric literal "${s}"`);
-          }, '');
+          errors.push(...propsNumberErrors(props, at, { patterns, useClaim }));
           // Excerpts: each object holding claim + excerpt must quote the claim verbatim.
           const excerptCheck = (value, p) => {
             if (Array.isArray(value)) value.forEach((x, i) => excerptCheck(x, `${p}[${i}]`));
@@ -284,7 +291,7 @@ export function checkContent({ lock = readJson('content/meta/claims.lock.json') 
   for (const { file, json } of loadViews()) errors.push(...viewReadinessErrors(file, json.view, { skus: skusData, allow }));
   errors.push(...skuRepoErrors({ repos: readJson('content/meta/sku-repos.json').skus, skus: skusData, views: loadViews() }));
   const siteScan = (file, text, where, isLink) => {
-    for (const h of readinessHits(text, { allow, isLink })) errors.push(`${file}${where}: "${h.match}" reads as ${h.rule}; nothing is released as a product (see "Readiness wording" in README)`);
+    for (const h of readinessHits(text, { allow, isLink })) errors.push(`${file}${where}: "${h.match}" reads as ${h.rule}; nothing is released as a product (see "Readiness wording" in docs/gates.md)`);
   };
   for (const file of ['content/meta/seo.json', 'content/meta/index-extra.json']) {
     walkProps(readJson(file), (value, p, key) => {
