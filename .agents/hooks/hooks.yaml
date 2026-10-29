@@ -1,0 +1,98 @@
+# Canonical hook definitions — the L0 layer of ADR-085 §J, authored once here and rendered to each
+# vendor's hook file by the shared renderer. agents-md-schema.md rule 12.
+#
+# A hook never states a rule first. Each one below enforces a rule written elsewhere, named in its
+# `reason`; a hook that denies something no policy forbids is switched off within a week.
+version: 1
+
+state-dir: .agents-state          # git-ignored; session state is keyed per session
+
+hooks:
+  # ── deny ────────────────────────────────────────────────────────────────────────────────────
+  # A push to `main` is a production deploy here: Cloudflare Pages builds every push through its
+  # Git integration, with no deploy job in between to stop one.
+  - id: deny-irreversible
+    event: pre-tool
+    tool: shell
+    decision: deny
+    reason: >-
+      agent-safety-and-autonomy.md §1 (shared bundle policy, vendored under .agents/vendor/):
+      irreversible or outward-facing action. In this repository a push to main deploys the public
+      site.
+    match:
+      # Force push
+      - 'git\s+push\b[^|;&]*(--force(?!-with-lease)|--mirror|\s-[a-zA-Z]*f[a-zA-Z]*(\s|$))'
+      # Protected branch — the production branch of the site
+      - 'git\s+push\b[^|;&]*\s\+?(main|master)(\s|$)'
+      - 'git\s+push\b[^|;&]*\s\+?[^\s:]*:(refs/heads/)?(main|master)(\s|$)'
+      - 'git\s+push\b[^|;&]*\s--(all|tags)\b'
+      - 'git\s+push\b[^|;&]*--delete\b'
+      # Tag creation
+      - 'git\s+tag\s+(?!-(l|-list|n\d*|-contains|-no-contains|v|-verify|-points-at|-merged|-no-merged)\b)(-[a-zA-Z]+\s+)*\S'
+      - 'git\s+branch\s+-[dD]\b'
+      - 'git\s+reset\s+--hard\b'
+      - 'git\s+clean\s+-[a-zA-Z]*[fd][a-zA-Z]*\b'
+      - 'git\s+worktree\s+remove\b'
+      # Deploys that bypass the Git integration
+      - '(^|[|;&]\s*)(npx\s+)?wrangler\s+(pages\s+(deploy|publish)|deploy|publish)\b'
+      # Publish operations
+      - '(^|[|;&]\s*)npm\s+(publish|unpublish|deprecate)\b'
+      - '(^|[|;&]\s*)gh\s+release\s+(create|delete|upload)\b'
+      - '(^|[|;&]\s*)gh\s+pr\s+(merge|close)\b'
+      - '(^|[|;&]\s*)gh\s+repo\s+(delete|archive|rename)\b'
+      - '(^|[|;&]\s*)gh\s+repo\s+edit\b[^|;&]*--visibility\b'
+
+  # The two trees no one writes by hand. view-ir-and-generated-output.md rule 1 for the first,
+  # agents-md-schema.md rule 8 for the second.
+  - id: deny-generated-edit
+    event: pre-tool
+    tool: edit
+    decision: deny
+    reason: >-
+      .agents/policies/view-ir-and-generated-output.md rule 1: src/app/generated/ is written by
+      the generator — change the view document. agents-md-schema.md rule 8: .agents/vendor/ is the
+      verified copy of the bundle — re-vendor instead.
+    paths:
+      - 'src/app/generated/**'
+      - '.agents/vendor/**'
+
+  # ── record ──────────────────────────────────────────────────────────────────────────────────
+  # The record names are the dispatcher's: the stop gate reads `docs-edited` and `guardrails-run`.
+  - id: record-guardrail-run
+    event: post-tool
+    tool: shell
+    decision: allow
+    match:
+      - '(?:^|[|;&]\s*|\$\(\s*)(?:python3?\s+)?(?:\S*/)?agents_file_check\.py\b'
+      - '(?:^|[|;&]\s*|\$\(\s*)(?:python3?\s+)?(?:\S*/)?agents_render\.py\b'
+      - '(?:^|[|;&]\s*|\$\(\s*)(?:\S+=\S+\s+)*npm\s+run\s+check:content\b'
+    record: guardrails-run
+
+  - id: record-edit
+    event: post-tool
+    tool: edit
+    decision: allow
+    paths:
+      - '.agents/**'
+      - 'AGENTS.md'
+      - 'content/**'
+      - 'src/content/**'
+      - 'src/app/blocks/**'
+    record: docs-edited
+
+  # ── gate ────────────────────────────────────────────────────────────────────────────────────
+  - id: guardrails-gate-on-stop
+    event: stop
+    decision: block-or-allow
+    degrade: warn
+    rules:
+      - when-edited: ['.agents/**', 'AGENTS.md']
+        requires: ['agents_file_check.py']
+        reason: >-
+          standards/agents-md-schema.md: the agent layer changed without the agent-file check.
+          Run it, and regenerate the adapters rather than editing them.
+      - when-edited: ['content/**', 'src/content/**', 'src/app/blocks/**']
+        requires: ['check:content']
+        reason: >-
+          .agents/policies/public-claims.md and product-readiness.md: copy or a block changed
+          without the content check. Run npm run check:content.

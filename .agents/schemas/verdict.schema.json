@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Review verdict (exeris-web)",
+  "description": "The bundle's shape, narrowed to this repository's reviewing role and its surfaces. The three-state `decision` and the `checks_run` contract are the base's; only the vocabulary is local. `scope_class` names which of the site's surfaces a change touches, which is finer than the four classes ADR-085 §E.16 fixes for a pull-request body.",
+  "allOf": [
+    {
+      "$ref": "../vendor/exeris-agents-2.1.0/schemas/verdict.base.schema.json"
+    },
+    {
+      "properties": {
+        "agent": {
+          "enum": [
+            "exeris-web-reviewer"
+          ],
+          "description": "One role, because one role emits: `exeris-web-reviewer` is the only profile naming this schema in `output`. The CI review is the organisation's, under its own role and schema, and does not validate against this file."
+        },
+        "scope_class": {
+          "enum": [
+            "copy-and-claims",
+            "readiness-wording",
+            "view-ir",
+            "blocks-and-shell",
+            "privacy-and-headers",
+            "build-and-gates",
+            "brand-and-licence",
+            "docs-only",
+            "agent-layer",
+            "mixed"
+          ]
+        },
+        "findings": {
+          "items": {
+            "$ref": "../vendor/exeris-agents-2.1.0/schemas/verdict.base.schema.json#/properties/findings/items",
+            "unevaluatedProperties": false
+          }
+        },
+        "checks_run": {
+          "items": {
+            "$ref": "../vendor/exeris-agents-2.1.0/schemas/verdict.base.schema.json#/properties/checks_run/items",
+            "unevaluatedProperties": false
+          }
+        },
+        "handoffs": {
+          "items": {
+            "$ref": "../vendor/exeris-agents-2.1.0/schemas/verdict.base.schema.json#/properties/handoffs/items",
+            "unevaluatedProperties": false
+          }
+        }
+      }
+    }
+  ],
+  "unevaluatedProperties": false
+}

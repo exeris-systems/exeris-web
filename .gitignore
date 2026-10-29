@@ -24,3 +24,8 @@ npm-debug.log*
 !.vscode/extensions.json
 /src/data/search-index.json
 /src/data/view-routes.json
+
+# Agent layer: hook session state, local worktrees and local Claude settings
+.agents-state/
+.claude/worktrees/
+.claude/settings.local.json

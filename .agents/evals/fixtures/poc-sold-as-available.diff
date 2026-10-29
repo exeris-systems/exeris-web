@@ -1,0 +1,14 @@
+--- a/content/views/view_skus.json
++++ b/content/views/view_skus.json
+@@
+       "type": "CUSTOM",
+       "customType": "sku-cards",
+       "props": {
+-        "intro": "Each SKU below is a proof of concept. None is released yet.",
++        "intro": "Each SKU below is available today for teams that want to run it in their own data centre. Get in touch to start a pilot.",
+         "skus": [{ "id": "api-gateway" }]
+       }
+--- a/src/data/caps.json (unchanged, shown for context)
++++ b/src/data/caps.json (unchanged, shown for context)
+@@
+   { "cap": "admin-control-plane", "sku": "api-gateway", "status": "poc", "licence": "enterprise" }
