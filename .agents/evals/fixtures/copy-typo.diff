@@ -1,0 +1,5 @@
+--- a/content/views/view_platform.json
++++ b/content/views/view_platform.json
+@@
+-        "body": "The kernel owns the lifecyle of every connection it accepts."
++        "body": "The kernel owns the lifecycle of every connection it accepts."

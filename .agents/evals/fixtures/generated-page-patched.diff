@@ -1,0 +1,8 @@
+--- a/src/app/generated/views/pricing/pricing.page.ts
++++ b/src/app/generated/views/pricing/pricing.page.ts
+@@
+   template: `
+     <ex-page-header [props]="block0" />
++    <p class="note">Tiers are indicative and will change before the first release.</p>
+     <ex-pricing-tiers [props]="block1" />
+   `,

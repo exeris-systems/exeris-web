@@ -1,0 +1,11 @@
+--- a/content/views/view_home.json
++++ b/content/views/view_home.json
+@@
+       "type": "CUSTOM",
+       "customType": "home-hero",
+       "props": {
+         "title": "A JVM runtime that owns its memory",
+-        "lede": "Measured, not promised: every figure below links to its claim.",
++        "lede": "Cold start in a fraction of the time — roughly 4x faster than a Spring Boot baseline.",
+         "claims": ["L12.absolute", "L13.floor"]
+       }

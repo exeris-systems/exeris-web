@@ -1,0 +1,12 @@
+--- a/content/meta/claims.lock.json
++++ b/content/meta/claims.lock.json
+@@
+-  "L13.floor": "At least 2.1x the throughput of the Netty baseline on the plaintext route, 8 cores.",
++  "L13.floor": "At least 1.3x the throughput of the Netty baseline on the plaintext route, 8 cores; not reproduced on 16 cores.",
+--- a/content/views/view_home.json (unchanged, shown for context)
++++ b/content/views/view_home.json (unchanged, shown for context)
+@@
+        "title": "More than twice the throughput, on the same hardware",
+        "claim": "L13.floor"
+
+PR description: "chore(data): refresh claims lock — ran npm run claims:lock after the data fetch went red."

@@ -1,19 +1,136 @@
 # Composition and delivery metadata for this repository's agent material.
+# agents-md-schema.md rules 5, 7, 8 and 10-14: profiles and workflows compose by reference,
+# provider directories are generated, imports are version-pinned, and what a vendor cannot do is
+# written down rather than assumed.
 #
-# This repository is a bundle CONSUMER and nothing else. It authors no role profile, skill, agent
-# workflow, policy, reference, hook or schema, so those keys are absent rather than empty:
-# `agents_file_check.py` asserts the manifest and the filesystem agree in BOTH directions, and it
-# reads absent and empty the same way. No `adapters:` either — an adapter is generated FROM
-# authored material, and there is none to render.
+# The check asserts this file and the filesystem agree in BOTH directions: every name here exists,
+# and every profile, skill and workflow on disk is named here.
 version: 2
 repository: exeris-web
 
-# The organisation bundle, pinned and vendored under .agents/vendor/ (agents-md-schema.md rule 8).
-# `ref` is the commit the tree was taken from and `sha256` a digest over every byte of it, so a
-# hand-edit of the vendored copy fails CI instead of becoming a silent local fork. Bumping the
-# version means re-vendoring with `agents_bundle.py vendor`; the pin and the tree land together.
+# The organisation bundle, pinned and vendored under .agents/vendor/ (rule 8). `ref` is the commit
+# the tree was taken from and `sha256` a digest over every byte of it, so a hand-edit of the
+# vendored copy fails CI instead of becoming a silent local fork. Bumping the version means
+# re-vendoring with `agents_bundle.py vendor`; the pin and the tree land together.
 imports:
   - bundle: exeris-agents
     version: 2.1.0
     ref: abfdbe5336e3c29b807241b0bb00a6091cb42fea
     sha256: sha256:7454a4e4f8682b664899225551dbf4e827e40a2c8889c989ff24e9ebdf2f960f
+
+# Four roles, because the site has four kinds of work and no fifth. There is no docs-adr role:
+# this repository registers no ADR, and a decision about the site that needs one is drafted in
+# exeris-docs, where the registry lives.
+agents:
+  - exeris-web-router
+  - exeris-web-reviewer
+  - exeris-web-implementer
+  - exeris-web-verification
+
+skills:
+  - exeris-web-task-classifier
+  - exeris-web-claims-review
+  - exeris-web-readiness-wording-review
+  - exeris-web-privacy-and-csp-review
+  - exeris-web-view-ir-review
+  - exeris-web-gate-runner
+
+workflows:
+  - web-pr-review
+  - page-authoring
+  - claims-lock-review
+
+# Repository-owned policies only. `agent-safety-and-autonomy` and `error-handling-and-fallback`
+# live in the shared bundle, where a change to them reaches every repository at once; a profile
+# references those as `bundle:<name>` so a reader can tell whose rule it is.
+policies:
+  - public-claims
+  - product-readiness
+  - no-third-party-requests
+  - view-ir-and-generated-output
+  - public-repository
+  - site-gates
+
+references:
+  - build-and-gates
+  - upstream-data
+
+# Rule 12. This repository has an irreversible act an interactive session can perform: a push to
+# `main` is a production deploy, because Cloudflare Pages builds every push through its Git
+# integration and there is no deploy job in between. The hooks deny that and the other
+# outward-facing commands, deny an edit to the two trees no human or agent writes by hand, and
+# hold a session open when content changed and the content gate did not run.
+hooks: hooks/hooks.yaml
+
+# Rule 14. Cases over the two roles that emit a machine-readable decision, graded
+# deterministically. They run on demand and on a schedule, never on a pull request.
+evals: evals/scenarios.yaml
+
+# Rule 13. `verdict` narrows the bundle's base to this repository's reviewing role and its
+# surfaces; `triage-result` to the classes `exeris-web-task-classifier` publishes. Each has exactly
+# one emitter — `exeris-web-reviewer` and `exeris-web-router`, both naming it in `output`. There is
+# no `handoff` schema: the four profiles hand off in prose.
+schemas:
+  - verdict
+  - triage-result
+
+nested: []
+
+renderer:
+  # One implementation, shared across repositories (ADR-085 §C.11: a repository does not carry
+  # its own renderer).
+  source: exeris-systems/exeris-agents
+  entrypoint: tools/agents_render.py
+  check: tools/agents_file_check.py
+  bundle: tools/agents_bundle.py
+
+adapters:
+  claude:
+    target: .claude
+    agents: .claude/agents/{name}.md
+    # One symlink PER SKILL, not one for the directory: workflows render into the same directory,
+    # so a directory-level link makes the two kinds fight over one path.
+    skills: symlink
+    workflows: .claude/skills/{name}/SKILL.md
+    hooks: .claude/settings.json#hooks
+  copilot:
+    target: .github
+    skills: native
+    status: deferred
+  codex:
+    target: .codex
+    skills: native
+    status: deferred
+  gemini:
+    target: .gemini
+    skills: native
+    status: deferred
+  antigravity:
+    target: .agents
+    skills: native
+    status: deferred
+  cursor:
+    target: .cursor
+    skills: native
+    status: deferred
+
+provider-owned:
+  - .claude/settings.local.json
+  - .claude/README.md
+  - .claude/worktrees
+  - .github/workflows
+  - .github/CODEOWNERS
+  - .github/dependabot.yml
+  # Rule 7: a file the renderer writes PART of. It owns the `hooks` key and merges around every
+  # other key, which stays the human's.
+  - path: .claude/settings.json
+    generated-region: hooks
+
+degradations:
+  # What each runtime cannot do. An unrecorded degradation is an operator believing a gate runs on
+  # a client that never had it. Only the Claude adapter is rendered today; the stop gate below is
+  # a warning on these four the day theirs are.
+  copilot: [stop-hook-warn-only]
+  gemini: [stop-hook-warn-only, no-agent-scoped-hooks]
+  cursor: [stop-hook-warn-only]
+  antigravity: [stop-hook-warn-only]
