@@ -13,6 +13,7 @@
 //    allow-listed technical use or the copy of a released SKU;
 //  - a SKU card names an id the SKU registry lacks, or a SKU with a public repository has no card;
 //  - the README summary of a public cap repository, which its card shows, uses readiness wording;
+//  - the copy the docs and lab applications author uses readiness wording;
 //  - exeris-codegen.json customBlocks does not map a CUSTOM block to a component file that exports it.
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -329,6 +330,16 @@ export function checkContent({ lock = readJson('content/meta/claims.lock.json') 
     for (const m of src.matchAll(/'([^'\n]*)'|"([^"\n]*)"|`([^`]*)`/g)) {
       const text = m[1] ?? m[2] ?? m[3];
       for (const s of strayNumbers(text, patterns)) errors.push(`${file}: numeric literal "${s}"`);
+      siteScan(file, text, '', /^https?:\/\//.test(text));
+    }
+  }
+
+  // The docs and lab applications: the copy this repository writes for them (navigation, home and
+  // not-found pages, SEO), not the upstream documents they render, which are generated.
+  for (const file of ['projects/docs/src/app', 'projects/lab/src/app'].flatMap(walkDir).filter((f) => f.endsWith('.ts') && !f.includes('/generated/'))) {
+    const src = read(file).replace(/\/\*[\s\S]*?\*\/|^\s*\/\/.*$/gm, '');
+    for (const m of src.matchAll(/'([^'\n]*)'|"([^"\n]*)"|`([^`]*)`/g)) {
+      const text = m[1] ?? m[2] ?? m[3];
       siteScan(file, text, '', /^https?:\/\//.test(text));
     }
   }

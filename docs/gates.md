@@ -23,9 +23,11 @@ last-verified: 2026-10-29
   held to the readiness rules.
 - **Readiness wording** (`scripts/check-content.mjs`, also a unit test): see below.
 - **Output** (`scripts/verify-dist.mjs`, with `docs` or `lab` as an argument for those
-  applications): every site route has its own HTML with title, description, canonical and Open
-  Graph tags and no unresolved content token; every application carries `_headers` and makes no
-  third-party request, names no tracker, runs no inline script and writes no cookie.
+  applications): every route of the site and of the docs has its own HTML with title,
+  description, canonical and Open Graph tags on its own host and no unresolved content token;
+  every application carries `_headers` and makes no third-party request, names no tracker (by
+  its host or script name, so an ordinary word in a document's prose is not one), runs no inline
+  script and writes no cookie.
 - **Lighthouse CI** (`lighthouserc.json`): performance ≥ 0.8, accessibility ≥ 0.9,
   best practices ≥ 0.9, SEO ≥ 0.9 on the static output.
 
@@ -34,7 +36,10 @@ last-verified: 2026-10-29
 Nothing is released as a product today, so copy must not say that something is sold, supported,
 hosted or licensed for production, or invite a sales conversation. The check scans every authored
 string: view titles and the props of every node, `RICH_TEXT` included (links too), the typed site
-content, the SEO and search-index meta files, and the README sentences cap cards show, and rejects the phrases of `READINESS_RULES` in `scripts/check-content.mjs`: sold or
+content, the SEO and search-index meta files, the README sentences cap cards show, and the string
+literals of the docs and lab applications (`projects/docs/src/app`, `projects/lab/src/app`, not
+the generated documents), and rejects the phrases of `READINESS_RULES` in
+`scripts/check-content.mjs`: sold or
 sale, buy and purchase, `production`, support as an offering, a service-level agreement, `CVE`, a hosted or managed
 service, a control plane, a production, runtime, perpetual or commercial licence, a subscription or
 one-time fee, air-gapped and on-prem, "Contact us" and "Contact sales", "Discuss fit", "request a

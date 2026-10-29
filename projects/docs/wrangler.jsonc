@@ -1,0 +1,17 @@
+// Cloudflare Workers configuration of docs.exeris.eu: a Worker with static assets and no script.
+// Workers Builds runs `npm run build:docs` and deploys with
+// `npx wrangler deploy --config projects/docs/wrangler.jsonc`; `name` is the Worker in the
+// Cloudflare dashboard and must match it. Paths are relative to this file.
+{
+  "name": "exeris-web-docs",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "../../dist/docs/browser",
+    // A page is served at its canonical address, without a trailing slash, as on exeris.eu.
+    "html_handling": "drop-trailing-slash",
+    // An unknown path is answered with 404.html and status 404.
+    "not_found_handling": "404-page"
+  },
+  // Preview builds of non-production branches (`wrangler preview`) need this block.
+  "previews": {}
+}

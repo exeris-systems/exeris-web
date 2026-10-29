@@ -1,0 +1,135 @@
+/* The documentation layout: sections beside, the document, its contents. Colours come only from
+   the tokens in brand.css. */
+
+.ex-docs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  padding-block: 40px 96px;
+}
+@media (min-width: 900px) {
+  .ex-docs { grid-template-columns: 220px minmax(0, 1fr); }
+}
+@media (min-width: 1240px) {
+  .ex-docs { grid-template-columns: 220px minmax(0, 1fr) 200px; }
+}
+
+.ex-docs-side,
+.ex-docs-toc {
+  font-size: 13px;
+}
+/* On a narrow screen the document comes first and the section list follows it. */
+.ex-docs-side { order: 2; }
+.ex-doc { order: 1; }
+@media (min-width: 900px) {
+  .ex-docs-side,
+  .ex-doc { order: 0; }
+}
+@media (min-width: 900px) {
+  .ex-docs-side,
+  .ex-docs-toc {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+  }
+}
+.ex-docs-nav__group + .ex-docs-nav__group { margin-top: 20px; }
+.ex-docs-nav ul,
+.ex-docs-toc ul,
+.ex-docs-home ul {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ex-docs-nav li a,
+.ex-docs-toc li a {
+  display: block;
+  padding: 4px 0 4px 10px;
+  border-left: 1px solid var(--ex-line);
+  color: var(--ex-fg-3);
+  text-decoration: none;
+}
+.ex-docs-nav li a:hover,
+.ex-docs-toc li a:hover { color: var(--ex-fg); }
+.ex-docs-nav li a.is-active {
+  border-left-color: var(--ex-flow-cyan);
+  color: var(--ex-fg);
+}
+.ex-docs-toc { display: none; }
+@media (min-width: 1240px) {
+  .ex-docs-toc { display: block; }
+}
+.ex-docs-toc__sub a { padding-left: 22px !important; }
+.ex-docs-toc__source {
+  margin-top: 20px;
+  font-family: var(--ex-mono);
+  font-size: 11px;
+  color: var(--ex-fg-4);
+  overflow-wrap: anywhere;
+}
+
+.ex-docs-home .ex-card { padding: 20px; }
+.ex-docs-home li { padding: 3px 0; }
+.ex-docs-home a { color: var(--ex-fg-2); }
+.ex-docs-home a:hover { color: var(--ex-fg); }
+
+/* The document. The typography plugin sets the rhythm; these lines bind it to the brand. */
+.ex-doc {
+  --tw-prose-invert-body: var(--ex-fg-2);
+  --tw-prose-invert-headings: var(--ex-fg);
+  --tw-prose-invert-links: var(--ex-flow-cyan);
+  --tw-prose-invert-bold: var(--ex-fg);
+  --tw-prose-invert-code: var(--ex-fg);
+  --tw-prose-invert-pre-bg: var(--ex-surface);
+  --tw-prose-invert-pre-code: var(--ex-fg-2);
+  --tw-prose-invert-borders: var(--ex-line);
+  --tw-prose-invert-th-borders: var(--ex-line-strong);
+  --tw-prose-invert-td-borders: var(--ex-line);
+  --tw-prose-invert-quote-borders: var(--ex-line-strong);
+  --tw-prose-invert-hr: var(--ex-line);
+  min-width: 0;
+  font-size: 15px;
+}
+.ex-doc :where(h1, h2, h3, h4) { scroll-margin-top: 80px; }
+.ex-doc pre {
+  border: 1px solid var(--ex-line);
+  border-radius: 0;
+  font-size: 13px;
+}
+.ex-doc :where(table) {
+  display: block;
+  overflow-x: auto;
+  font-size: 13px;
+}
+.ex-doc code::before,
+.ex-doc code::after { content: none; }
+.ex-doc pre.ex-doc__diagram { position: relative; padding-top: 32px; }
+.ex-doc pre.ex-doc__diagram::before {
+  content: 'Diagram source (Mermaid)';
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  font-family: var(--ex-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ex-fg-4);
+}
+
+.ex-docs-lede {
+  max-width: 72ch;
+  margin: 16px 0 32px;
+  color: var(--ex-fg-2);
+  font-size: 17px;
+}
+.ex-docs-lede a { color: var(--ex-flow-cyan); }
+
+.ex-docs-title {
+  margin: 10px 0 0;
+  font-size: clamp(34px, 6vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}

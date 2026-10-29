@@ -6,3 +6,6 @@
 @import "../../shell/styles/brand.css";
 @import "../../shell/styles/fonts.css";
 @import "../../shell/styles/shell.css";
+@import "./docs.css";
+
+@plugin "@tailwindcss/typography";
