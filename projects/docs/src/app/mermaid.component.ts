@@ -50,9 +50,12 @@ export class MermaidComponent {
     const id = `ex-mermaid-${++sequence}`;
     try {
       const { svg } = await (await mermaid()).render(id, this.source());
-      const doc = new DOMParser().parseFromString(svg, 'image/svg+xml');
-      const root = doc.documentElement;
-      if (root.nodeName !== 'svg') return;
+      // Parsed as HTML, not XML: Mermaid's labels are HTML inside foreignObject (<br>, &nbsp;),
+      // which an XML parser rejects. DOMParser runs no script, and the nodes are imported, not
+      // written as a string.
+      const doc = new DOMParser().parseFromString(svg, 'text/html');
+      const root = doc.body.querySelector('svg');
+      if (!root) return;
       this.out().nativeElement.appendChild(document.importNode(root, true));
       this.drawn.set(true);
     } catch {
