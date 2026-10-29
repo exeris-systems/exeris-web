@@ -27,5 +27,8 @@ as `not-run`, never as passing.
 - **`.github/workflows/guardrails.yml`** — the organisation's docs lint (which runs the agent-file
   check), commit lint, pull-request body check, and the L2 review with `docs/repo-review-rules.md`
   as its repository extension. The required check is `review / verdict`.
+- **`.github/workflows/claude.yml`** — answers an `@claude` mention in an issue, a comment or a
+  review. It reviews nothing on its own and gates nothing; the review of a pull request is the
+  `review` job above.
 - **Cloudflare Pages** — builds every push through its Git integration; `main` is production. There
   is no deploy job, so nothing between a push and a deploy can stop it.
