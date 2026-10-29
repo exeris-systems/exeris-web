@@ -61,8 +61,9 @@ manifest.
 Pages builds on every push through its Git integration; the repository has no deploy job. Pages
 sets `CF_PAGES=1`, which makes `npm run data` strict: a failed fetch fails the deploy instead of
 publishing the committed data.
-`public/_headers` sets the security headers (a same-origin Content-Security-Policy with no
-inline script) and long caching for hashed assets; `public/_redirects` maps the paths of the
+`projects/shell/public/_headers`, copied into every application's output, sets the security
+headers (a same-origin Content-Security-Policy with no inline script) and long caching for hashed
+assets; the site's `public/_redirects` maps the paths of the
 previous landing site and of the SKU pages merged into `/skus`.
 
 ## Licences named on the site

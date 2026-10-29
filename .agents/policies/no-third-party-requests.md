@@ -2,7 +2,7 @@
 
 `AGENTS.md` states it as the operating contract: the site sets no cookies, loads no analytics and
 makes no third-party requests. It is a promise to every visitor, not an implementation detail, and
-it is kept by the Content-Security-Policy in `public/_headers` and by `scripts/verify-dist.mjs`.
+it is kept by the Content-Security-Policy in `projects/shell/public/_headers` and by `scripts/verify-dist.mjs`.
 The severity is `docs/repo-review-rules.md` S4.
 
 ## Hard Rules
@@ -14,7 +14,7 @@ The severity is `docs/repo-review-rules.md` S4.
    `sessionStorage` value that identifies a visitor.
 3. **No analytics, tag manager or beacon**, first-party or otherwise.
 4. **No inline script and no inline event handler.** The policy is `script-src 'self'`.
-5. **The CSP is not loosened.** An edit to `public/_headers` that adds `unsafe-inline`,
+5. **The CSP is not loosened.** An edit to `projects/shell/public/_headers` that adds `unsafe-inline`,
    `unsafe-eval`, a host or a wildcard to a fetch directive changes the promise.
 6. **A link is not a request.** An `<a href>` to another site navigates on a click and is judged as
    copy (licence and hygiene), not under this policy.
@@ -27,4 +27,4 @@ an edit that only loosens a header.
 
 - `scripts/verify-dist.mjs` (run by `postbuild`): no third-party request, tracker, inline script or
   cookie write in the output.
-- The CSP in `public/_headers` blocks at runtime what the scan misses.
+- The CSP in `projects/shell/public/_headers` blocks at runtime what the scan misses.

@@ -5,8 +5,8 @@
 +  <link rel="preconnect" href="https://fonts.googleapis.com" />
 +  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
  </head>
---- a/public/_headers
-+++ b/public/_headers
+--- a/projects/shell/public/_headers
++++ b/projects/shell/public/_headers
 @@
 -  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:
 +  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:

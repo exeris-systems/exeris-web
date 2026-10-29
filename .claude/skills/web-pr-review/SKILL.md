@@ -22,7 +22,7 @@ quoted, a proof of concept described as available — and it passes every type c
 Steps:
 
 1. **Triage** with `exeris-web-task-classifier`. The class decides which skills the review needs; a
-   change to `public/_headers` does not need the claims pass.
+   change to `projects/shell/public/_headers` does not need the claims pass.
 
 2. **Record what the mechanical checks said**, before reading the diff for meaning. Read the pull
    request's own check runs and report each by the name and conclusion it reports. A check that has

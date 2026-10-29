@@ -1,6 +1,6 @@
 ---
 name: exeris-web-privacy-and-csp-review
-description: Review whether a change to exeris.eu keeps the promise of no cookies, no analytics and no third-party requests, and leaves the Content-Security-Policy no looser than script-src 'self'. Use whenever a diff touches public/_headers, index.html, package.json dependencies, fonts or assets, styles that load resources, or any component code that could issue a browser request or store state.
+description: Review whether a change to exeris.eu keeps the promise of no cookies, no analytics and no third-party requests, and leaves the Content-Security-Policy no looser than script-src 'self'. Use whenever a diff touches projects/shell/public/_headers, index.html, package.json dependencies, fonts or assets, styles that load resources, or any component code that could issue a browser request or store state.
 ---
 
 # Exeris Web Privacy and CSP Review
@@ -21,7 +21,7 @@ home once configured, a header edit that makes the scan's job impossible.
 3. **Analytics.** Any analytics, tag manager or beacon library, or a dependency that bundles one
    (rule 3).
 4. **Inline code.** `<script>` without `src`, `on*=` attributes, `javascript:` URLs (rule 4).
-5. **Headers.** Diff `public/_headers` directive by directive. Any addition of `unsafe-inline`,
+5. **Headers.** Diff `projects/shell/public/_headers` directive by directive. Any addition of `unsafe-inline`,
    `unsafe-eval`, a host or a wildcard to a fetch directive, or a removed directive (rule 5).
 6. **Dependencies.** For a new runtime dependency, check what it loads at runtime, not only its
    licence.

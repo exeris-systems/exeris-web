@@ -8,7 +8,7 @@ severity is `docs/repo-review-rules.md` S9.
 ## Hard Rules
 
 1. **A threshold is not lowered, an allowlist not widened, a route not skipped** in
-   `scripts/check-content.mjs`, `scripts/verify-dist.mjs`, `lighthouserc.json`, `public/_headers`
+   `scripts/check-content.mjs`, `scripts/verify-dist.mjs`, `lighthouserc.json`, `projects/shell/public/_headers`
    or `.github/workflows/`, without the reason stated in the pull request.
 2. **A check that enforces `public-claims`, `product-readiness` or `no-third-party-requests` is
    never removed.**
