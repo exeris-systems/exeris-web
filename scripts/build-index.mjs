@@ -11,6 +11,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => JSON.parse(readFileSync(join(ROOT, p), 'utf8'));
 
+/** Where a document entry of the palette opens: the docs site, by its host, or else GitHub. */
+export function docHint(href) {
+  return new URL(href).host === 'docs.exeris.eu' ? 'Docs' : 'GitHub';
+}
+
 export function buildIndex() {
   const seo = read('content/meta/seo.json');
   const extra = read('content/meta/index-extra.json');
@@ -44,7 +49,7 @@ export function buildIndex() {
   }));
 
   const concepts = extra.concepts.map((c) => ({ kind: 'concept', ...c }));
-  const docs = extra.docs.map((d) => ({ kind: 'doc', hint: d.href.startsWith('https://docs.exeris.eu') ? 'Docs' : 'GitHub', ...d }));
+  const docs = extra.docs.map((d) => ({ kind: 'doc', hint: docHint(d.href), ...d }));
   return [...pages, ...skuEntries, ...concepts, ...docs, ...capEntries];
 }
 
