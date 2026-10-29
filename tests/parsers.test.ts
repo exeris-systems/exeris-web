@@ -137,6 +137,10 @@ describe('parseRepoReadme', () => {
     expect(parseRepoReadme('# a\n\nOne thing.\n\n**Licence:** Apache-2.0.')).toEqual({ summary: 'One thing.', builtAgainst: null });
   });
 
+  it('skips a badge line after the H1', () => {
+    expect(parseRepoReadme('# a\n\n[![CI](https://x/badge.svg)](https://x)\n\nOne thing. Two.').summary).toBe('One thing.');
+  });
+
   it('fails on a README with no paragraph after its H1', () => {
     expect(() => parseRepoReadme('no heading')).toThrow(/no H1/);
     expect(() => parseRepoReadme('# a\n\n## What it does\n')).toThrow(/no paragraph/);

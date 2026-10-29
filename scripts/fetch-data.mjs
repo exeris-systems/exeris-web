@@ -35,7 +35,7 @@ const DATA = join(ROOT, 'src/data');
 const RAW = 'https://raw.githubusercontent.com/exeris-systems';
 const API = 'https://api.github.com/repos/exeris-systems';
 const CENTRAL = 'https://repo1.maven.org/maven2';
-const ORG_REPOS = 'https://api.github.com/orgs/exeris-systems/repos?type=public&per_page=100';
+const ORG_REPOS = 'https://api.github.com/orgs/exeris-systems/repos?type=public&per_page=100&page=';
 const GITHUB = 'https://github.com/exeris-systems';
 
 /** The tooling coordinates the Get started page shows; all are published under one group. */
@@ -106,14 +106,17 @@ async function headSha(repo) {
 }
 
 /**
- * The names of the organisation's public repositories: one API call, so an unauthenticated build
- * stays far inside the rate limit. A repository this list does not hold is private or absent,
- * and the site links neither.
+ * The names of the organisation's public repositories: one API call per hundred, so an
+ * unauthenticated build stays far inside the rate limit. A repository this list does not hold is
+ * private or absent, and the site links neither.
  */
 async function publicRepos() {
-  const repos = await getJson(ORG_REPOS);
-  if (repos.length >= 100) throw new Error(`${ORG_REPOS}: 100 or more repositories; page through the list`);
-  return new Set(repos.map((r) => r.name));
+  const names = new Set();
+  for (let page = 1; ; page++) {
+    const repos = await getJson(`${ORG_REPOS}${page}`);
+    for (const r of repos) names.add(r.name);
+    if (repos.length < 100) return names;
+  }
 }
 
 /** `repo` for a cap or SKU: its public repository and what its README says, or null. */

@@ -386,6 +386,8 @@ export function parseRepoReadme(markdown) {
       if (para.length) break;
       continue;
     }
+    // A badge line is not prose.
+    if (!para.length && /^\s*\[?!\[/.test(line)) continue;
     if (/^(#|>|[-*] |```|\||---)/.test(line)) {
       if (para.length) break;
       throw new Error('README has no paragraph after its H1');
