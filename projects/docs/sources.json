@@ -53,8 +53,7 @@
         },
         "sdk:docs/architecture.md",
         "sdk:docs/glossary.md",
-        "sdk:docs/stability-matrix.md",
-        "sdk:docs/examples/README.md"
+        "sdk:docs/stability-matrix.md"
       ]
     },
     {
