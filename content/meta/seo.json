@@ -31,10 +31,6 @@
     "title": "Pricing",
     "description": "Exeris has no prices yet: it is looking for design partners, and Code Detachment applies to the commercial caps and SKUs."
   },
-  "docs": {
-    "title": "Docs",
-    "description": "An index of the Exeris documentation: whitepapers, architecture, ADRs, SDK, tooling and benchmark methodology."
-  },
   "lab": {
     "title": "Lab",
     "description": "The Exeris benchmark laboratory: registered claims with their fences, cold start, CPU per request, memory, Spring hosting and sagas."

@@ -2,9 +2,12 @@
 /evidence      /lab   301
 /evidence/*    /lab   301
 /evidence-lab  /lab   301
-/docs/research /docs  301
 
 # The SKU subpages were merged into /skus.
 /skus/api-gateway  /skus#sku-api-gateway  301
 /skus/idp          /skus                  301
 /skus/bot-blocker  /skus                  301
+
+# The documentation lives at docs.exeris.eu.
+/docs/*  https://docs.exeris.eu  301
+/docs    https://docs.exeris.eu  301

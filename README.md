@@ -78,7 +78,8 @@ data.
 `projects/shell/public/_headers`, copied into every application's output and applied by Workers
 static assets as Pages does, sets the security headers (a same-origin Content-Security-Policy with
 no inline script) and long caching for hashed assets; the site's `public/_redirects` maps the
-paths of the previous landing site and of the SKU pages merged into `/skus`.
+paths of the previous landing site and of the SKU pages merged into `/skus`, and sends `/docs`
+and every path under it to docs.exeris.eu.
 
 ## Licences named on the site
 

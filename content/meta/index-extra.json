@@ -64,11 +64,11 @@
   "docs": [
     {
       "title": "Kernel whitepaper",
-      "href": "https://github.com/exeris-systems/exeris-kernel/blob/main/docs/whitepaper.md"
+      "href": "https://docs.exeris.eu/kernel/whitepaper"
     },
     {
       "title": "High-level architecture",
-      "href": "https://github.com/exeris-systems/exeris-docs/blob/main/high-level-architecture.md"
+      "href": "https://docs.exeris.eu/platform/high-level-architecture"
     },
     {
       "title": "ADR index",
@@ -80,7 +80,7 @@
     },
     {
       "title": "Capability licence registry",
-      "href": "https://github.com/exeris-systems/exeris-docs/blob/main/cap-license-registry.md"
+      "href": "https://docs.exeris.eu/platform/cap-license-registry"
     }
   ]
 }

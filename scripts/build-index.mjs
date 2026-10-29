@@ -44,7 +44,7 @@ export function buildIndex() {
   }));
 
   const concepts = extra.concepts.map((c) => ({ kind: 'concept', ...c }));
-  const docs = extra.docs.map((d) => ({ kind: 'doc', hint: 'GitHub', ...d }));
+  const docs = extra.docs.map((d) => ({ kind: 'doc', hint: d.href.startsWith('https://docs.exeris.eu') ? 'Docs' : 'GitHub', ...d }));
   return [...pages, ...skuEntries, ...concepts, ...docs, ...capEntries];
 }
 

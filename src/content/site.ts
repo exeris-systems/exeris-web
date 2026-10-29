@@ -11,6 +11,7 @@ export const CONTACT_EMAIL = 'contact@exeris.eu';
 export const CONTACT_HREF = `mailto:${CONTACT_EMAIL}`;
 
 const GH = 'https://github.com/exeris-systems';
+const DOCS = 'https://docs.exeris.eu';
 
 export const LINKS = {
   github: GH,
@@ -23,10 +24,11 @@ export const LINKS = {
   claims: `${GH}/exeris-benchmarks/blob/main/docs/CLAIMS.md`,
   methodology: `${GH}/exeris-benchmarks/blob/main/docs/methodology.md`,
   hardwareProfiles: `${GH}/exeris-benchmarks/blob/main/docs/hardware-profiles.md`,
-  whitepaper: `${GH}/exeris-kernel/blob/main/docs/whitepaper.md`,
+  docs: DOCS,
+  whitepaper: `${DOCS}/kernel/whitepaper`,
   b2bWhitepaper: `${GH}/exeris-docs/blob/main/b2b-technical-whitepaper.md`,
-  architecture: `${GH}/exeris-kernel/blob/main/docs/architecture.md`,
-  hla: `${GH}/exeris-docs/blob/main/high-level-architecture.md`,
+  architecture: `${DOCS}/kernel/architecture`,
+  hla: `${DOCS}/platform/high-level-architecture`,
   adrIndex: `${GH}/exeris-docs/blob/main/adr-index.md`,
   capRegistry: `${GH}/exeris-docs/blob/main/cap-license-registry.md`,
   roadmap: `${GH}/exeris-kernel/blob/main/docs/ROADMAP.md`,
@@ -53,7 +55,7 @@ export const NAV: readonly NavItem[] = [
   { id: 'skus', label: 'SKUs', href: '/skus' },
   { id: 'ai', label: 'AI', href: '/ai' },
   { id: 'spring', label: 'Spring Runtime', href: '/spring' },
-  { id: 'docs', label: 'Docs', href: '/docs' },
+  { id: 'docs', label: 'Docs', href: DOCS },
   { id: 'lab', label: 'Lab', href: '/lab' },
   { id: 'pricing', label: 'Pricing', href: '/pricing' },
 ];
@@ -82,6 +84,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
   {
     title: 'Docs',
     links: [
+      { label: 'All documentation', href: LINKS.docs },
       { label: 'Whitepaper', href: LINKS.whitepaper },
       { label: 'Architecture', href: LINKS.hla },
       { label: 'ADR Index', href: LINKS.adrIndex },
