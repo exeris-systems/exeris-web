@@ -1,7 +1,7 @@
 {
   "source": {
     "repo": "exeris-docs",
-    "commit": "ba1010775f0437602af0a42c7dd68a833b599d50",
+    "commit": "2680e3e9648696d59b3eb8204f6daf565bb0d74a",
     "path": "cap-license-registry.md"
   },
   "caps": [
@@ -24,7 +24,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -83,6 +83,17 @@
       "status": "poc"
     },
     {
+      "name": "exeris-caps-gateway-observability",
+      "short": "gateway-observability",
+      "layer": 2,
+      "layerName": "Gateway building blocks",
+      "licence": "commercial",
+      "licenceNote": null,
+      "visibility": "public",
+      "build": "specified",
+      "status": "poc"
+    },
+    {
       "name": "exeris-caps-rate-limiting",
       "short": "rate-limiting",
       "layer": 3,
@@ -90,7 +101,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -101,7 +112,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -189,7 +200,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -497,7 +508,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -508,7 +519,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -519,7 +530,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -530,7 +541,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -541,7 +552,7 @@
       "licence": "community",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -552,7 +563,7 @@
       "licence": "commercial",
       "licenceNote": null,
       "visibility": "public",
-      "build": "specified",
+      "build": "scaffolded",
       "status": "poc"
     },
     {
@@ -675,7 +686,7 @@
     {
       "n": 2,
       "name": "Gateway building blocks",
-      "count": 5
+      "count": 6
     },
     {
       "n": 3,
@@ -705,8 +716,8 @@
   ],
   "totals": {
     "community": 4,
-    "commercial": 55,
+    "commercial": 56,
     "enterprise-private": 1,
-    "total": 60
+    "total": 61
   }
 }
