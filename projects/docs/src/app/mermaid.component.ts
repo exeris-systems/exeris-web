@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, afterNextRender, input, signal, viewChild } from '@angular/core';
+import { drawDiagram } from './mermaid-draw';
 
 let sequence = 0;
 /** Mermaid renders one diagram at a time; concurrent renders on one page interfere. */
@@ -23,9 +24,8 @@ function mermaid(): Promise<typeof import('mermaid')['default']> {
 
 /**
  * A Mermaid diagram. The prerendered page shows its source; in the browser the diagram is drawn
- * from it, with Mermaid loaded from this site only on a page that has one. Mermaid runs with
- * securityLevel "strict" (its own sanitising of labels), and its SVG is parsed with DOMParser and
- * appended as nodes, so no HTML string is inserted. If drawing fails, the source stays.
+ * from it (drawDiagram), with Mermaid loaded from this site only on a page that has one and run
+ * with securityLevel "strict", its own sanitising of labels. If drawing fails, the source stays.
  */
 @Component({
   selector: 'ex-mermaid',
@@ -47,22 +47,10 @@ export class MermaidComponent {
   }
 
   private async draw(): Promise<void> {
-    const id = `ex-mermaid-${++sequence}`;
     try {
-      const { svg } = await (await mermaid()).render(id, this.source());
-      // Parsed as HTML, not XML: Mermaid's labels are HTML inside foreignObject (<br>, &nbsp;),
-      // which an XML parser rejects. DOMParser runs no script, and the nodes are imported, not
-      // written as a string.
-      const doc = new DOMParser().parseFromString(svg, 'text/html');
-      const root = doc.body.querySelector('svg');
-      if (!root) return;
-      this.out().nativeElement.appendChild(document.importNode(root, true));
-      this.drawn.set(true);
+      this.drawn.set(await drawDiagram(await mermaid(), `ex-mermaid-${++sequence}`, this.source(), this.out().nativeElement));
     } catch {
-      // Not valid Mermaid, or Mermaid failed to load: the source stays visible, and nothing Mermaid
-      // rendered for it stays in the document.
-      document.getElementById(id)?.remove();
-      document.getElementById(`d${id}`)?.remove();
+      // Mermaid failed to load: the source stays visible.
     }
   }
 }

@@ -104,8 +104,7 @@ describe('the document tree', () => {
     expect(template).toMatch(/@if \(n\.a\?\.class === 'ex-doc__diagram'\) \{\s*<ex-mermaid \[source\]="textOf\(n\)" \/>/);
     const mermaid = readFileSync(join(__dirname, '../projects/docs/src/app/mermaid.component.ts'), 'utf8');
     expect(mermaid).toMatch(/securityLevel: 'strict'/);
-    // HTML, not XML: Mermaid's labels are HTML inside foreignObject, which an XML parser rejects.
-    expect(mermaid).toMatch(/parseFromString\(svg, 'text\/html'\)/);
+    expect(mermaid).toMatch(/drawDiagram\(/);
     expect(mermaid).not.toMatch(/innerHTML|bypassSecurityTrust/);
   });
 
