@@ -1,8 +1,10 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
 import { buildDocs } from '../scripts/docs/fetch-docs.mjs';
 // @ts-expect-error -- plain ESM module without type declarations
-import { isPublished, parseFrontmatter, renderDoc, rewriteHref, routeOf, slug } from '../scripts/docs/render.mjs';
+import { SANITIZE, isPublished, parseFrontmatter, renderDoc, rewriteHref, routeOf, slug, toTree } from '../scripts/docs/render.mjs';
 
 const blob = (p: string) => `https://github.com/exeris-systems/exeris-kernel/blob/v1/${p}`;
 const published = new Map([
@@ -73,6 +75,27 @@ describe('rendering', () => {
   it('describes a page by its first paragraph of substance, on one line', () => {
     const { description } = renderDoc('# T\n\n**Layout:**\n\nThe memory subsystem implements the\nzero-allocation model for the kernel.\n', ctx);
     expect(description).toBe('The memory subsystem implements the zero-allocation model for the kernel.');
+  });
+});
+
+describe('the document tree', () => {
+  it('turns elements into tag, attributes and children, and text into strings', () => {
+    expect(toTree('<h2 id="a">A <code>b</code></h2>\n<ul>\n<li>x</li>\n</ul>')).toEqual([
+      { t: 'h2', a: { id: 'a' }, c: ['A ', { t: 'code', c: ['b'] }] },
+      { t: 'ul', c: [{ t: 'li', c: ['x'] }] },
+    ]);
+  });
+
+  it('keeps the whitespace of code and of inline text, and moves text-align to align', () => {
+    expect(toTree('<pre><code>a\n  b\n</code></pre>')).toEqual([{ t: 'pre', c: [{ t: 'code', c: ['a\n  b\n'] }] }]);
+    expect(toTree('<p><code>a</code> <code>b</code></p>')[0]).toEqual({ t: 'p', c: [{ t: 'code', c: ['a'] }, ' ', { t: 'code', c: ['b'] }] });
+    expect(toTree('<td style="text-align:right">1</td>')).toEqual([{ t: 'td', a: { align: 'right' }, c: ['1'] }]);
+  });
+
+  it('is drawn by a template that has a case for every tag the build keeps', () => {
+    const template = readFileSync(join(__dirname, '../projects/docs/src/app/doc-content.component.ts'), 'utf8');
+    const cases = new Set([...template.matchAll(/@case \('([a-z0-9]+)'\)/g)].map((m) => m[1]));
+    expect([...SANITIZE.allowedTags].filter((t: string) => !cases.has(t))).toEqual([]);
   });
 });
 

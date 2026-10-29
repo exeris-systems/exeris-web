@@ -20,3 +20,15 @@ export interface DocsIndex {
   readonly sections: readonly { readonly id: string; readonly label: string }[];
   readonly pages: readonly DocPage[];
 }
+
+/**
+ * A node of a rendered document (scripts/docs/render.mjs toTree): an element with its tag,
+ * attributes and children, or text.
+ */
+export type DocNode = string | DocElement;
+
+export interface DocElement {
+  readonly t: string;
+  readonly a?: Readonly<Record<string, string>>;
+  readonly c?: readonly DocNode[];
+}

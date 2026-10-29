@@ -1,5 +1,6 @@
 // Markdown of the upstream documentation to the HTML docs.exeris.eu prerenders. Everything here
 // runs at build time; the browser receives only the sanitised result.
+import { parseDocument } from 'htmlparser2';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 
@@ -58,7 +59,7 @@ export function rewriteHref(href, { path, published, blob }) {
   return `${blob(resolved)}${hash ? `#${hash}` : ''}`;
 }
 
-const SANITIZE = {
+export const SANITIZE = {
   allowedTags: [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'em', 'strong',
     'del', 's', 'hr', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'details', 'summary', 'sub', 'sup', 'kbd',
@@ -120,7 +121,33 @@ export function renderDoc(body, { path, published, blob }) {
   };
 
   const html = sanitizeHtml(md.render(body), SANITIZE);
-  return { html, headings, description: describe(body) };
+  return { html, tree: toTree(html), headings, description: describe(body) };
+}
+
+/** Elements whose whitespace-only text children are layout, not content. */
+const BLOCK_CONTAINERS = new Set(['ul', 'ol', 'table', 'thead', 'tbody', 'tr', 'blockquote', 'details']);
+
+/**
+ * The sanitised HTML as a tree the page renders with Angular templates, so no HTML string reaches
+ * the browser: an element is `{ t, a?, c? }` (tag, attributes, children), text is a string. A
+ * cell's `text-align` style becomes its `align` attribute.
+ */
+export function toTree(html) {
+  const convert = (nodes, parent) =>
+    nodes.flatMap((n) => {
+      if (n.type === 'text') return BLOCK_CONTAINERS.has(parent) || parent === null ? (n.data.trim() ? [n.data] : []) : [n.data];
+      if (n.type !== 'tag') return [];
+      const a = { ...n.attribs };
+      const align = a.style?.match(/text-align:\s*(left|right|center)/)?.[1];
+      delete a.style;
+      if (align) a.align = align;
+      const node = { t: n.name };
+      if (Object.keys(a).length) node.a = a;
+      const c = convert(n.children, n.name);
+      if (c.length) node.c = c;
+      return [node];
+    });
+  return convert(parseDocument(html).children, null);
 }
 
 /**

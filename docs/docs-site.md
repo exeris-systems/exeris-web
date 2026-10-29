@@ -34,7 +34,8 @@ A page's route is its path in the repository without `docs/` and `.md`:
 `npm run build:docs` runs `scripts/docs/fetch-docs.mjs`, which reads each listed file from
 `raw.githubusercontent.com` at the ref above and writes `projects/docs/src/app/generated/` (not
 committed): `index.json` with every page's title, description, section, contents and source, one
-module of HTML per page, which the build turns into a chunk of its own, and the routes. There is
+module per page holding its document tree, which the build turns into a chunk of its own, and the
+routes. There is
 no committed copy, so a failed fetch fails the build. `scripts/docs/render.mjs` renders the
 markdown:
 
@@ -44,8 +45,12 @@ markdown:
   relative link goes to the file on GitHub at the ref the build read. Absolute links are kept.
 - A Mermaid block is shown as its source, marked as a diagram.
 - Raw HTML in the markdown is reduced to an allow-list of tags and attributes: no script, style
-  element, image, frame, event handler or `javascript:` link survives. Angular's own sanitiser is
-  bypassed for this HTML because it would drop the heading ids; the allow-list replaces it.
+  element, image, frame, event handler or `javascript:` link survives.
+- The sanitised HTML is turned into a tree of elements and text (`toTree`), and the page draws it
+  with an Angular template (`doc-content.component.ts`) that has a case for each allowed tag. No
+  HTML string reaches the browser and nothing bypasses Angular's sanitising: attributes are bound
+  one by one, and links go through Angular's URL sanitiser. A test fails when the allow-list names
+  a tag the template does not draw.
 - The page title is the frontmatter `title`; the description is the first paragraph of at least
   40 characters, cut near 160.
 

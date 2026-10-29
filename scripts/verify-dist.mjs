@@ -12,9 +12,14 @@ import { APPS } from './postbuild.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
+/** `text` as a literal inside a regular expression. */
+export function escapeRegExp(text) {
+  return text.replace(/[\\^$.*+?()[\]{}|/-]/g, '\\$&');
+}
+
 /** The tags every prerendered page of an application served at `url` must carry. */
 function required(url) {
-  const at = url.replace(/[.]/g, '\\.').replace(/\//g, '\\/');
+  const at = escapeRegExp(url);
   return [
     [/<title>[^<]{3,}<\/title>/, '<title>'],
     [/<meta name="description" content="[^"]{20,}"/, 'meta description'],
