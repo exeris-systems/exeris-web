@@ -32,7 +32,7 @@ export interface ConsumerTableProps {
           <table class="ex-table">
             <caption class="ex-sr">{{ props().caption }}</caption>
             <thead>
-              <tr><th scope="col">Consumer</th><th scope="col">Runs on Spring Runtime</th><th scope="col">Why</th></tr>
+              <tr><th scope="col">Consumer</th><th scope="col">Spring Runtime target</th><th scope="col">Why</th></tr>
             </thead>
             <tbody>
               @for (r of props().rows; track r.consumer) {
