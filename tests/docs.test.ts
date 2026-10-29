@@ -23,6 +23,14 @@ describe('frontmatter and publication', () => {
     expect(isPublished(parseFrontmatter('# no frontmatter').data)).toBe(false);
   });
 
+  it('reads quoted titles as YAML does', () => {
+    const title = (line: string) => parseFrontmatter(`---\ntitle: ${line}\n---\n`).data.title;
+    expect(title(`'ADR-006: Spring-Free Kernel Boundary ("The Wall")'`)).toBe('ADR-006: Spring-Free Kernel Boundary ("The Wall")');
+    expect(title(`'It''s here'`)).toBe("It's here");
+    expect(title(`"Say \\"hi\\""`)).toBe('Say "hi"');
+    expect(title('Plain: words')).toBe('Plain: words');
+  });
+
   it('routes a file by its source and path', () => {
     expect(routeOf('kernel', 'docs/subsystems/memory.md')).toBe('kernel/subsystems/memory');
     expect(routeOf('platform', 'high-level-architecture.md')).toBe('platform/high-level-architecture');
@@ -171,6 +179,44 @@ describe('buildDocs', () => {
     const both = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }, 'sdk:docs/README.md'] }] };
     const page = '---\nvisibility: public\nstatus: active\n---\n\n# SDK\n';
     await expect(buildDocs(both, { read: async () => page, refs: { sdk: 'v1' } })).rejects.toThrow(/sdk:README\.md and sdk:docs\/README\.md are both \/sdk/);
+  });
+
+  it('lists a directory: every Markdown file under it, a README first, no ADR link stub', async () => {
+    const cfg = { sources: { docs: { repo: 'exeris-docs', ref: 'main', route: 'platform' } }, sections: [{ id: 'std', label: 'Standards', files: [{ dir: 'docs:standards' }] }] };
+    const page = '---\nvisibility: public\nstatus: active\n---\n\n# P\n';
+    const list = async () => ['standards/b.md', 'standards/README.md', 'standards/checklists/a.md', 'standards/x.link.md', 'standards/c.txt', 'other/d.md'];
+    const { pages } = await buildDocs(cfg, { read: async () => page, refs: { docs: 'abc' }, list });
+    expect(pages.map((p: { route: string }) => p.route)).toEqual(['platform/standards', 'platform/standards/b', 'platform/standards/checklists/a']);
+    await expect(buildDocs(cfg, { read: async () => page, refs: { docs: 'abc' }, list: async () => [] })).rejects.toThrow(/holds no Markdown file/);
+  });
+
+  it('lists the records a registry links to, in its order, and reports the ones it cannot read', async () => {
+    const cfg = {
+      sources: {
+        docs: { repo: 'exeris-docs', ref: 'main', route: 'platform' },
+        kernel: { repo: 'exeris-kernel', ref: 'main', route: 'kernel' },
+      },
+      sections: [
+        { id: 'kernel', label: 'Kernel', files: ['kernel:docs/adr/ADR-002-b.md'] },
+        { id: 'decisions', label: 'Decisions', files: [{ registry: 'docs:adr-index.md' }] },
+      ],
+    };
+    const index = [
+      '| 001 | [ADR-001](adr/ADR-001-a.md) |',
+      '| 002 | [ADR-002](https://github.com/exeris-systems/exeris-kernel/blob/main/docs/adr/ADR-002-b.md) |',
+      '| 003 | [ADR-003](https://github.com/exeris-systems/exeris-kernel/blob/development/0.12.0/docs/adr/ADR-003-c.md) |',
+      '| 004 | [ADR-004](https://github.com/exeris-systems/exeris-agents/blob/main/docs/adr/ADR-004-d.md) |',
+      '| 005 | [stub](https://github.com/exeris-systems/exeris-kernel/blob/main/docs/adr/ADR-005.link.md) [rfc](rfc/RFC-2026-01-01-e.md) [std](standards/x.md) |',
+    ].join('\n');
+    const page = '---\nvisibility: public\nstatus: active\n---\n\n# P\n';
+    const read = async (_r: string, _ref: string, path: string) => (path === 'adr-index.md' ? index : page);
+    const { pages, skipped } = await buildDocs(cfg, { read, refs: { docs: 'a1', kernel: 'k1' } });
+    expect(pages.map((p: { route: string; section: string }) => [p.route, p.section])).toEqual([
+      ['kernel/adr/ADR-002-b', 'kernel'],
+      ['platform/adr/ADR-001-a', 'decisions'],
+      ['platform/rfc/RFC-2026-01-01-e', 'decisions'],
+    ]);
+    expect(skipped).toEqual(['docs:adr-index.md: 2 links to records at another ref or in a repository that is not a source']);
   });
 
   it('fails on a listed file of an unknown source', async () => {

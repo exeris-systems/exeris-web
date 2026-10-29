@@ -35,7 +35,25 @@
     overflow-y: auto;
   }
 }
-.ex-docs-nav__group + .ex-docs-nav__group { margin-top: 20px; }
+.ex-docs-nav__group + .ex-docs-nav__group { margin-top: 14px; }
+.ex-docs-nav__group > summary {
+  cursor: pointer;
+  list-style: none;
+}
+.ex-docs-nav__group > summary::-webkit-details-marker { display: none; }
+.ex-docs-nav__group > summary::before {
+  content: '▸';
+  display: inline-block;
+  width: 1.2em;
+  font-size: 1.15em;
+  line-height: 1;
+  text-align: center;
+  transform-origin: 50% 50%;
+  transition: transform 0.15s;
+}
+.ex-docs-nav__group[open] > summary::before { transform: rotate(90deg); }
+.ex-docs-nav__group > summary:focus-visible { outline: 2px solid var(--ex-flow-cyan); outline-offset: 2px; }
+.ex-docs-nav__count { color: var(--ex-fg-3); font-weight: 400; }
 .ex-docs-nav ul,
 .ex-docs-toc ul,
 .ex-docs-home ul {

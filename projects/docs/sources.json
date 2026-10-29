@@ -1,5 +1,5 @@
 {
-  "description": "What docs.exeris.eu publishes. Each source is read at build time at the commit its main branch points to; until the 1.0 releases the documentation follows main, and from 1.0 it is read at release tags, one version of the site per release. A file is published only when it is listed here and its frontmatter says visibility public and status active, or, for an entry marked readme, when it is a README of the public repository: a README has no frontmatter and is as public as its repository. Sections are shown in this order; a file belongs to the first section whose list names it.",
+  "description": "What docs.exeris.eu publishes. Each source is read at build time at the commit its main branch points to; until the 1.0 releases the documentation follows main, and from 1.0 it is read at release tags, one version of the site per release. A file is published only when it is listed here, by path, by a directory (dir) or through the records an ADR registry links to (registry), and its frontmatter says visibility public and status active, or, for an entry marked readme, when it is a README of the public repository: a README has no frontmatter and is as public as its repository. Sections are shown in this order; a file belongs to the first section whose list names it.",
   "sources": {
     "kernel": {
       "repo": "exeris-kernel",
@@ -15,6 +15,16 @@
       "repo": "exeris-tooling",
       "ref": "main",
       "route": "tooling"
+    },
+    "spring-runtime": {
+      "repo": "exeris-spring-runtime",
+      "ref": "main",
+      "route": "spring-runtime"
+    },
+    "ai-bridge": {
+      "repo": "exeris-ai-bridge",
+      "ref": "main",
+      "route": "ai-bridge"
     },
     "platform": {
       "repo": "exeris-docs",
@@ -159,6 +169,42 @@
         "kernel:docs/rowcursor-type-set.md",
         "kernel:docs/operations/jvm-flags-baseline.md",
         "kernel:docs/operations/reference-deployment.md"
+      ]
+    },
+    {
+      "id": "decisions",
+      "label": "Decisions",
+      "files": [
+        {
+          "registry": "platform:adr-index.md"
+        }
+      ]
+    },
+    {
+      "id": "rfcs",
+      "label": "RFCs",
+      "files": [
+        {
+          "dir": "platform:rfc"
+        },
+        {
+          "dir": "kernel:docs/rfc"
+        },
+        {
+          "dir": "sdk:docs/rfc"
+        },
+        {
+          "dir": "tooling:docs/rfc"
+        }
+      ]
+    },
+    {
+      "id": "standards",
+      "label": "Standards",
+      "files": [
+        {
+          "dir": "platform:standards"
+        }
       ]
     }
   ]

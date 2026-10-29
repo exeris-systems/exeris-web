@@ -5,13 +5,22 @@ import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 
 /** The frontmatter between the leading `---` lines, as flat key/value strings, and the body. */
+/** A one-line YAML scalar: a double-quoted one unescaped, a single-quoted one with '' as a quote. */
+function scalar(value) {
+  const dq = value.match(/^"(.*)"$/);
+  if (dq) return dq[1].replace(/\\(["\\])/g, '$1');
+  const sq = value.match(/^'(.*)'$/);
+  if (sq) return sq[1].replace(/''/g, "'");
+  return value;
+}
+
 export function parseFrontmatter(text) {
   const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
   if (!m) return { data: {}, body: text };
   const data = {};
   for (const line of m[1].split(/\r?\n/)) {
     const kv = line.match(/^([A-Za-z][\w-]*):\s*(.*)$/);
-    if (kv) data[kv[1]] = kv[2].trim().replace(/^"(.*)"$/, '$1');
+    if (kv) data[kv[1]] = scalar(kv[2].trim());
   }
   return { data, body: text.slice(m[0].length) };
 }
@@ -41,7 +50,7 @@ export function slug(text) {
 }
 
 /** Resolves `target` against the directory of `from`, both repository paths. */
-function resolvePath(from, target) {
+export function resolvePath(from, target) {
   const parts = from.split('/').slice(0, -1);
   for (const seg of target.split('/')) {
     if (seg === '..') parts.pop();
