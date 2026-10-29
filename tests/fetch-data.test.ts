@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 // @ts-expect-error -- plain ESM modules without type declarations
-import { FetchError, headersFor, loadUpstream } from '../scripts/fetch-data.mjs';
+import { FetchError, headersFor, loadUpstream, strictFetch } from '../scripts/fetch-data.mjs';
 // @ts-expect-error -- plain ESM module without type declarations
 import { isRuntimeError } from '../scripts/lighthouse-ci.mjs';
 
@@ -33,6 +33,15 @@ describe('headersFor', () => {
 
   it('sends no Authorization header without a token', () => {
     expect(headersFor('https://api.github.com/x', {})).not.toHaveProperty('Authorization');
+  });
+});
+
+describe('strictFetch', () => {
+  it('is strict in a Cloudflare Pages build and when asked, and only then', () => {
+    expect(strictFetch({ CF_PAGES: '1' })).toBe(true);
+    expect(strictFetch({ SITE_FETCH_STRICT: '1' })).toBe(true);
+    expect(strictFetch({})).toBe(false);
+    expect(strictFetch({ CF_PAGES: '0' })).toBe(false);
   });
 });
 

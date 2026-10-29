@@ -39,7 +39,10 @@ runnable jar exists, and writes the result to `build-meta.json`. Copy and code s
 version literal.
 
 The JSON is committed, so an offline build works. `SITE_SKIP_FETCH=1` keeps it without fetching;
-a fetch error (network failure or HTTP status) falls back to it unless `SITE_FETCH_STRICT=1`; a
+a fetch error (network failure or HTTP status) falls back to it unless `SITE_FETCH_STRICT=1` or
+`CF_PAGES=1`, which Cloudflare Pages sets: the publishing build fails rather than publish the
+committed copy, which may be older than the registers it quotes, and the previous deployment stays
+live. A
 parser or consistency failure (a duplicate claim key, an unknown licence, tooling artefacts on
 different releases, a missing initializr jar, a missing CITABLE row) always fails the build.
 `GITHUB_TOKEN`, when set, is sent to `api.github.com` only, never to Maven Central or

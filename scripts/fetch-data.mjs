@@ -4,8 +4,10 @@
 //
 //   SITE_SKIP_FETCH=1   keep the committed JSON, fetch nothing
 //   SITE_FETCH_STRICT=1 fail on a fetch error instead of falling back to the committed JSON
+//   CF_PAGES=1          set by Cloudflare Pages: the build publishes, so it is strict as well
 //
-// A fetch error (network failure, non-2xx status) falls back to the committed JSON. A parser or
+// Outside a publishing build, a fetch error (network failure, non-2xx status) falls back to the
+// committed JSON, so a local or offline build works. A parser or
 // consistency failure on content that did arrive always fails the build: falling back would ship
 // stale claims, readiness and tooling versions behind a warning.
 //
@@ -202,6 +204,14 @@ async function fetchAll() {
 }
 
 /**
+ * Whether a fetch error fails the build. A build that publishes never keeps the committed JSON:
+ * it could be older than the registers it quotes, and the claims lock would pass against it.
+ */
+export function strictFetch(env = process.env) {
+  return env.SITE_FETCH_STRICT === '1' || env.CF_PAGES === '1';
+}
+
+/**
  * Runs `fetchAll`; on a FetchError keeps the committed data (returns null) unless `strict` or
  * nothing is committed. Any other error is a parser or consistency failure and propagates.
  */
@@ -223,7 +233,7 @@ async function main() {
     return;
   }
   const files = await loadUpstream(fetchAll, {
-    strict: process.env.SITE_FETCH_STRICT === '1',
+    strict: strictFetch(),
     committed: existsSync(join(DATA, 'claims.json')),
   });
   if (!files) return;
