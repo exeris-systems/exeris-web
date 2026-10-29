@@ -2,8 +2,8 @@
 // Verifies the static output of one application (site, docs or lab; site by default): every
 // route emitted its own HTML with title, description, canonical and Open Graph tags; the page
 // markup leaves no unresolved content token; and the application makes no third-party request
-// and runs no inline script (the no-tracking check). The route and SEO checks cover the site;
-// docs and lab are held to the no-tracking check and the shared headers until they have routes.
+// and runs no inline script (the no-tracking check). The route and SEO checks read the site's
+// views; an application without that list is held to the shared headers and the no-tracking check.
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -82,7 +82,7 @@ function siteErrors(routes) {
 }
 
 /** No third-party request, no tracker, no inline executable script, no cookie write. */
-function noTrackingErrors(out, self) {
+export function noTrackingErrors(out, self) {
   const errors = [];
   for (const file of files(out)) {
     const rel = relative(out, file);

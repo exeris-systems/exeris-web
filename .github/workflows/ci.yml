@@ -63,7 +63,7 @@ jobs:
         env:
           SITE_SKIP_FETCH: '1'
 
-      # Not deployed yet; built so a change to the shared shell cannot break them unseen.
+      # Built on every run, deployed or not, so a change to the shared shell cannot break them unseen.
       - name: Build docs and lab
         run: npm run build:docs && npm run build:lab
 
