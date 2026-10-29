@@ -27,23 +27,29 @@ async function resolveRef(source) {
 
 /**
  * The pages of the docs site from `config` (sources.json) and a reader of raw files. Each listed
- * file must exist; one whose frontmatter is not public and active is left out and reported.
+ * file must exist; one whose frontmatter is not public and active is left out and reported,
+ * unless it is listed as a README.
  */
 export async function buildDocs(config, { read, refs }) {
   const listed = [];
   for (const section of config.sections) {
-    for (const entry of section.files) {
+    for (const item of section.files) {
+      const entry = typeof item === 'string' ? item : item.file;
+      const readme = typeof item === 'object' && item.readme === true;
       const [key, path] = entry.split(':');
       const source = config.sources[key];
       if (!source) throw new Error(`sources.json: ${entry} names no source ${key}`);
-      listed.push({ section: section.id, key, path, source });
+      if (readme && !/(^|\/)README\.md$/.test(path)) throw new Error(`sources.json: ${entry} is marked readme but is not a README`);
+      listed.push({ section: section.id, key, path, source, readme });
     }
   }
   const files = [];
   const skipped = [];
   for (const f of listed) {
     const { data, body } = parseFrontmatter(await read(f.source.repo, refs[f.key], f.path));
-    if (!isPublished(data)) {
+    // A README carries no frontmatter; listed as one, it is as public as its repository, which the
+    // build reads without credentials.
+    if (!f.readme && !isPublished(data)) {
       skipped.push(`${f.key}:${f.path} (visibility ${data.visibility ?? 'unset'}, status ${data.status ?? 'unset'})`);
       continue;
     }

@@ -1,8 +1,26 @@
 {
-  "description": "What docs.exeris.eu publishes. Each source is read at build time: the kernel at its latest release tag, exeris-docs at the commit main points to. A file is published only when it is listed here and its frontmatter says visibility public and status active. Sections are shown in this order; a file belongs to the first section whose list names it.",
+  "description": "What docs.exeris.eu publishes. Each source is read at build time: the kernel, the SDK and the tooling at their latest release tags, exeris-docs at the commit main points to. A file is published only when it is listed here and its frontmatter says visibility public and status active, or, for an entry marked readme, when it is a README of the public repository: a README has no frontmatter and is as public as its repository. Sections are shown in this order; a file belongs to the first section whose list names it.",
   "sources": {
-    "kernel": { "repo": "exeris-kernel", "ref": "release", "route": "kernel" },
-    "platform": { "repo": "exeris-docs", "ref": "main", "route": "platform" }
+    "kernel": {
+      "repo": "exeris-kernel",
+      "ref": "release",
+      "route": "kernel"
+    },
+    "sdk": {
+      "repo": "exeris-sdk",
+      "ref": "release",
+      "route": "sdk"
+    },
+    "tooling": {
+      "repo": "exeris-tooling",
+      "ref": "release",
+      "route": "tooling"
+    },
+    "platform": {
+      "repo": "exeris-docs",
+      "ref": "main",
+      "route": "platform"
+    }
   },
   "sections": [
     {
@@ -23,6 +41,44 @@
         "platform:b2b-technical-whitepaper.md",
         "platform:layer-build-order.md",
         "platform:cap-license-registry.md"
+      ]
+    },
+    {
+      "id": "sdk",
+      "label": "SDK",
+      "files": [
+        {
+          "file": "sdk:README.md",
+          "readme": true
+        },
+        {
+          "file": "sdk:exeris-sdk-source-model/README.md",
+          "readme": true
+        },
+        {
+          "file": "sdk:exeris-sdk-tck/README.md",
+          "readme": true
+        },
+        {
+          "file": "sdk:exeris-sdk-ui-kit/README.md",
+          "readme": true
+        }
+      ]
+    },
+    {
+      "id": "tooling",
+      "label": "Tooling",
+      "files": [
+        {
+          "file": "tooling:README.md",
+          "readme": true
+        },
+        {
+          "file": "tooling:exeris-codegen-ts/README.md",
+          "readme": true
+        },
+        "tooling:docs/generators.md",
+        "tooling:docs/diagnostics.md"
       ]
     },
     {

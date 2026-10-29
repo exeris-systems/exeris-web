@@ -133,3 +133,12 @@
   letter-spacing: -0.03em;
   line-height: 1.05;
 }
+
+.ex-mermaid {
+  margin: 1.5em 0;
+  padding: 16px;
+  border: 1px solid var(--ex-line);
+  background: var(--ex-surface);
+  overflow-x: auto;
+}
+.ex-mermaid svg { max-width: 100%; height: auto; }

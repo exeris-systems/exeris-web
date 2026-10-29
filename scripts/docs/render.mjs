@@ -21,9 +21,14 @@ export function isPublished(data) {
   return data.visibility === 'public' && data.status === 'active';
 }
 
-/** The route of a source file: `kernel:docs/subsystems/memory.md` → `kernel/subsystems/memory`. */
+/**
+ * The route of a source file: `kernel:docs/subsystems/memory.md` → `kernel/subsystems/memory`; a
+ * README is its directory: `sdk:README.md` → `sdk`, `sdk:exeris-sdk-tck/README.md` →
+ * `sdk/exeris-sdk-tck`.
+ */
 export function routeOf(sourceRoute, path) {
-  return `${sourceRoute}/${path.replace(/^docs\//, '').replace(/\.md$/, '')}`;
+  const rest = path.replace(/^docs\//, '').replace(/\.md$/, '').replace(/(^|\/)README$/, '');
+  return rest ? `${sourceRoute}/${rest}` : sourceRoute;
 }
 
 /** GitHub's heading slug: lower case, punctuation dropped, spaces to hyphens. */
@@ -145,6 +150,8 @@ export function toTree(html) {
       if (Object.keys(a).length) node.a = a;
       const c = convert(n.children, n.name);
       if (c.length) node.c = c;
+      // A link left empty by the sanitiser (a README badge whose image was removed) is dropped.
+      if (n.name === 'a' && !c.some((x) => typeof x !== 'string' || x.trim())) return [];
       return [node];
     });
   return convert(parseDocument(html).children, null);

@@ -26,6 +26,8 @@ describe('frontmatter and publication', () => {
   it('routes a file by its source and path', () => {
     expect(routeOf('kernel', 'docs/subsystems/memory.md')).toBe('kernel/subsystems/memory');
     expect(routeOf('platform', 'high-level-architecture.md')).toBe('platform/high-level-architecture');
+    expect(routeOf('sdk', 'README.md')).toBe('sdk');
+    expect(routeOf('sdk', 'exeris-sdk-tck/README.md')).toBe('sdk/exeris-sdk-tck');
   });
 });
 
@@ -92,6 +94,19 @@ describe('the document tree', () => {
     expect(toTree('<td style="text-align:right">1</td>')).toEqual([{ t: 'td', a: { align: 'right' }, c: ['1'] }]);
   });
 
+  it('drops a link the sanitiser left empty, such as a badge', () => {
+    const { tree } = renderDoc('[![CI](https://x/badge.svg)](https://x/actions) Text.\n', { path: 'README.md', published: new Map(), blob });
+    expect(tree).toEqual([{ t: 'p', c: [' Text.'] }]);
+  });
+
+  it('draws a diagram block with the Mermaid component, its source as the fallback', () => {
+    const template = readFileSync(join(__dirname, '../projects/docs/src/app/doc-content.component.ts'), 'utf8');
+    expect(template).toMatch(/@if \(n\.a\?\.class === 'ex-doc__diagram'\) \{\s*<ex-mermaid \[source\]="textOf\(n\)" \/>/);
+    const mermaid = readFileSync(join(__dirname, '../projects/docs/src/app/mermaid.component.ts'), 'utf8');
+    expect(mermaid).toMatch(/securityLevel: 'strict'/);
+    expect(mermaid).not.toMatch(/innerHTML|bypassSecurityTrust/);
+  });
+
   it('is drawn by a template that has a case for every tag the build keeps', () => {
     const template = readFileSync(join(__dirname, '../projects/docs/src/app/doc-content.component.ts'), 'utf8');
     const cases = new Set([...template.matchAll(/@case \('([a-z0-9]+)'\)/g)].map((m) => m[1]));
@@ -117,6 +132,14 @@ describe('buildDocs', () => {
     expect(pages[0].source.url).toBe('https://github.com/exeris-systems/exeris-kernel/blob/v1/docs/a.md');
     expect(pages[0].html).toContain(`href="${'https://github.com/exeris-systems/exeris-kernel/blob/v1/docs/b.md'}"`);
     expect(skipped).toEqual(['kernel:docs/b.md (visibility public, status draft)']);
+  });
+
+  it('publishes a README listed as one without frontmatter, and only a README', async () => {
+    const readme = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }] }] };
+    const { pages } = await buildDocs(readme, { read: async () => '# Exeris SDK\n\nAnnotations for declaring a domain.\n', refs: { sdk: 'v1' } });
+    expect(pages.map((p: { route: string; title: string }) => [p.route, p.title])).toEqual([['sdk', 'Exeris SDK']]);
+    const wrong = { ...readme, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:docs/guide.md', readme: true }] }] };
+    await expect(buildDocs(wrong, { read: async () => '', refs: { sdk: 'v1' } })).rejects.toThrow(/marked readme but is not a README/);
   });
 
   it('fails on a listed file of an unknown source', async () => {

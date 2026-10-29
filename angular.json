@@ -131,7 +131,14 @@
               }
             ],
             "server": "projects/docs/src/main.server.ts",
-            "outputMode": "static"
+            "outputMode": "static",
+            "allowedCommonJsDependencies": [
+              "cytoscape-fcose",
+              "cytoscape-cose-bilkent",
+              "elkjs",
+              "@braintree/sanitize-url",
+              "dayjs"
+            ]
           },
           "configurations": {
             "production": {

@@ -1,6 +1,7 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import type { DocNode } from './doc-types';
+import { MermaidComponent } from './mermaid.component';
 
 /**
  * A rendered document, drawn from its tree with Angular templates: no HTML string is inserted, so
@@ -10,7 +11,7 @@ import type { DocNode } from './doc-types';
  */
 @Component({
   selector: 'ex-doc-content',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, MermaidComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ng-container *ngTemplateOutlet="nodes; context: { $implicit: tree() }" />
@@ -36,7 +37,13 @@ import type { DocNode } from './doc-types';
           @case ('ol') { <ol [attr.start]="n.a?.start"><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></ol> }
           @case ('li') { <li><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></li> }
           @case ('blockquote') { <blockquote><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></blockquote> }
-          @case ('pre') { <pre [attr.class]="n.a?.class"><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></pre> }
+          @case ('pre') {
+            @if (n.a?.class === 'ex-doc__diagram') {
+              <ex-mermaid [source]="textOf(n)" />
+            } @else {
+              <pre [attr.class]="n.a?.class"><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></pre>
+            }
+          }
           @case ('code') { <code [attr.class]="n.a?.class"><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></code> }
           @case ('em') { <em><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></em> }
           @case ('strong') { <strong><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></strong> }
@@ -65,5 +72,10 @@ export class DocContentComponent {
 
   protected isText(n: DocNode): n is string {
     return typeof n === 'string';
+  }
+
+  /** The text of a node and its descendants: a diagram's source. */
+  protected textOf(n: DocNode): string {
+    return typeof n === 'string' ? n : (n.c ?? []).map((c) => this.textOf(c)).join('');
   }
 }
