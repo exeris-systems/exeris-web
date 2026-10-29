@@ -12,7 +12,7 @@ function files(dir: string): string[] {
   });
 }
 
-const AUTHORED = [...files('content'), ...files('src/content'), ...files('src/app'), 'src/index.html', 'README.md'];
+const AUTHORED = [...files('content'), ...files('src/content'), ...files('src/app'), 'src/index.html', 'README.md', ...files('docs').filter((f) => f !== 'docs/repo-review-rules.md')];
 
 /** Phrases the site spec bans from every authored file. */
 const BANNED: [RegExp, string][] = [
