@@ -10,6 +10,7 @@ node_modules
 
 # Generated per build
 /src/app/generated
+/projects/docs/src/app/generated
 /src/data/site-sha.json
 
 # Lighthouse CI

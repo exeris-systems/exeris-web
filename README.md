@@ -22,8 +22,8 @@ The output is `dist/exeris-web/browser/`: one `index.html` per route, `404.html`
 `sitemap.xml`, `robots.txt`, `_headers` and `_redirects`.
 
 The repository is an Angular workspace. The site is the root project (`src/`); `projects/docs`
-and `projects/lab` are the applications for `docs.exeris.eu` and `lab.exeris.eu`, not deployed
-yet; `projects/shell` holds what the three share, imported as `@exeris-web/shell`: the top
+is `docs.exeris.eu` ([the docs site](docs/docs-site.md)); `projects/lab` is the application for
+`lab.exeris.eu`, not deployed yet; `projects/shell` holds what the three share, imported as `@exeris-web/shell`: the top
 navigation, footer and command palette (each application supplies their content through
 `SHELL_CONFIG`), the brand and shell stylesheets, the brand assets, `_headers` and the web
 manifest.
@@ -35,7 +35,8 @@ manifest.
 | `npm run check:content` | The claims and content gate |
 | `npm run check:views` | Fails if two page generations differ |
 | `npm run claims:lock` | Accepts the current copy of every quoted claim after review |
-| `npm run build:docs`, `npm run build:lab` | Build the docs or lab application into `dist/docs`, `dist/lab` and run the output check on it |
+| `npm run build:docs` | Reads and renders the documentation (`scripts/docs/fetch-docs.mjs`), builds `dist/docs`, writes its 404, sitemap and robots, and runs the output check |
+| `npm run build:lab` | Builds the lab application into `dist/lab` and runs the output check on it |
 | `npm run lighthouse` | Lighthouse CI against `dist/`; repeats the run once when Lighthouse reports a runtime error, never on a failed assertion |
 | `npm run build` | `prebuild` (`prepare:site`: data, `generate:views`, index; then `check:content`), `ng build`, then `postbuild`: 404/sitemap/robots and output verification. `check:views` and `claims:lock` are run separately |
 
@@ -45,6 +46,8 @@ manifest.
   the prerender, and the brand and theme.
 - [Build-time data](docs/build-time-data.md): the upstream registers, what each JSON file holds,
   the fetch fallback and the token rules.
+- [The docs site](docs/docs-site.md): what docs.exeris.eu publishes, from which ref, and how a
+  document is rendered.
 - [Build gates](docs/gates.md): the content, claims, readiness-wording, output and Lighthouse
   checks, and what CI runs.
 
@@ -63,6 +66,11 @@ empty `previews` block, which preview builds of other branches need.
 | Non-production branch deploy command | `npx wrangler preview` (or `npx wrangler versions upload`) |
 | Environment variable | `NODE_VERSION` = `24` |
 | Secret (recommended) | `SITE_GITHUB_TOKEN`: a fine-grained token with read access to public repositories only, so the build's GitHub API calls are not rate-limited |
+
+docs.exeris.eu is the Worker `exeris-web-docs`, configured by `projects/docs/wrangler.jsonc` in
+the same way, with build command `npm run build:docs` and deploy command
+`npx wrangler deploy --config projects/docs/wrangler.jsonc` (previews: `npx wrangler preview
+--config projects/docs/wrangler.jsonc`), the same Node version and the same secret.
 
 Workers Builds builds every push; the repository has no deploy job. It sets `WORKERS_CI=1`, which
 makes `npm run data` strict: a failed fetch fails the deploy instead of publishing the committed

@@ -99,11 +99,11 @@ async function request(url, method = 'GET') {
   return res;
 }
 
-async function getText(url) {
+export async function getText(url) {
   return (await request(url)).text();
 }
 
-async function getJson(url) {
+export async function getJson(url) {
   return JSON.parse(await getText(url));
 }
 
