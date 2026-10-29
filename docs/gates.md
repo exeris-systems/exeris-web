@@ -36,7 +36,10 @@ last-verified: 2026-10-29
 Nothing is released as a product today, so copy must not say that something is sold, supported,
 hosted or licensed for production, or invite a sales conversation. The check scans every authored
 string: view titles and the props of every node, `RICH_TEXT` included (links too), the typed site
-content, the SEO and search-index meta files, and the README sentences cap cards show, and rejects the phrases of `READINESS_RULES` in `scripts/check-content.mjs`: sold or
+content, the SEO and search-index meta files, the README sentences cap cards show, and the string
+literals of the docs and lab applications (`projects/docs/src/app`, `projects/lab/src/app`, not
+the generated documents), and rejects the phrases of `READINESS_RULES` in
+`scripts/check-content.mjs`: sold or
 sale, buy and purchase, `production`, support as an offering, a service-level agreement, `CVE`, a hosted or managed
 service, a control plane, a production, runtime, perpetual or commercial licence, a subscription or
 one-time fee, air-gapped and on-prem, "Contact us" and "Contact sales", "Discuss fit", "request a

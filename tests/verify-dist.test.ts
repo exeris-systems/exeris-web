@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
-import { noTrackingErrors, verify } from '../scripts/verify-dist.mjs';
+import { noTrackingErrors, routeErrors, verify } from '../scripts/verify-dist.mjs';
 
 function out(files: Record<string, string>): string {
   const dir = mkdtempSync(join(tmpdir(), 'verify-dist-'));
@@ -28,5 +28,32 @@ describe('the no-tracking check of an application', () => {
 
   it('names an unknown application', () => {
     expect(verify('blog').errors).toEqual(['unknown application blog']);
+  });
+
+  it('rejects the analytics host and accepts the English word', () => {
+    const dir = out({
+      'a/index.html': '<script src="/x.js" data-domain="docs.exeris.eu" defer></script><p>loads plausible.io/js/script.js</p>',
+      'b/index.html': '<p>a sign error yields a plausible string</p>',
+    });
+    const errors = noTrackingErrors(dir, new Set(['docs.exeris.eu']));
+    expect(errors).toEqual([expect.stringMatching(/^a\/index\.html: names a tracker/)]);
+  });
+});
+
+describe('the route check of an application', () => {
+  const page = (canonical: string) =>
+    `<title>Page — Exeris Docs</title><meta name="description" content="A description of twenty characters or more">` +
+    `<link rel="canonical" href="${canonical}"><meta property="og:title" content="t"><meta property="og:description" content="d">` +
+    `<meta property="og:url" content="${canonical}"><meta property="og:image" content="https://docs.exeris.eu/a.png"><meta name="twitter:card" content="x"><h1>T</h1>`;
+
+  it('accepts a page whose canonical is its own address on the application host', () => {
+    const dir = out({ 'kernel/a/index.html': page('https://docs.exeris.eu/kernel/a'), '404.html': '', 'sitemap.xml': '', 'robots.txt': '' });
+    expect(routeErrors({ out: dir, url: 'https://docs.exeris.eu' }, ['kernel/a'])).toEqual([]);
+  });
+
+  it('flags a canonical on another host', () => {
+    const dir = out({ 'kernel/a/index.html': page('https://exeris.eu/kernel/a') });
+    const errors = routeErrors({ out: dir, url: 'https://docs.exeris.eu' }, ['kernel/a']);
+    expect(errors).toEqual(expect.arrayContaining([expect.stringMatching(/no canonical/), expect.stringMatching(/canonical is https:\/\/exeris\.eu\/kernel\/a/)]));
   });
 });

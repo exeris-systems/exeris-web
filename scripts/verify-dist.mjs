@@ -51,7 +51,7 @@ export function verify(app = 'site') {
 }
 
 /** Route, SEO and token checks of an application's prerendered pages. */
-function routeErrors({ out, url, redirects }, routes) {
+export function routeErrors({ out, url, redirects }, routes) {
   const errors = [];
   const seenTitles = new Map();
   const REQUIRED = required(url);
