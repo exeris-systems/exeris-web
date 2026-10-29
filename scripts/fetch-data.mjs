@@ -119,11 +119,21 @@ async function publicRepos() {
   }
 }
 
-/** `repo` for a cap or SKU: its public repository and what its README says, or null. */
-export async function repoOf(name, publicNames, readme) {
+/**
+ * `repo` for a cap or SKU: its public repository and what its README says, or null. A README the
+ * parser cannot read costs that card its sentence and version, not the build; a README that cannot
+ * be fetched is a FetchError like any other.
+ */
+export async function repoOf(name, publicNames, readme, warn = console.warn) {
   if (!publicNames.has(name)) return null;
-  const { summary, builtAgainst } = parseRepoReadme(await readme(name));
-  return { url: `${GITHUB}/${name}`, summary, builtAgainst };
+  const text = await readme(name);
+  try {
+    const { summary, builtAgainst } = parseRepoReadme(text);
+    return { url: `${GITHUB}/${name}`, summary, builtAgainst };
+  } catch (err) {
+    warn(`fetch-data: ${name} README: ${err.message}; linking it without a summary`);
+    return { url: `${GITHUB}/${name}`, summary: null, builtAgainst: null };
+  }
 }
 
 function write(name, value) {

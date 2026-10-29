@@ -54,6 +54,16 @@ describe('repoOf', () => {
     });
     expect(readme).toHaveBeenCalledWith('exeris-caps-a');
   });
+
+  it('links a repository whose README it cannot read, without a summary', async () => {
+    const warn = vi.fn();
+    expect(await repoOf('exeris-caps-a', publicNames, async () => '# a\n\n## What it does\n', warn)).toEqual({
+      url: 'https://github.com/exeris-systems/exeris-caps-a',
+      summary: null,
+      builtAgainst: null,
+    });
+    expect(warn).toHaveBeenCalledWith(expect.stringMatching(/exeris-caps-a README: .*no paragraph/));
+  });
 });
 
 describe('strictFetch', () => {

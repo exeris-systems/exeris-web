@@ -33,8 +33,8 @@ export type Licence = 'community' | 'commercial' | 'enterprise-private';
 /** A public repository of a cap or SKU, and what its README says about it. */
 export interface Repo {
   url: string;
-  /** The first sentence of the README paragraph after the H1. */
-  summary: string;
+  /** The first sentence of the README paragraph after the H1; null when it could not be read. */
+  summary: string | null;
   /** The kernel version on the README's `Status:` line, when it names one. */
   builtAgainst: string | null;
 }

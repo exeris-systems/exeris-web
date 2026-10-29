@@ -49,7 +49,8 @@ a fetch error (network failure or HTTP status) falls back to it unless `SITE_FET
 committed copy, which may be older than the registers it quotes, and the previous deployment stays
 live. A parser or consistency failure (a duplicate claim key, an unknown licence, a stated cap
 total the rows do not give, a SKU cap the registry lacks, tooling artefacts on different releases,
-a missing initializr jar, a missing CITABLE row, a public repository whose README has no paragraph
-after its H1) always fails the build.
+a missing initializr jar, a missing CITABLE row) always fails the build. A public repository whose
+README the parser cannot read is the one exception: its card links it without a summary or kernel
+version, and the fetch prints a warning.
 `GITHUB_TOKEN`, when set, is sent to `api.github.com` only, never to Maven Central or
 `raw.githubusercontent.com`.

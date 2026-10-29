@@ -83,7 +83,9 @@ type SourceFilter = 'all' | 'public';
               <p class="ex-capcard__status"><ex-status-badge [status]="c.status" /></p>
               <h3 class="ex-mono ex-capcard__name">{{ c.short }}</h3>
               @if (c.repo; as repo) {
-                <p class="ex-capcard__summary"><ex-text [text]="repo.summary" [tokens]="false" /></p>
+                @if (repo.summary) {
+                  <p class="ex-capcard__summary"><ex-text [text]="repo.summary" [tokens]="false" /></p>
+                }
                 <p class="ex-card__code">
                   <a class="ex-link" [href]="repo.url">{{ c.name }}</a> · {{ c.build }}
                   @if (repo.builtAgainst) { · kernel {{ repo.builtAgainst }} }

@@ -19,6 +19,6 @@ describe('segments', () => {
 describe('the cap card', () => {
   it('renders a README sentence with site tokens off', () => {
     const src = readFileSync(join(__dirname, '../src/app/blocks/cap-matrix.block.ts'), 'utf8');
-    expect(src).toMatch(/<ex-text \[text\]="repo\.summary" \[tokens\]="false" \/>/);
+    expect(src).toMatch(/<ex-text \[text\]="repo.summary" \[tokens\]="false" \/>/);
   });
 });
