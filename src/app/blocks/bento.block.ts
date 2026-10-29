@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { HrefDirective } from '../shell/href.directive';
+import { HrefDirective } from '@exeris-web/shell';
 import { BUILD_META, CAPS, CAP_TOTALS, READINESS, SKUS, type Licence, type Readiness } from '../data/data';
 import { ClaimQuoteComponent } from './claim-quote.component';
 import { CodePaneComponent, type CodePaneProps } from './code-pane.block';

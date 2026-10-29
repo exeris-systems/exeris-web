@@ -20,7 +20,12 @@
       "ES2022",
       "dom"
     ],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@exeris-web/shell": [
+        "./projects/shell/src/index.ts"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

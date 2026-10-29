@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { HrefDirective } from '../shell/href.directive';
+import { HrefDirective } from '@exeris-web/shell';
 import { fillVersions } from '../data/data';
 import { CodePaneComponent, type CodePaneProps } from './code-pane.block';
 import { btnClass, type Cta } from './types';

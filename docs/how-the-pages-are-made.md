@@ -54,16 +54,19 @@ How the site uses the generator today:
 
 The look is brand kit v6 on top of [`@exeris/ui-kit`](https://www.npmjs.com/package/@exeris/ui-kit):
 
-- `src/styles.css` imports the kit's `theme`, `styles` and `theme-exeris` entries and activates
-  the theme with `data-theme="exeris"` on `<html>`.
-- `src/styles/brand.css` is the only stylesheet that holds brand colour values; the other
-  places, both repeating the page background, are the `theme-color` meta in `src/index.html` and
-  `theme_color` and `background_color` in `public/site.webmanifest`. `brand.css` declares the v6
+- `src/styles.css` imports the kit's `theme`, `styles` and `theme-exeris` entries, then the
+  shared shell's `brand.css`, `fonts.css` and `shell.css` from `projects/shell/styles/`, then the
+  site's own `src/styles/site.css`, and activates the theme with `data-theme="exeris"` on
+  `<html>`.
+- `projects/shell/styles/brand.css` is the only stylesheet that holds brand colour values; the
+  other places, all repeating the page background, are the `theme-color` meta in each
+  application's `index.html` and `theme_color` and `background_color` in
+  `projects/shell/public/site.webmanifest`. `brand.css` declares the v6
   token names (`--ex-flow-blue`, `--ex-flow-cyan`, `--ex-flow`, `--ex-evidence`, the surface,
   text and line scales, the status colours) and the v6 primitives, and re-points the installed
   theme's rules that still read the earlier palette. When the kit's own `theme-exeris` ships v6,
   delete `brand.css` and its import line; nothing else changes.
 - Evidence Orange (`--ex-evidence`) is reserved for figures bound to a registered claim id.
 - Brand assets (mark, lockups, icons, social card) are the shipped files of the brand kit, in
-  `src/assets/brand/`; they are never redrawn.
+  `projects/shell/assets/brand/`; they are never redrawn.
 - IBM Plex Sans and Mono are self-hosted from `@fontsource`.

@@ -26,7 +26,8 @@ policy is the right one.
 - **A figure** → a claim reference (`L12.absolute`). If the claim does not exist, it is added to the
   register in `exeris-benchmarks` first; the site does not get ahead of its evidence.
 - **A version** → `{tooling.version}` or `{kernel.version}`, never a literal.
-- **A colour** → a token in `src/styles/brand.css`; nowhere else holds a brand colour value.
+- **A colour** → a token in `projects/shell/styles/brand.css`; nowhere else holds a brand colour
+  value.
 
 ## Hard Constraints
 - No edit under `src/app/generated/` or `.agents/vendor/`. The L0 hooks deny both.

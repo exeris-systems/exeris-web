@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fuzzyScore, searchIndex, type SearchEntry } from '../src/app/shell/fuzzy';
+import { fuzzyScore, searchIndex, type SearchEntry } from '../projects/shell/src/lib/fuzzy';
 
 const entries: SearchEntry[] = [
   { kind: 'page', title: 'Capabilities', href: '/capabilities' },

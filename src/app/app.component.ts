@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CommandPaletteComponent } from './shell/command-palette.component';
-import { FooterComponent } from './shell/footer.component';
-import { TopNavComponent } from './shell/top-nav.component';
+import { CommandPaletteComponent, FooterComponent, TopNavComponent } from '@exeris-web/shell';
 
 /** The shell every page shares: skip link, top navigation, the routed page, footer, palette. */
 @Component({

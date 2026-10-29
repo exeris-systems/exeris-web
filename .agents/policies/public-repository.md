@@ -22,8 +22,8 @@ they describe, the brand is used as shipped, and the language is English. The se
    names a repository only once it is public on GitHub and its `LICENSE` carries the Apache-2.0
    text.
 5. **Brand assets are the brand kit's files.** The mark, lockups, icons and social card in
-   `src/assets/brand/` are used as shipped — never recoloured, redrawn or re-exported. Brand colour
-   values live in `src/styles/brand.css` and nowhere else.
+   `projects/shell/assets/brand/` are used as shipped — never recoloured, redrawn or re-exported.
+   Brand colour values live in `projects/shell/styles/brand.css` and nowhere else.
 6. **English** in every committed artefact.
 
 ## Verification

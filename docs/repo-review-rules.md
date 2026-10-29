@@ -64,8 +64,9 @@ S3. **Pages are View IR, and generated output is not patched.** A page is a
 S4. **The site sets no cookie, runs no analytics and makes no third-party request.** In a diff: a
     cookie write, `localStorage` used as a tracking identifier, an analytics or tag-manager
     snippet, an external font, script, image, stylesheet or frame host, a runtime request to
-    another origin, an inline script or inline event handler, or a `public/_headers` edit that
-    loosens the Content-Security-Policy below `script-src 'self'` (an `unsafe-inline`,
+    another origin, an inline script or inline event handler, or a
+    `projects/shell/public/_headers` edit that loosens the Content-Security-Policy below
+    `script-src 'self'` (an `unsafe-inline`,
     `unsafe-eval`, a host, a wildcard) → `[HARD BLOCK]`. A new link that merely navigates to
     another site is not a request and is judged by S7. A change to the promise in `README.md` or
     `AGENTS.md` without the code that keeps it → `[CONTRACT]`.
@@ -100,8 +101,8 @@ S8. **Brand assets are used, not redrawn, and the language is English.** The mar
     `[CONTRACT]`.
 
 S9. **The gates are not weakened.** A change to `scripts/check-content.mjs`,
-    `scripts/verify-dist.mjs`, `lighthouserc.json`, `public/_headers` or the workflows that lowers
-    a threshold, widens an allowlist, skips a route, or adds `SITE_SKIP_FETCH` or a fallback to a
+    `scripts/verify-dist.mjs`, `lighthouserc.json`, `projects/shell/public/_headers` or the
+    workflows that lowers a threshold, widens an allowlist, skips a route, or adds `SITE_SKIP_FETCH` or a fallback to a
     path that publishes, with no stated reason in the pull request → `[CONTRACT]`; the same change
     that removes a check which enforces S1, S2 or S4 → `[HARD BLOCK]`.
 

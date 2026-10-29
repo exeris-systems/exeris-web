@@ -8,8 +8,8 @@ Not covered by the Apache License, Version 2.0:
 
   - the site copy: the text authored under content/ and src/content/, and the text it renders
     on exeris.eu;
-  - the brand assets under src/assets/brand/: the Exeris mark, the wordmark, the lockups, the
-    app and favicon icons and the social card.
+  - the brand assets under projects/shell/assets/brand/: the Exeris mark, the wordmark, the
+    lockups, the app and favicon icons and the social card.
 
 © Exeris Systems, all rights reserved.
 

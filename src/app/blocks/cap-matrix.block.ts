@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { HrefDirective } from '../shell/href.directive';
+import { HrefDirective } from '@exeris-web/shell';
 import { CAPS, CAP_TOTALS, LAYERS, SKUS_WITH_REPO, skusUsingCap, type Licence } from '../data/data';
 import { StatusBadgeComponent } from './status-badge.component';
 import { TextComponent } from './text.component';

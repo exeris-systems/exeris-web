@@ -8,8 +8,7 @@ const angular = JSON.parse(readFileSync(join(ROOT, 'angular.json'), 'utf8'));
 
 describe('the Cloudflare configuration', () => {
   it('serves the directory the site builds into', () => {
-    const outputPath = Object.values(angular.projects as Record<string, { architect: { build: { options: { outputPath: string } } } }>)[0]
-      .architect.build.options.outputPath;
+    const outputPath = angular.projects['exeris-web'].architect.build.options.outputPath;
     expect(config.assets.directory).toBe(`./${outputPath}/browser`);
   });
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { HrefDirective } from '../shell/href.directive';
+import { HrefDirective } from '@exeris-web/shell';
 import { SectionHeadComponent, type SectionHeadProps } from './section-head.block';
 import { TextComponent } from './text.component';
 import { tagClass, toneVar, type Badge, type Tone } from './types';

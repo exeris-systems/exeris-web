@@ -22,7 +22,7 @@ touches.
 - **A figure, ratio, comparison, claim id, `claims.lock.json` or the number allowlist** → `exeris-web-reviewer` (then `exeris-web-implementer` if a change is needed)
 - **Wording about availability, price, support, licence for production, a call to action, the SKU list** → `exeris-web-reviewer`
 - **A new or renamed page, a view document, a `CUSTOM` block, `seo.json`, routes** → `exeris-web-implementer`, with `exeris-web-reviewer` after
-- **`public/_headers`, a new dependency, a font, an asset host, any runtime request** → `exeris-web-reviewer`
+- **`projects/shell/public/_headers`, a new dependency, a font, an asset host, any runtime request** → `exeris-web-reviewer`
 - **A build script, a gate, `lighthouserc.json`, a workflow** → `exeris-web-reviewer` for the gate's strength, `exeris-web-verification` for whether it runs green
 - **"Does it build / pass?"** → `exeris-web-verification`
 

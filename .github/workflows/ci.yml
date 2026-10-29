@@ -63,6 +63,10 @@ jobs:
         env:
           SITE_SKIP_FETCH: '1'
 
+      # Built on every run, deployed or not, so a change to the shared shell cannot break them unseen.
+      - name: Build docs and lab
+        run: npm run build:docs && npm run build:lab
+
       - name: Lighthouse CI
         # Repeats the run once when Lighthouse reports a runtime error such as NO_NAVSTART; an
         # assertion failure fails at once.

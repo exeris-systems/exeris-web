@@ -22,9 +22,10 @@ last-verified: 2026-10-29
 - **Repository summaries** (`scripts/check-content.mjs`): the README sentence a cap card shows is
   held to the readiness rules.
 - **Readiness wording** (`scripts/check-content.mjs`, also a unit test): see below.
-- **Output** (`scripts/verify-dist.mjs`): every route has its own HTML with title, description,
-  canonical and Open Graph tags; no unresolved content token; no third-party request, tracker,
-  inline script or cookie write.
+- **Output** (`scripts/verify-dist.mjs`, with `docs` or `lab` as an argument for those
+  applications): every site route has its own HTML with title, description, canonical and Open
+  Graph tags and no unresolved content token; every application carries `_headers` and makes no
+  third-party request, names no tracker, runs no inline script and writes no cookie.
 - **Lighthouse CI** (`lighthouserc.json`): performance ≥ 0.8, accessibility ≥ 0.9,
   best practices ≥ 0.9, SEO ≥ 0.9 on the static output.
 
@@ -59,5 +60,6 @@ technical use of a listed word needs its own allowlist entry with a reason.
 
 `.github/workflows/ci.yml` runs install, data (fetch errors fall back to the committed JSON; CI publishes nothing), a
 notice listing what changed upstream since `src/data` was committed, generation, the content check,
-the determinism check, lint, tests, the build and Lighthouse CI (`npm run lighthouse`), and uploads
+the determinism check, lint, tests, the build, the docs and lab builds and Lighthouse CI
+(`npm run lighthouse`), and uploads
 the Lighthouse reports as a build artifact.

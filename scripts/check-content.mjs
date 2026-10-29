@@ -318,7 +318,7 @@ export function checkContent({ lock = readJson('content/meta/claims.lock.json') 
   }
 
   // No component or public file links the Console, whatever the copy says.
-  const sources = [...walkDir('src/app').filter((f) => f.endsWith('.ts') && !f.startsWith('src/app/generated/')), ...walkDir('public')];
+  const sources = [...walkDir('src/app').filter((f) => f.endsWith('.ts') && !f.startsWith('src/app/generated/')), ...walkDir('public'), ...walkDir('projects').filter((f) => /\.(ts|html|json|webmanifest)$|_headers$/.test(f))];
   for (const file of sources) {
     if (/console\.exeris\.eu/i.test(read(file))) errors.push(`${file}: links console.exeris.eu; the console is not a live offering`);
   }
