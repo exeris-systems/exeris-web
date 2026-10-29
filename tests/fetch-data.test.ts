@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 // @ts-expect-error -- plain ESM modules without type declarations
-import { FetchError, headersFor, loadUpstream, repoOf, siteSha, strictFetch } from '../scripts/fetch-data.mjs';
+import { FetchError, apiFailureDetail, headersFor, loadUpstream, repoOf, siteSha, strictFetch } from '../scripts/fetch-data.mjs';
 // @ts-expect-error -- plain ESM module without type declarations
 import { isRuntimeError } from '../scripts/lighthouse-ci.mjs';
 
@@ -70,6 +70,22 @@ describe('repoOf', () => {
       builtAgainst: null,
     });
     expect(warn).toHaveBeenCalledWith(expect.stringMatching(/exeris-caps-a README: .*no paragraph/));
+  });
+});
+
+describe('apiFailureDetail', () => {
+  const api = 'https://api.github.com/repos/exeris-systems/exeris-docs/commits/main';
+
+  it('names the token sent and the rate limit left, for the GitHub API only', () => {
+    const limited = new Headers({ 'x-ratelimit-remaining': '0', 'x-ratelimit-limit': '60' });
+    expect(apiFailureDetail(api, limited, {})).toBe(' (no token; rate limit 0 of 60 left)');
+    expect(apiFailureDetail(api, new Headers(), { SITE_GITHUB_TOKEN: 's' })).toBe(' (SITE_GITHUB_TOKEN; no rate-limit headers)');
+    expect(apiFailureDetail(api, new Headers(), { GITHUB_TOKEN: 'g' })).toBe(' (GITHUB_TOKEN; no rate-limit headers)');
+    expect(apiFailureDetail('https://repo1.maven.org/maven2/x', limited, {})).toBe('');
+  });
+
+  it('never prints the token itself', () => {
+    expect(apiFailureDetail(api, new Headers(), { SITE_GITHUB_TOKEN: 'secret-value' })).not.toContain('secret-value');
   });
 });
 

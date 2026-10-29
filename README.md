@@ -65,7 +65,7 @@ empty `previews` block, which preview builds of other branches need.
 | Deploy command | `npx wrangler deploy` |
 | Non-production branch deploy command | `npx wrangler preview` (or `npx wrangler versions upload`) |
 | Environment variable | `NODE_VERSION` = `24` |
-| Secret (recommended) | `SITE_GITHUB_TOKEN`: a fine-grained token with read access to public repositories only, so the build's GitHub API calls are not rate-limited |
+| Build secret (recommended) | `SITE_GITHUB_TOKEN` under Settings → Build → Variables and secrets, not the Worker's runtime variables, which the build does not see: a fine-grained token with read access to public repositories only, so the build's GitHub API calls are not held to the unauthenticated limit |
 
 docs.exeris.eu is the Worker `exeris-web-docs`, configured by `projects/docs/wrangler.jsonc` in
 the same way, with build command `npm run build:docs` and deploy command

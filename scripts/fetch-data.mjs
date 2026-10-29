@@ -88,6 +88,20 @@ export function headersFor(url, env = process.env) {
   return h;
 }
 
+/**
+ * What a failed GitHub API answer says about its cause: whether the request carried a token, and
+ * the rate limit the response reports. A 403 with none remaining is the unauthenticated limit
+ * (60 requests an hour, shared by the build hosts), not a missing page.
+ */
+export function apiFailureDetail(url, headers, env = process.env) {
+  if (new URL(url).hostname !== 'api.github.com') return '';
+  const token = env.SITE_GITHUB_TOKEN ? 'SITE_GITHUB_TOKEN' : env.GITHUB_TOKEN ? 'GITHUB_TOKEN' : 'no token';
+  const remaining = headers.get('x-ratelimit-remaining');
+  const limit = headers.get('x-ratelimit-limit');
+  const rate = remaining === null ? 'no rate-limit headers' : `rate limit ${remaining} of ${limit} left`;
+  return ` (${token}; ${rate})`;
+}
+
 async function request(url, method = 'GET') {
   let res;
   try {
@@ -95,7 +109,7 @@ async function request(url, method = 'GET') {
   } catch (err) {
     throw new FetchError(`${method} ${url}: ${err.message}`, { cause: err });
   }
-  if (!res.ok) throw new FetchError(`${method} ${url}: HTTP ${res.status}`);
+  if (!res.ok) throw new FetchError(`${method} ${url}: HTTP ${res.status}${apiFailureDetail(url, res.headers)}`);
   return res;
 }
 
