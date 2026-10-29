@@ -1,0 +1,19 @@
+// Cloudflare Workers configuration of exeris.eu: a Worker with static assets and no script.
+// Workers Builds runs `npm run build` and then deploys with this file; `name` is the Worker in the
+// Cloudflare dashboard and must match it.
+{
+  "name": "exeris-web",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist/exeris-web/browser",
+    // A route is served at its canonical address, without a trailing slash (`/start` from
+    // start/index.html), and `/start/` redirects there; the canonical tags and the sitemap name
+    // that form.
+    "html_handling": "drop-trailing-slash",
+    // An unknown path is answered with 404.html and status 404, as the prerender expects.
+    "not_found_handling": "404-page"
+  },
+  // Preview builds of non-production branches (`wrangler preview`) need this block; it may stay
+  // empty, because assets and compatibility settings apply at the top level.
+  "previews": {}
+}
