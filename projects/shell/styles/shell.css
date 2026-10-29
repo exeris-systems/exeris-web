@@ -58,6 +58,25 @@
   }
 }
 
+/* View transitions: a short cross-fade between pages, within one application (the router's own
+   transitions) and across documents of the same origin (a full page load, as the docs' links
+   are). The navigation bar is its own transition group, so it stays still while the page changes.
+   With reduced motion the change is immediate. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 /* ── Layout ─────────────────────────────────────────────────────────────── */
 
 .ex-skip {
@@ -747,6 +766,7 @@ a.ex-card:hover {
   position: sticky;
   top: 0;
   z-index: 50;
+  view-transition-name: ex-nav;
   background: color-mix(in oklch, var(--ex-bg) 92%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);

@@ -1,6 +1,6 @@
 import { type ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
-import { TitleStrategy, provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
+import { TitleStrategy, provideRouter, withComponentInputBinding, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { SHELL_CONFIG, type SearchEntry, type ShellConfig } from '@exeris-web/shell';
 import { FOOTER_COLUMNS, FOOTER_LEGAL, FOOTER_TAGLINE, LINKS, NAV } from '../content/site';
 import searchIndexJson from '../data/search-index.json';
@@ -23,6 +23,9 @@ export const appConfig: ApplicationConfig = {
       routes,
       withComponentInputBinding(),
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
+      // A navigation between pages cross-fades the content; the navigation bar stays in place
+      // (shell.css). A browser without the View Transitions API navigates as before.
+      withViewTransitions({ skipInitialTransition: true }),
     ),
     provideClientHydration(withNoIncrementalHydration()),
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
