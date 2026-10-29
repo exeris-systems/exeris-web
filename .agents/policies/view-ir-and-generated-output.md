@@ -3,7 +3,7 @@
 A page is a document of the Exeris presentation IR, `content/views/view_<name>.json`, read by
 `@exeris/codegen-ts` into `src/app/generated/`. The IR is the source a CMS or Studio can later store
 unchanged, so a page that bypasses it is a page no tool can edit. How the pipeline runs is
-`README.md` § How the pages are made; the severities are `docs/repo-review-rules.md` S3 and S5.
+`docs/how-the-pages-are-made.md`; the severities are `docs/repo-review-rules.md` S3 and S5.
 
 ## Hard Rules
 

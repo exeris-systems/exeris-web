@@ -1,8 +1,8 @@
 # Reference: Build and Gates
 
-**Source:** `README.md` (§ Build, § Gates, § Cloudflare Pages) and `package.json` `scripts`. This
-file names where to look and yields to them; a script's behaviour is what `package.json` and the
-script say, not what is summarised here.
+**Source:** `README.md` (§ Build, § Cloudflare Pages), `docs/gates.md` and `package.json`
+`scripts`. This file names where to look and yields to them; a script's behaviour is what
+`package.json` and the script say, not what is summarised here.
 
 ## Commands an agent runs
 

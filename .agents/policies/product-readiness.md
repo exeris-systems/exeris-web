@@ -3,7 +3,7 @@
 What the site says about whether something can be had is true only as far as
 `exeris-docs/cap-license-registry.md` says it is. The registry's `Status` column (`poc`,
 `snapshot`, `released`) is the evidence, read at build time into `src/data/caps.json` and
-`src/data/skus.json`. The mechanics are `README.md` § Readiness wording; the severity is
+`src/data/skus.json`. The mechanics are `docs/gates.md` § Readiness wording; the severity is
 `docs/repo-review-rules.md` S2.
 
 ## Hard Rules

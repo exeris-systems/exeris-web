@@ -1,6 +1,6 @@
 # Reference: Upstream Data
 
-**Source:** `README.md` § Build-time data and `scripts/fetch-data.mjs`. The registers themselves
+**Source:** `docs/build-time-data.md` and `scripts/fetch-data.mjs`. The registers themselves
 are authoritative in their owning repositories; `src/data/*.json` is their committed copy.
 
 | Committed copy | Authoritative register | Owning repository |

@@ -3,7 +3,7 @@
 The site is the public statement of what Exeris measures. A number on a page is read as a promise
 by a buyer and as a citation by everyone else, so it has one source: the claim register of
 `exeris-benchmarks` (`docs/CLAIMS.md`), read at build time into `src/data/claims.json`. How the
-check that enforces this works is in `README.md` § Gates; the severity a reviewer gives a breach is
+check that enforces this works is in `docs/gates.md`; the severity a reviewer gives a breach is
 `docs/repo-review-rules.md` S1.
 
 ## Hard Rules
