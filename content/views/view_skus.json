@@ -1,0 +1,43 @@
+{
+  "name": "skus",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Skus",
+  "view": {
+    "name": "skus",
+    "kind": "PAGE",
+    "route": "skus",
+    "title": "SKUs",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"SKUs\"}], \"eyebrow\": \"TIER 3 · SKUS\", \"title\": \"SKUs\", \"lede\": \"Named compositions of capabilities. A SKU’s composition manifest is byte-identical across the Community and Enterprise kernel drivers: the driver is a substrate choice, not a manifest change. These are the SKUs that have a repository today.\"}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExSkuCards",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"licence\": \"Source-available under the Exeris Commercial License at first release.\", \"skus\": [{\"id\": \"api-gateway\", \"description\": \"Routing, upstream pools, a policy chain, backend health and an admin control plane over a kernel-level HTTP data plane.\"}, {\"id\": \"content-api\", \"description\": \"Content types, versioning, assets and search, emitted as REST and GraphQL surfaces.\"}, {\"id\": \"identity\", \"description\": \"Credential store, sessions, TOTP multi-factor, federated login, token issuance and invitations for a Service Boundary service.\"}, {\"id\": \"pim\", \"description\": \"Product catalogue, entity versioning, assets, search, import and export, and an audit trail, over REST and GraphQL.\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · OPEN SOURCE ON GITHUB\", \"title\": \"Generate your first application.\", \"ctas\": [{\"label\": \"Get started →\", \"href\": \"/start\", \"variant\": \"solid\"}, {\"label\": \"Become a design partner\", \"href\": \"/pricing#design-partners\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "home": {
+    "title": "Intent in. Systems out.",
+    "description": "An open-source JVM platform for Java 25: describe the domain in annotated Java, get the handlers, API and front end generated at build time, and run them on a Spring-free kernel."
+  },
+  "start": {
+    "title": "Get started",
+    "description": "Generate an Exeris application with the initializr from Maven Central: a Maven backend and an Angular front end from one command."
+  },
+  "platform": {
+    "title": "Platform",
+    "description": "The Exeris platform in three tiers: the kernel substrate, composable capabilities and SKUs, and the Wall that keeps Spring out of the kernel."
+  },
+  "capabilities": {
+    "title": "Capabilities",
+    "description": "The Exeris capability matrix by layer and licence, generated from the capability licence registry."
+  },
+  "skus": {
+    "title": "SKUs",
+    "description": "Exeris SKUs: the compositions of capabilities that have a repository today, and the ones that are planned."
+  },
+  "spring": {
+    "title": "Spring Runtime",
+    "description": "Exeris Spring Runtime hosts existing Spring applications on the Exeris kernel in Pure Mode or Compatibility Mode."
+  },
+  "ai": {
+    "title": "AI",
+    "description": "The Exeris AI layer: intent in, systems out. What exists today, what is planned, and how AI works on the platform."
+  },
+  "pricing": {
+    "title": "Pricing",
+    "description": "Exeris has no prices yet: it is looking for design partners, and Code Detachment applies to the commercial caps and SKUs."
+  },
+  "docs": {
+    "title": "Docs",
+    "description": "An index of the Exeris documentation: whitepapers, architecture, ADRs, SDK, tooling and benchmark methodology."
+  },
+  "lab": {
+    "title": "Lab",
+    "description": "The Exeris benchmark laboratory: registered claims with their fences, cold start, CPU per request, memory, Spring hosting and sagas."
+  },
+  "not-found": {
+    "title": "Page not found",
+    "description": "This address does not exist on exeris.eu.",
+    "index": false
+  }
+}

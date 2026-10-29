@@ -22,3 +22,5 @@ npm-debug.log*
 .idea
 .vscode/*
 !.vscode/extensions.json
+/src/data/search-index.json
+/src/data/view-routes.json

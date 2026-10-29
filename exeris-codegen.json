@@ -1,0 +1,129 @@
+{
+  "inputPath": "content/views",
+  "outputPath": "src/app/generated",
+  "framework": "angular",
+  "styling": "tailwind",
+  "standalone": true,
+  "signals": true,
+  "lazyRoutes": true,
+  "generateZod": false,
+  "generateServices": false,
+  "generateForms": false,
+  "generateLists": false,
+  "generateDetails": false,
+  "generateStores": false,
+  "generateSagas": false,
+  "generateEvents": false,
+  "apiBasePath": "",
+  "appName": "Exeris Web",
+  "backend": "KERNEL",
+  "overwrite": false,
+  "dryRun": false,
+  "verbose": false,
+  "peers": [],
+  "generateTests": false,
+  "scaffold": false,
+  "viewHeading": "none",
+  "customBlocks": {
+    "ExBento": {
+      "import": "../../blocks/bento.block",
+      "symbol": "BentoComponent"
+    },
+    "ExCallout": {
+      "import": "../../blocks/callout.block",
+      "symbol": "CalloutComponent"
+    },
+    "ExCapMatrix": {
+      "import": "../../blocks/cap-matrix.block",
+      "symbol": "CapMatrixComponent"
+    },
+    "ExCardGrid": {
+      "import": "../../blocks/card-grid.block",
+      "symbol": "CardGridComponent"
+    },
+    "ExCodeExample": {
+      "import": "../../blocks/code-example.block",
+      "symbol": "CodeExampleComponent"
+    },
+    "ExCodePane": {
+      "import": "../../blocks/code-pane.block",
+      "symbol": "CodePaneComponent"
+    },
+    "ExCodeSteps": {
+      "import": "../../blocks/code-steps.block",
+      "symbol": "CodeStepsComponent"
+    },
+    "ExConsumerTable": {
+      "import": "../../blocks/consumer-table.block",
+      "symbol": "ConsumerTableComponent"
+    },
+    "ExContact": {
+      "import": "../../blocks/contact.block",
+      "symbol": "ContactComponent"
+    },
+    "ExCoordinates": {
+      "import": "../../blocks/coordinates.block",
+      "symbol": "CoordinatesComponent"
+    },
+    "ExEvidenceStrip": {
+      "import": "../../blocks/evidence-strip.block",
+      "symbol": "EvidenceStripComponent"
+    },
+    "ExFinalCta": {
+      "import": "../../blocks/final-cta.block",
+      "symbol": "FinalCtaComponent"
+    },
+    "ExHomeHero": {
+      "import": "../../blocks/home-hero.block",
+      "symbol": "HomeHeroComponent"
+    },
+    "ExLab": {
+      "import": "../../blocks/lab.block",
+      "symbol": "LabComponent"
+    },
+    "ExLayerBreakdown": {
+      "import": "../../blocks/layer-breakdown.block",
+      "symbol": "LayerBreakdownComponent"
+    },
+    "ExPageHeader": {
+      "import": "../../blocks/page-header.block",
+      "symbol": "PageHeaderComponent"
+    },
+    "ExPlatformMap": {
+      "import": "../../blocks/platform-map.block",
+      "symbol": "PlatformMapComponent"
+    },
+    "ExPricingTiers": {
+      "import": "../../blocks/pricing-tiers.block",
+      "symbol": "PricingTiersComponent"
+    },
+    "ExRepoGrid": {
+      "import": "../../blocks/repo-grid.block",
+      "symbol": "RepoGridComponent"
+    },
+    "ExSectionHead": {
+      "import": "../../blocks/section-head.block",
+      "symbol": "SectionHeadComponent"
+    },
+    "ExSkuCards": {
+      "import": "../../blocks/sku-cards.block",
+      "symbol": "SkuCardsComponent"
+    },
+    "ExStepGrid": {
+      "import": "../../blocks/step-grid.block",
+      "symbol": "StepGridComponent"
+    },
+    "ExTierDeep": {
+      "import": "../../blocks/tier-deep.block",
+      "symbol": "TierDeepComponent"
+    },
+    "ExTwoLevels": {
+      "import": "../../blocks/two-levels.block",
+      "symbol": "TwoLevelsComponent"
+    },
+    "ExWallDiagram": {
+      "import": "../../blocks/wall-diagram.block",
+      "symbol": "WallDiagramComponent"
+    }
+  }
+}

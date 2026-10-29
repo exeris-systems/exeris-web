@@ -1,0 +1,23 @@
+{
+  "kernel": {
+    "tag": "v0.13.0",
+    "url": "https://github.com/exeris-systems/exeris-kernel/releases/tag/v0.13.0",
+    "publishedAt": "2026-10-28T19:09:35Z"
+  },
+  "tooling": {
+    "group": "eu.exeris",
+    "version": "0.10.0",
+    "artifacts": [
+      "exeris-initializr",
+      "exeris-app-parent",
+      "exeris-app-bom",
+      "exeris-app-starter"
+    ],
+    "jarUrl": "https://repo1.maven.org/maven2/eu/exeris/exeris-initializr/0.10.0/exeris-initializr-0.10.0.jar",
+    "centralUrl": "https://central.sonatype.com/artifact/eu.exeris/exeris-initializr/0.10.0"
+  },
+  "sources": {
+    "exeris-benchmarks": "5f8012d210424898cc1882a05ab798f5e5f200fe",
+    "exeris-docs": "2680e3e9648696d59b3eb8204f6daf565bb0d74a"
+  }
+}

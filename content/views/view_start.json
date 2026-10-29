@@ -1,0 +1,67 @@
+{
+  "name": "start",
+  "packageName": "eu.exeris.web.views",
+  "qualifiedName": "eu.exeris.web.views.Start",
+  "view": {
+    "name": "start",
+    "kind": "PAGE",
+    "route": "start",
+    "title": "Get started",
+    "layout": "site",
+    "regions": [
+      {
+        "slot": "main",
+        "components": [
+          {
+            "type": "CUSTOM",
+            "customType": "ExPageHeader",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"GET STARTED\", \"title\": \"Generate your first Exeris application.\", \"lede\": \"The initializr writes a Maven backend, and optionally an Angular front end, from one command. It needs Java 25 or newer and Maven 3.9 or newer, and everything it uses is published on Maven Central.\", \"ctas\": [{\"label\": \"Initializr on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-tooling/tree/main/exeris-initializr\", \"variant\": \"solid\"}, {\"label\": \"Coordinates on Maven Central\", \"href\": \"https://central.sonatype.com/artifact/eu.exeris/exeris-initializr\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCodeSteps",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"initializr\", \"head\": {\"eyebrow\": \"§ THE INITIALIZR\", \"title\": \"From an empty directory to a built project.\", \"body\": \"Run these in a terminal. The initializr is one self-contained jar and writes the project into a new directory.\"}, \"steps\": [{\"title\": \"Download the initializr\", \"body\": \"One runnable jar, published as `eu.exeris:exeris-initializr`. It runs on Java 25 or newer.\", \"code\": {\"title\": \"Terminal\", \"lang\": \"shell\", \"label\": \"Download the initializr jar\", \"code\": \"curl -fLO https://repo1.maven.org/maven2/eu/exeris/exeris-initializr/{tooling.version}/exeris-initializr-{tooling.version}.jar\"}}, {\"title\": \"Write a project\", \"body\": \"`--topology=e2e` writes the backend under `backend/` and the front end under `frontend/`; the default, `backend-only`, writes the backend alone. `--entity` names the first entity, `Item` by default, and `--help` lists every switch. The database is PostgreSQL, with a `docker-compose.yml`; `--database=h2` builds and tests but cannot run the application.\", \"code\": {\"title\": \"Terminal\", \"lang\": \"shell\", \"label\": \"Write a new project\", \"code\": \"java -jar exeris-initializr-{tooling.version}.jar --topology=e2e --group-id=com.example --artifact-id=orders\\ncd orders\"}}, {\"title\": \"Build the backend\", \"body\": \"The first build takes two passes, and `first-build.sh` runs them. The annotation processor writes the entity metadata, then the generators write the handler, service, repository, migration, OpenAPI document and tests, and the build compiles and tests them.\", \"code\": {\"title\": \"Terminal\", \"lang\": \"shell\", \"label\": \"Build the backend\", \"code\": \"cd backend\\nsh first-build.sh\"}}, {\"title\": \"Generate the front end\", \"body\": \"`@exeris/codegen-ts` reads the metadata the backend build wrote and writes an Angular application into `frontend/app/`. The generated application targets Node 22 or newer.\", \"code\": {\"title\": \"Terminal\", \"lang\": \"shell\", \"label\": \"Generate and start the front end\", \"code\": \"cd ../frontend\\nnpm install\\nnpm run generate\\ncd app\\nnpm install\\nnpm start\"}}, {\"title\": \"Run the backend\", \"body\": \"Start PostgreSQL, apply the generated migrations and start the generated `Application`. The README the initializr writes lists the exact commands and system properties.\", \"code\": {\"title\": \"Terminal\", \"lang\": \"shell\", \"label\": \"Start the database\", \"code\": \"cd ..\\ndocker compose up -d --wait\"}}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCoordinates",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"coordinates\", \"alt\": true, \"head\": {\"eyebrow\": \"§ MAVEN CENTRAL\", \"title\": \"The coordinates.\", \"body\": \"Every tooling artefact is published under the `eu.exeris` group, the group of the kernel and SDK artefacts. They resolve from Maven Central without a settings file.\"}, \"caption\": \"Maven Central coordinates of the tooling release\", \"what\": {\"exeris-initializr\": \"The runnable jar that writes a new project. A tool, not an application dependency.\", \"exeris-app-parent\": \"The Maven parent of an application: it runs the annotation processor and the generators and compiles for Java 25.\", \"exeris-app-bom\": \"The tested tooling, kernel and SDK versions, for an application that already has a parent.\", \"exeris-app-starter\": \"The dependency set the generated code compiles and runs against, declared with the `pom` type.\"}}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCodeSteps",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"existing\", \"head\": {\"eyebrow\": \"§ AN EXISTING BUILD\", \"title\": \"Use the parent or the BOM.\", \"body\": \"The JDBC driver and the logging backend stay your choice: the starter declares neither.\"}, \"steps\": [{\"title\": \"Take the parent\", \"body\": \"The parent manages the starter's version, so the tooling version appears once.\", \"code\": {\"title\": \"pom.xml\", \"lang\": \"xml\", \"label\": \"A POM on exeris-app-parent\", \"code\": \"<parent>\\n    <groupId>eu.exeris</groupId>\\n    <artifactId>exeris-app-parent</artifactId>\\n    <version>{tooling.version}</version>\\n    <relativePath/>\\n</parent>\\n\\n<dependencies>\\n    <dependency>\\n        <groupId>eu.exeris</groupId>\\n        <artifactId>exeris-app-starter</artifactId>\\n        <type>pom</type>\\n    </dependency>\\n</dependencies>\"}}, {\"title\": \"Or import the BOM\", \"body\": \"For an application that already has a parent. An imported BOM brings dependency management only, so the build block of the parent is copied into your POM; the tooling README has it.\", \"code\": {\"title\": \"pom.xml\", \"lang\": \"xml\", \"label\": \"Importing exeris-app-bom\", \"code\": \"<dependencyManagement>\\n    <dependencies>\\n        <dependency>\\n            <groupId>eu.exeris</groupId>\\n            <artifactId>exeris-app-bom</artifactId>\\n            <version>{tooling.version}</version>\\n            <type>pom</type>\\n            <scope>import</scope>\\n        </dependency>\\n    </dependencies>\\n</dependencyManagement>\"}}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExCardGrid",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"id\": \"contribute\", \"alt\": true, \"columns\": 3, \"head\": {\"eyebrow\": \"§ CONTRIBUTE\", \"title\": \"Try it, read it, check it.\", \"body\": \"Everything here is open source. The most useful contribution is a project you tried to build and what stood in the way.\"}, \"cards\": [{\"eyebrow\": \"TOOLING\", \"title\": \"Report what breaks\", \"tone\": \"flow\", \"body\": \"A command that failed, a generated file that surprised you, a switch that is missing.\", \"href\": \"https://github.com/exeris-systems/exeris-tooling/issues\", \"linkLabel\": \"Tooling issues\"}, {\"eyebrow\": \"KERNEL\", \"title\": \"Read the kernel\", \"tone\": \"cyan\", \"body\": \"The SPI, the Core and the Community driver, with the contributing guide beside them.\", \"href\": \"https://github.com/exeris-systems/exeris-kernel/blob/main/CONTRIBUTING.md\", \"linkLabel\": \"Contributing guide\"}, {\"eyebrow\": \"BENCHMARKS\", \"title\": \"Check the numbers\", \"tone\": \"slate\", \"body\": \"Every figure on this site comes from a registered claim and a harness you can run.\", \"href\": \"/lab\", \"linkLabel\": \"The Lab\"}]}"
+          },
+          {
+            "type": "CUSTOM",
+            "customType": "ExFinalCta",
+            "binding": {
+              "source": "STATIC"
+            },
+            "props": "{\"eyebrow\": \"EXERIS · TRL-3 (PLATFORM) · OPEN SOURCE ON GITHUB\", \"title\": \"Build something on it.\", \"ctas\": [{\"label\": \"Browse the source\", \"href\": \"https://github.com/exeris-systems\", \"variant\": \"solid\"}, {\"label\": \"Become a design partner\", \"href\": \"/pricing#design-partners\"}]}"
+          }
+        ]
+      }
+    ]
+  }
+}
