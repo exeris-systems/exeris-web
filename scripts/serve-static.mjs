@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// A static file server for the build output that answers the way Cloudflare Pages does for this
-// site: `/path` serves `path/index.html`, an unknown path serves `404.html` with status 404, and
-// the `_headers` rules apply, and text is compressed as Pages compresses it (Brotli, else gzip).
+// A static file server for the build output that answers the way Cloudflare serves this site
+// (wrangler.jsonc): `/path` serves `path/index.html`, an unknown path serves `404.html` with
+// status 404, the `_headers` rules apply, and text is compressed as Cloudflare compresses it
+// (Brotli, else gzip).
 // Used by Lighthouse CI and for local review; never deployed.
 import { createServer } from 'node:http';
 import { existsSync, readFileSync, statSync } from 'node:fs';

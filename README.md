@@ -3,7 +3,7 @@
 The static source of [exeris.eu](https://exeris.eu), the public site of the Exeris platform.
 
 The site is an Angular 22 application prerendered at build time into plain HTML, CSS and
-JavaScript. There is no server: the output is served as static files by Cloudflare Pages. The
+JavaScript. There is no server: the output is served as static assets by a Cloudflare Worker. The
 site sets no cookies, loads no analytics and makes no third-party requests.
 
 ## Build
@@ -15,7 +15,7 @@ npm ci
 npm run build      # data, page generation, content check, prerender, output verification
 npm test
 npm run lint
-npm run serve:dist # serve dist/ the way Cloudflare Pages does, on http://127.0.0.1:4173
+npm run serve:dist # serve dist/ the way Cloudflare serves it, on http://127.0.0.1:4173
 ```
 
 The output is `dist/exeris-web/browser/`: one `index.html` per route, `404.html`,
@@ -48,23 +48,29 @@ manifest.
 - [Build gates](docs/gates.md): the content, claims, readiness-wording, output and Lighthouse
   checks, and what CI runs.
 
-## Cloudflare Pages
+## Cloudflare
+
+exeris.eu is the Worker `exeris-web`, a Worker with static assets and no script, deployed by
+Workers Builds from this repository. `wrangler.jsonc` holds its configuration: the assets
+directory, routes served without a trailing slash (`/start`, the form the canonical tags and the
+sitemap use; `/start/` redirects to it), `404.html` with status 404 for an unknown path, and an
+empty `previews` block, which preview builds of other branches need.
 
 | Setting | Value |
 |---|---|
-| Framework preset | None |
 | Build command | `npm run build` |
-| Build output directory | `dist/exeris-web/browser` |
+| Deploy command | `npx wrangler deploy` |
+| Non-production branch deploy command | `npx wrangler preview` (or `npx wrangler versions upload`) |
 | Environment variable | `NODE_VERSION` = `24` |
 | Secret (recommended) | `SITE_GITHUB_TOKEN`: a fine-grained token with read access to public repositories only, so the build's GitHub API calls are not rate-limited |
 
-Pages builds on every push through its Git integration; the repository has no deploy job. Pages
-sets `CF_PAGES=1`, which makes `npm run data` strict: a failed fetch fails the deploy instead of
-publishing the committed data.
-`projects/shell/public/_headers`, copied into every application's output, sets the security
-headers (a same-origin Content-Security-Policy with no inline script) and long caching for hashed
-assets; the site's `public/_redirects` maps the paths of the
-previous landing site and of the SKU pages merged into `/skus`.
+Workers Builds builds every push; the repository has no deploy job. It sets `WORKERS_CI=1`, which
+makes `npm run data` strict: a failed fetch fails the deploy instead of publishing the committed
+data.
+`projects/shell/public/_headers`, copied into every application's output and applied by Workers
+static assets as Pages does, sets the security headers (a same-origin Content-Security-Policy with
+no inline script) and long caching for hashed assets; the site's `public/_redirects` maps the
+paths of the previous landing site and of the SKU pages merged into `/skus`.
 
 ## Licences named on the site
 
