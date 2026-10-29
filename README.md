@@ -48,7 +48,7 @@ The output is `dist/exeris-web/browser/`: one `index.html` per route, `404.html`
 | Build command | `npm run build` |
 | Build output directory | `dist/exeris-web/browser` |
 | Environment variable | `NODE_VERSION` = `24` |
-| Secret (recommended) | `GITHUB_TOKEN`: a fine-grained token with read access to public repositories only, so the build's GitHub API calls are not rate-limited |
+| Secret (recommended) | `SITE_GITHUB_TOKEN`: a fine-grained token with read access to public repositories only, so the build's GitHub API calls are not rate-limited |
 
 Pages builds on every push through its Git integration; the repository has no deploy job. Pages
 sets `CF_PAGES=1`, which makes `npm run data` strict: a failed fetch fails the deploy instead of

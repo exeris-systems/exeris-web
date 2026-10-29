@@ -31,6 +31,13 @@ describe('headersFor', () => {
     expect(JSON.stringify(h)).not.toContain('secret-token');
   });
 
+  it('reads SITE_GITHUB_TOKEN first, then GITHUB_TOKEN', () => {
+    const url = 'https://api.github.com/x';
+    expect(headersFor(url, { SITE_GITHUB_TOKEN: 'site', GITHUB_TOKEN: 'actions' }).Authorization).toBe('Bearer site');
+    expect(headersFor(url, { SITE_GITHUB_TOKEN: 'site' }).Authorization).toBe('Bearer site');
+    expect(headersFor('https://raw.githubusercontent.com/x', { SITE_GITHUB_TOKEN: 'site' })).not.toHaveProperty('Authorization');
+  });
+
   it('sends no Authorization header without a token', () => {
     expect(headersFor('https://api.github.com/x', {})).not.toHaveProperty('Authorization');
   });
