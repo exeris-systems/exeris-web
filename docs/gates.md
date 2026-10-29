@@ -48,7 +48,12 @@ Two things keep a legitimate technical use from failing the build:
 
 When a SKU is released, its exemption follows from the registry; nothing else in the site changes.
 
-`.github/workflows/ci.yml` runs install, data (fetch errors fall back to the committed JSON), a
+The check matches words, not meaning. A sentence that implies readiness or adoption without a
+listed word, such as "the application runs on it", passes and is left to review; a green check is
+evidence only for the phrases the rules name. The cost runs the other way: every legitimate
+technical use of a listed word needs its own allowlist entry with a reason.
+
+`.github/workflows/ci.yml` runs install, data (fetch errors fall back to the committed JSON; CI publishes nothing), a
 notice listing what changed upstream since `src/data` was committed, generation, the content check,
 the determinism check, lint, tests, the build and Lighthouse CI (`npm run lighthouse`), and uploads
 the Lighthouse reports as a build artifact.

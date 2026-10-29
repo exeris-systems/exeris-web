@@ -56,7 +56,8 @@ The look is brand kit v6 on top of [`@exeris/ui-kit`](https://www.npmjs.com/pack
 
 - `src/styles.css` imports the kit's `theme`, `styles` and `theme-exeris` entries and activates
   the theme with `data-theme="exeris"` on `<html>`.
-- `src/styles/brand.css` is the only file that holds brand colour values. It declares the v6
+- `src/styles/brand.css` is the only stylesheet that holds brand colour values; the one other
+  place is the `theme-color` meta in `src/index.html`, which repeats the page background. It declares the v6
   token names (`--ex-flow-blue`, `--ex-flow-cyan`, `--ex-flow`, `--ex-evidence`, the surface,
   text and line scales, the status colours) and the v6 primitives, and re-points the installed
   theme's rules that still read the earlier palette. When the kit's own `theme-exeris` ships v6,
