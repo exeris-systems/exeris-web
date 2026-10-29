@@ -16,7 +16,17 @@ the not-found page.
 ## What is published
 
 `projects/docs/sources.json` lists every file the site may publish, grouped into the sections the
-navigation shows, in order. A listed file is published only when its frontmatter says
+navigation shows, in order. A section lists files in three ways:
+
+- by path, `kernel:docs/architecture.md`;
+- by directory, `{ "dir": "platform:standards" }`: every Markdown file under it at the ref read,
+  its README first, then by path, ADR link stubs (`*.link.md`) left out;
+- by registry, `{ "registry": "platform:adr-index.md" }`: every ADR and RFC the registry links to,
+  in the registry's order, whether the link is relative or an organisation URL at the ref its
+  source is read at. A record on another branch, or in a repository that is not a source, is not
+  read, and the build log counts those links.
+
+A file listed twice belongs to the first section that lists it. A listed file is published only when its frontmatter says
 `visibility: public` and `status: active`; any other listed file is left out and named in the
 build log. An entry marked `readme` is the one exception: a README carries no frontmatter and is
 as public as its repository, which the build reads without credentials, so a README of a private
@@ -29,6 +39,8 @@ review rules do not appear on the site.
 | `kernel` | `exeris-kernel` | the commit `main` points to | `/kernel/` |
 | `sdk` | `exeris-sdk` | the commit `main` points to | `/sdk/` |
 | `tooling` | `exeris-tooling` | the commit `main` points to | `/tooling/` |
+| `spring-runtime` | `exeris-spring-runtime` | the commit `main` points to | `/spring-runtime/` |
+| `ai-bridge` | `exeris-ai-bridge` | the commit `main` points to | `/ai-bridge/` |
 | `platform` | `exeris-docs` | the commit `main` points to | `/platform/` |
 
 Until the 1.0 releases the site follows `main`, so a fix to a document is published by the next
@@ -45,10 +57,10 @@ directory: `exeris-sdk/README.md` is `/sdk`, `exeris-sdk/exeris-sdk-tck/README.m
 
 `npm run build:docs` runs `scripts/docs/fetch-docs.mjs`, which reads each listed file from
 `raw.githubusercontent.com` at the ref above and writes `projects/docs/src/app/generated/` (not
-committed): `index.json` with every page's title, description, section, contents and source, one
-module per page holding its document tree, which the build turns into a chunk of its own, and the
-routes. There is
-no committed copy, so a failed fetch fails the build. `scripts/docs/render.mjs` renders the
+committed): `index.json` with every page's title, description, section, source and the text of
+its headings for search, which every page loads; one module per page holding its document tree
+and its contents, which the build turns into a chunk of its own and the page loads with it; and
+the routes. There is no committed copy, so a failed fetch fails the build. `scripts/docs/render.mjs` renders the
 markdown:
 
 - Headings get GitHub's anchor ids, numbered when a heading repeats, so links into a section of a
@@ -71,7 +83,8 @@ markdown:
   HTML string reaches the browser and nothing bypasses Angular's sanitising: attributes are bound
   one by one, and links go through Angular's URL sanitiser. A test fails when the allow-list names
   a tag the template does not draw.
-- The page title is the frontmatter `title`; the description is the first paragraph of at least
+- The page title is the frontmatter `title`, a quoted YAML scalar read as YAML reads it; the
+  description is the first paragraph of at least
   40 characters, cut near 160.
 
 The readiness word list of the site's own copy is not applied to the prose of these documents,
@@ -83,5 +96,9 @@ docs site.
 Every page, the home page and the not-found page are prerendered with their own title,
 description, canonical URL on `https://docs.exeris.eu` and Open Graph tags. `scripts/postbuild.mjs
 docs` writes `404.html`, `sitemap.xml` and `robots.txt`; `scripts/verify-dist.mjs docs` checks
-every route's tags and the no-tracking rules (see [Build gates](gates.md)). CI builds the docs on
-every run with the repository's token.
+every route's tags, the links and the no-tracking rules (see [Build gates](gates.md)): a link
+within the docs that names no route or file of the output, or an anchor no element of its page
+carries, fails the build. CI builds the docs on every run with the repository's token.
+
+The navigation beside a page shows each section as a disclosure with its page count, open on the
+section of the current page.

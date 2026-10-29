@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // Verifies the static output of one application (site, docs or lab; site by default): every
 // route emitted its own HTML with title, description, canonical and Open Graph tags; the page
-// markup leaves no unresolved content token; and the application makes no third-party request
+// markup leaves no unresolved content token; every link within the application reaches a route
+// or a file of its output, and an anchor in it an element of that page; and the application makes
+// no third-party request
 // and runs no inline script (the no-tracking check). The route and SEO checks cover an
 // application with a route list (APPS in postbuild.mjs); one without it is held to the shared
 // headers and the no-tracking check.
@@ -50,6 +52,7 @@ export function verify(app = 'site') {
   if (!existsSync(out)) return { errors: [`missing ${relative(ROOT, out)}; build ${app} first`], routes: [] };
   const routes = config.routes ? [...config.routes(), '404'] : [];
   errors.push(...routeErrors(config, routes));
+  errors.push(...linkErrors(out, routes));
   if (!existsSync(join(out, '_headers'))) errors.push('missing _headers');
   errors.push(...noTrackingErrors(out, new Set([new URL(url).hostname])));
   return { errors, routes };
@@ -81,6 +84,47 @@ export function routeErrors({ out, url, redirects }, routes) {
   if (routes.length) {
     for (const extra of ['404.html', 'sitemap.xml', 'robots.txt', ...(redirects ? ['_redirects'] : [])]) {
       if (!existsSync(join(out, extra))) errors.push(`missing ${extra}`);
+    }
+  }
+  return errors;
+}
+
+/**
+ * Links within the application, read from each route's prerendered page: a path names a route or
+ * a file of the output, and a fragment names an element id on the page it points at.
+ */
+export function linkErrors(out, routes) {
+  const errors = [];
+  const known = new Set(routes);
+  const pages = new Map();
+  const page = (route) => {
+    if (!pages.has(route)) pages.set(route, readFileSync(join(out, route, 'index.html'), 'utf8'));
+    return pages.get(route);
+  };
+  const ids = new Map();
+  const idsOf = (route) => {
+    if (!ids.has(route)) ids.set(route, new Set([...page(route).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1])));
+    return ids.get(route);
+  };
+  for (const route of routes) {
+    if (!existsSync(join(out, route, 'index.html'))) continue;
+    const reported = new Set();
+    for (const [, raw] of page(route).matchAll(/<a\b[^>]*\shref="([^"]*)"/g)) {
+      const href = raw.replace(/&amp;/g, '&');
+      if (href.startsWith('//') || !(href.startsWith('/') || href.startsWith('#'))) continue;
+      const [pathPart, hash] = href.split('#');
+      const path = pathPart.split('?')[0];
+      const target = path === '' ? route : decodeURIComponent(path).replace(/^\/+|\/+$/g, '');
+      let problem;
+      if (!known.has(target)) {
+        if (!existsSync(join(out, target)) || hash) problem = 'no such route';
+      } else if (hash && !idsOf(target).has(decodeURIComponent(hash))) {
+        problem = `no element #${hash} on /${target}`;
+      }
+      if (problem && !reported.has(href)) {
+        reported.add(href);
+        errors.push(`/${route}: link ${href}: ${problem}`);
+      }
     }
   }
   return errors;
