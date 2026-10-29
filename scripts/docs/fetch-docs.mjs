@@ -2,8 +2,8 @@
 // Reads the documents projects/docs/sources.json lists from their repositories, renders the
 // published ones and writes the docs application's generated tree (projects/docs/src/app/generated,
 // not committed): an index of every page, one module per page holding its document tree, so each
-// page is its own lazily loaded chunk, and the routes. The kernel is read at its latest release tag, exeris-docs
-// at the commit main points to.
+// page is its own lazily loaded chunk, and the routes. Each source is read at the ref
+// sources.json gives it: the commit `main` points to, or the latest release tag.
 //
 // There is no committed copy to fall back to: a fetch error fails the build.
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -18,7 +18,7 @@ const API = 'https://api.github.com/repos/exeris-systems';
 const RAW = 'https://raw.githubusercontent.com/exeris-systems';
 const GITHUB = 'https://github.com/exeris-systems';
 
-/** The ref each source is read at: the latest release tag, or the commit `main` points to. */
+/** The ref a source is read at: the commit `main` points to, or the latest release tag. */
 async function resolveRef(source) {
   if (source.ref === 'release') return (await getJson(`${API}/${source.repo}/releases/latest`)).tag_name;
   if (source.ref === 'main') return (await getJson(`${API}/${source.repo}/commits/main`)).sha;
@@ -27,27 +27,40 @@ async function resolveRef(source) {
 
 /**
  * The pages of the docs site from `config` (sources.json) and a reader of raw files. Each listed
- * file must exist; one whose frontmatter is not public and active is left out and reported.
+ * file must exist; one whose frontmatter is not public and active is left out and reported,
+ * unless it is listed as a README.
  */
 export async function buildDocs(config, { read, refs }) {
   const listed = [];
   for (const section of config.sections) {
-    for (const entry of section.files) {
+    for (const item of section.files) {
+      const entry = typeof item === 'string' ? item : item.file;
+      const readme = typeof item === 'object' && item.readme === true;
       const [key, path] = entry.split(':');
       const source = config.sources[key];
       if (!source) throw new Error(`sources.json: ${entry} names no source ${key}`);
-      listed.push({ section: section.id, key, path, source });
+      if (readme && !/(^|\/)README\.md$/.test(path)) throw new Error(`sources.json: ${entry} is marked readme but is not a README`);
+      listed.push({ section: section.id, key, path, source, readme });
     }
   }
   const files = [];
   const skipped = [];
   for (const f of listed) {
     const { data, body } = parseFrontmatter(await read(f.source.repo, refs[f.key], f.path));
-    if (!isPublished(data)) {
+    // A README carries no frontmatter; listed as one, it is as public as its repository, which the
+    // build reads without credentials.
+    if (!f.readme && !isPublished(data)) {
       skipped.push(`${f.key}:${f.path} (visibility ${data.visibility ?? 'unset'}, status ${data.status ?? 'unset'})`);
       continue;
     }
     files.push({ ...f, data, body, route: routeOf(f.source.route, f.path) });
+  }
+  // A route is one page: `docs/README.md` and `README.md` of one source would both be its root.
+  const byRoute = new Map();
+  for (const f of files) {
+    const other = byRoute.get(f.route);
+    if (other) throw new Error(`sources.json: ${other.key}:${other.path} and ${f.key}:${f.path} are both /${f.route}`);
+    byRoute.set(f.route, f);
   }
   const published = new Map(Object.keys(config.sources).map((k) => [k, new Map()]));
   for (const f of files) published.get(f.key).set(f.path, f.route);
