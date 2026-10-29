@@ -1,6 +1,7 @@
 /**
  * The CUSTOM block names, kept free of Angular imports so the content checks can read them.
- * `index.ts` maps each to its component and the type system keeps the two lists equal.
+ * `customBlocks` in exeris-codegen.json maps each to its component, and `npm run check:content`
+ * fails when the two lists differ.
  */
 export const CUSTOM_BLOCKS = [
   'ExBento',
