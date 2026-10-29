@@ -9,7 +9,8 @@ last-verified: 2026-10-29
 
 # Build-time data
 
-`scripts/fetch-data.mjs` reads, from the `main` branch of each repository:
+`scripts/fetch-data.mjs` reads the registers at the commit `main` points to in their repository,
+the latest kernel release from the GitHub API and the tooling release from Maven Central:
 
 | File | Source |
 |---|---|
@@ -21,9 +22,9 @@ last-verified: 2026-10-29
 | `src/data/build-meta.json` | the latest `exeris-kernel` release, the version of the tooling published on Maven Central and the source commits |
 
 `repo` is set for a cap or SKU whose repository (`exeris-caps-<short>`, `exeris-sku-<id>`) is in the
-organisation's list of public repositories, one call to the GitHub API, and is null otherwise. It
-holds the repository URL and, from its README on `main`, `summary`, the first sentence of the
-paragraph after the H1, and `builtAgainst`, the kernel version on its `Status:` line. A cap card
+organisation's list of public repositories, one GitHub API call per hundred repositories, and is
+null otherwise. It holds the repository URL and, from its README on `main`, `summary`, the first
+sentence of the first paragraph after the H1 (a badge line is skipped), and `builtAgainst`, the kernel version on its `Status:` line. A cap card
 links its repository, shows the summary and the kernel version, and can be filtered on a public
 source. The SKUs page shows a card for each SKU with a public repository and names every other SKU
 in one line; the description on a card is authored in `content/views/view_skus.json`, and
@@ -46,8 +47,9 @@ The JSON is committed, so an offline build works. `SITE_SKIP_FETCH=1` keeps it w
 a fetch error (network failure or HTTP status) falls back to it unless `SITE_FETCH_STRICT=1` or
 `CF_PAGES=1`, which Cloudflare Pages sets: the publishing build fails rather than publish the
 committed copy, which may be older than the registers it quotes, and the previous deployment stays
-live. A
-parser or consistency failure (a duplicate claim key, an unknown licence, tooling artefacts on
-different releases, a missing initializr jar, a missing CITABLE row) always fails the build.
+live. A parser or consistency failure (a duplicate claim key, an unknown licence, a stated cap
+total the rows do not give, a SKU cap the registry lacks, tooling artefacts on different releases,
+a missing initializr jar, a missing CITABLE row, a public repository whose README has no paragraph
+after its H1) always fails the build.
 `GITHUB_TOKEN`, when set, is sent to `api.github.com` only, never to Maven Central or
 `raw.githubusercontent.com`.
