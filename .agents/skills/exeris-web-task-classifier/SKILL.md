@@ -23,7 +23,7 @@ Return exactly the fields of `.agents/schemas/triage-result.schema.json`:
 - `PRIVACY_AND_HEADERS` — `public/_headers`, `public/_redirects`, a new dependency, a font or
   asset, anything that could issue a request from the browser.
 - `BUILD_AND_GATES` — `scripts/`, `lighthouserc.json`, `package.json` scripts, `.github/workflows/`.
-- `BRAND_AND_LICENCE` — `src/assets/brand/`, `brand.css`, a licence statement, `OPEN_SOURCE_REPOS`.
+- `BRAND_AND_LICENCE` — `projects/shell/assets/brand/`, `brand.css`, a licence statement, `OPEN_SOURCE_REPOS`.
 - `AGENT_LAYER` — `AGENTS.md`, `.agents/`, `.claude/`.
 - `MULTI_DOMAIN` — two of the above are first-order. Name both.
 
