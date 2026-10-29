@@ -4,7 +4,8 @@
 //
 //   SITE_SKIP_FETCH=1   keep the committed JSON, fetch nothing
 //   SITE_FETCH_STRICT=1 fail on a fetch error instead of falling back to the committed JSON
-//   CF_PAGES=1          set by Cloudflare Pages: the build publishes, so it is strict as well
+//   WORKERS_CI=1        set by Cloudflare Workers Builds: the build publishes, so it is strict as well
+//   CF_PAGES=1          the same, set by Cloudflare Pages
 //   SITE_GITHUB_TOKEN   a token for api.github.com; GITHUB_TOKEN, which Actions provides, when unset
 //
 // Outside a publishing build, a fetch error (network failure, non-2xx status) falls back to the
@@ -147,8 +148,9 @@ function write(name, value) {
   writeFileSync(join(DATA, name), `${JSON.stringify(value, null, 2)}\n`);
 }
 
-function siteSha() {
-  const fromEnv = process.env.CF_PAGES_COMMIT_SHA || process.env.GITHUB_SHA;
+/** The commit the build is made from: the CI's own variable first, else the checkout's HEAD. */
+export function siteSha(env = process.env) {
+  const fromEnv = env.WORKERS_CI_COMMIT_SHA || env.CF_PAGES_COMMIT_SHA || env.GITHUB_SHA;
   if (fromEnv) return fromEnv;
   try {
     return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
@@ -253,7 +255,7 @@ async function fetchAll() {
  * it could be older than the registers it quotes, and the claims lock would pass against it.
  */
 export function strictFetch(env = process.env) {
-  return env.SITE_FETCH_STRICT === '1' || env.CF_PAGES === '1';
+  return env.SITE_FETCH_STRICT === '1' || env.WORKERS_CI === '1' || env.CF_PAGES === '1';
 }
 
 /**

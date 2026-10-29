@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 // @ts-expect-error -- plain ESM modules without type declarations
-import { FetchError, headersFor, loadUpstream, repoOf, strictFetch } from '../scripts/fetch-data.mjs';
+import { FetchError, headersFor, loadUpstream, repoOf, siteSha, strictFetch } from '../scripts/fetch-data.mjs';
 // @ts-expect-error -- plain ESM module without type declarations
 import { isRuntimeError } from '../scripts/lighthouse-ci.mjs';
 
@@ -73,8 +73,21 @@ describe('repoOf', () => {
   });
 });
 
+describe('siteSha', () => {
+  it('reads the Workers Builds commit first, then Pages, then Actions', () => {
+    expect(siteSha({ WORKERS_CI_COMMIT_SHA: 'w', CF_PAGES_COMMIT_SHA: 'p', GITHUB_SHA: 'g' })).toBe('w');
+    expect(siteSha({ CF_PAGES_COMMIT_SHA: 'p', GITHUB_SHA: 'g' })).toBe('p');
+    expect(siteSha({ GITHUB_SHA: 'g' })).toBe('g');
+  });
+
+  it('falls back to the checkout HEAD', () => {
+    expect(siteSha({})).toMatch(/^[0-9a-f]{40}$/);
+  });
+});
+
 describe('strictFetch', () => {
-  it('is strict in a Cloudflare Pages build and when asked, and only then', () => {
+  it('is strict in a Cloudflare build and when asked, and only then', () => {
+    expect(strictFetch({ WORKERS_CI: '1' })).toBe(true);
     expect(strictFetch({ CF_PAGES: '1' })).toBe(true);
     expect(strictFetch({ SITE_FETCH_STRICT: '1' })).toBe(true);
     expect(strictFetch({})).toBe(false);

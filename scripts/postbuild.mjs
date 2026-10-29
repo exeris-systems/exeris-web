@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Completes the static output for Cloudflare Pages: 404.html (served with status 404 for any
+// Completes the static output for Cloudflare: 404.html (served with status 404 for any
 // unknown path), sitemap.xml and robots.txt for the indexable views.
 import { copyFileSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

@@ -10,13 +10,14 @@ last-verified: 2026-10-08
 # exeris-web: the static source of exeris.eu
 
 The entry point for any AI agent working in this repository. The human-facing description — build
-commands, Cloudflare Pages settings, licensing — is in [`README.md`](README.md); this file states
+commands, Cloudflare settings, licensing — is in [`README.md`](README.md); this file states
 what an editing session must respect.
 
 ## Mission and scope
 
 `exeris-web` is the public site of the Exeris platform: an Angular application prerendered at build
-time into static HTML, CSS and JavaScript and served by Cloudflare Pages. There is no server.
+time into static HTML, CSS and JavaScript and served as static assets by a Cloudflare Worker.
+There is no server.
 
 ## Operating contract
 
@@ -50,7 +51,7 @@ Read the policies a change touches before making it; each names the document it 
 `.agents/vendor/` is the digest-verified copy of the organisation bundle `exeris-agents` — never
 edit it; bump the version by re-vendoring.
 
-**Hooks.** A push to `main` is a production deploy (Cloudflare Pages builds every push), so the
+**Hooks.** A push to `main` is a production deploy (Cloudflare Workers Builds builds every push), so the
 L0 hooks deny it, along with other outward-facing commands and edits to `src/app/generated/` and
 `.agents/vendor/`. A session that changed copy or blocks is held until `npm run check:content` has
 run; one that changed the agent layer, until the agent-file check has.

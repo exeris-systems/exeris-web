@@ -15,6 +15,9 @@ node_modules
 # Lighthouse CI
 /.lighthouseci
 
+# Local wrangler state
+/.wrangler
+
 # Logs and editors
 npm-debug.log*
 *.log
