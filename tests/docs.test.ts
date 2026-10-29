@@ -143,6 +143,12 @@ describe('buildDocs', () => {
     await expect(buildDocs(wrong, { read: async () => '', refs: { sdk: 'v1' } })).rejects.toThrow(/marked readme but is not a README/);
   });
 
+  it('fails on two files published at one route', async () => {
+    const both = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }, 'sdk:docs/README.md'] }] };
+    const page = '---\nvisibility: public\nstatus: active\n---\n\n# SDK\n';
+    await expect(buildDocs(both, { read: async () => page, refs: { sdk: 'v1' } })).rejects.toThrow(/sdk:README\.md and sdk:docs\/README\.md are both \/sdk/);
+  });
+
   it('fails on a listed file of an unknown source', async () => {
     await expect(buildDocs({ ...config, sections: [{ id: 'x', label: 'X', files: ['nope:a.md'] }] }, { read, refs: {} })).rejects.toThrow(/names no source nope/);
   });

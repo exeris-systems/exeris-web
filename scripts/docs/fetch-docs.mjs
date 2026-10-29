@@ -55,6 +55,13 @@ export async function buildDocs(config, { read, refs }) {
     }
     files.push({ ...f, data, body, route: routeOf(f.source.route, f.path) });
   }
+  // A route is one page: `docs/README.md` and `README.md` of one source would both be its root.
+  const byRoute = new Map();
+  for (const f of files) {
+    const other = byRoute.get(f.route);
+    if (other) throw new Error(`sources.json: ${other.key}:${other.path} and ${f.key}:${f.path} are both /${f.route}`);
+    byRoute.set(f.route, f);
+  }
   const published = new Map(Object.keys(config.sources).map((k) => [k, new Map()]));
   for (const f of files) published.get(f.key).set(f.path, f.route);
 

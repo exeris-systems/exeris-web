@@ -51,18 +51,43 @@
           "file": "sdk:README.md",
           "readme": true
         },
-        {
-          "file": "sdk:exeris-sdk-source-model/README.md",
-          "readme": true
-        },
-        {
-          "file": "sdk:exeris-sdk-tck/README.md",
-          "readme": true
-        },
-        {
-          "file": "sdk:exeris-sdk-ui-kit/README.md",
-          "readme": true
-        }
+        "sdk:docs/architecture.md",
+        "sdk:docs/glossary.md",
+        "sdk:docs/stability-matrix.md",
+        "sdk:docs/examples/README.md"
+      ]
+    },
+    {
+      "id": "sdk-guides",
+      "label": "SDK guides",
+      "files": [
+        "sdk:docs/guides/README.md",
+        "sdk:docs/guides/01-platform-and-dependencies.md",
+        "sdk:docs/guides/02-model-a-domain.md",
+        "sdk:docs/guides/03-declare-behavior.md",
+        "sdk:docs/guides/04-model-a-graph.md",
+        "sdk:docs/guides/05-declare-presentation.md",
+        "sdk:docs/guides/06-read-and-write-source.md",
+        "sdk:docs/guides/07-consume-the-ast.md",
+        "sdk:docs/guides/08-capabilities-and-composition.md",
+        "sdk:docs/guides/09-style-generated-ui.md"
+      ]
+    },
+    {
+      "id": "sdk-modules",
+      "label": "SDK modules",
+      "files": [
+        "sdk:docs/modules/README.md",
+        "sdk:docs/modules/01-annotations.md",
+        "sdk:docs/modules/02-source-model.md",
+        "sdk:docs/modules/03-source-model-io.md",
+        "sdk:docs/modules/04-annotation-catalog.md",
+        "sdk:docs/modules/05-composition-spec.md",
+        "sdk:docs/modules/06-composition-lifecycle.md",
+        "sdk:docs/modules/07-composition-runtime.md",
+        "sdk:docs/modules/08-tck.md",
+        "sdk:docs/modules/09-ui-kit.md",
+        "sdk:docs/modules/10-examples.md"
       ]
     },
     {
@@ -93,7 +118,7 @@
     },
     {
       "id": "modules",
-      "label": "Modules",
+      "label": "Kernel modules",
       "files": [
         "kernel:docs/modules/01-spi.md",
         "kernel:docs/modules/02-core.md",
