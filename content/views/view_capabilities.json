@@ -18,7 +18,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"Capabilities\"}], \"eyebrow\": \"TIER 2 · CAPABILITIES\", \"title\": \"Capability matrix\", \"lede\": \"{caps.total} capabilities in {layers} layers, generated at build time from the capability licence registry. Filter by layer or licence; each card names the SKUs that compose it.\", \"ctas\": [{\"label\": \"Registry on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/cap-license-registry.md\"}]}"
+            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"Capabilities\"}], \"eyebrow\": \"TIER 2 · CAPABILITIES\", \"title\": \"Capability matrix\", \"lede\": \"{caps.total} capabilities in {layers} layers, generated at build time from the capability licence registry. Filter by layer, licence or public source. A cap whose repository is public links it and quotes the first sentence of its README; each card names the SKUs that compose it.\", \"ctas\": [{\"label\": \"Registry on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/cap-license-registry.md\"}]}"
           },
           {
             "type": "CUSTOM",

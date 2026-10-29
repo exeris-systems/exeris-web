@@ -21,9 +21,9 @@ interface CardView extends SkuCardProps {
 }
 
 /**
- * One card per SKU that has a repository, and one line naming the other SKUs of the registry.
- * Name, readiness, family and composed caps come from the registers; the description is the
- * content's. A card for an id outside content/meta/sku-repos.json fails the build.
+ * One card per SKU whose repository is public, and one line naming the other SKUs of the registry.
+ * Name, readiness, family, composed caps and the repository come from the registers; the
+ * description is the content's. A card for a SKU whose repository is not public is not rendered.
  */
 @Component({
   selector: 'ex-sku-cards',
@@ -51,11 +51,17 @@ interface CardView extends SkuCardProps {
                 }
               </ul>
               <p class="ex-card__foot ex-sku-card__vis">{{ props().licence }}</p>
+              @if (c.sku.repo; as repo) {
+                <p class="ex-card__code">
+                  <a class="ex-link" [href]="repo.url">{{ repo.url.replace('https://github.com/', '') }}</a>
+                  @if (repo.builtAgainst) { · kernel {{ repo.builtAgainst }} }
+                </p>
+              }
             </article>
           }
         </div>
         @if (planned().length) {
-          <p class="ex-sku-planned"><strong>Planned:</strong> {{ planned().join(', ') }}.</p>
+          <p class="ex-sku-planned"><strong>No public repository yet:</strong> {{ planned().join(', ') }}.</p>
         }
       </div>
     </section>
@@ -65,10 +71,7 @@ export class SkuCardsComponent {
   readonly props = input.required<SkuCardsProps, unknown>({ transform: (value: unknown) => value as SkuCardsProps });
 
   protected readonly cards = computed<CardView[]>(() =>
-    this.props().skus.map((c) => {
-      if (!SKUS_WITH_REPO.includes(c.id)) throw new Error(`SKU card for "${c.id}", which content/meta/sku-repos.json does not list`);
-      return { ...c, sku: sku(c.id) };
-    }),
+    this.props().skus.filter((c) => SKUS_WITH_REPO.includes(c.id)).map((c) => ({ ...c, sku: sku(c.id) })),
   );
 
   protected readonly planned = computed(() => SKUS.filter((s) => !SKUS_WITH_REPO.includes(s.id)).map((s) => s.name));

@@ -1960,6 +1960,14 @@ kbd {
   font-weight: 500 !important;
   overflow-wrap: anywhere;
 }
+.ex-capcard__summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  color: var(--ex-fg-2);
+}
 
 /* ── Pricing ────────────────────────────────────────────────────────────── */
 

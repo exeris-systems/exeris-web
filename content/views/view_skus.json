@@ -18,7 +18,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"SKUs\"}], \"eyebrow\": \"TIER 3 · SKUS\", \"title\": \"SKUs\", \"lede\": \"Named compositions of capabilities. A SKU’s composition manifest is byte-identical across the Community and Enterprise kernel drivers: the driver is a substrate choice, not a manifest change. These are the SKUs that have a repository today.\"}"
+            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"SKUs\"}], \"eyebrow\": \"TIER 3 · SKUS\", \"title\": \"SKUs\", \"lede\": \"Named compositions of capabilities. A SKU’s composition manifest is byte-identical across the Community and Enterprise kernel drivers: the driver is a substrate choice, not a manifest change. These are the SKUs with a public repository.\"}"
           },
           {
             "type": "CUSTOM",

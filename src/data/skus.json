@@ -28,7 +28,12 @@
       "skuSpecificCaps": [],
       "note": null,
       "capCount": 13,
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-sku-api-gateway",
+        "summary": "The API Gateway Platform SKU: a composition of Exeris capabilities that runs as a reverse proxy directly on the Exeris kernel's HTTP subsystem, with no Spring Framework, servlet container or Netty in the data plane.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "id": "edge-proxy",
@@ -49,7 +54,8 @@
       ],
       "note": null,
       "capCount": 8,
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "id": "bot-blocker",
@@ -68,7 +74,8 @@
       "skuSpecificCaps": [],
       "note": null,
       "capCount": 7,
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "id": "idp",
@@ -96,7 +103,8 @@
       "skuSpecificCaps": [],
       "note": null,
       "capCount": 16,
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "id": "pim",
@@ -124,7 +132,8 @@
       "skuSpecificCaps": [],
       "note": null,
       "capCount": 16,
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "id": "oms",
@@ -152,7 +161,8 @@
       "skuSpecificCaps": [],
       "note": "L4 Flow saga engine (ADR-013) consumed via kernel SPI",
       "capCount": 16,
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "id": "content-api",
@@ -178,7 +188,8 @@
       "skuSpecificCaps": [],
       "note": null,
       "capCount": 14,
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "id": "identity",
@@ -209,7 +220,12 @@
       ],
       "note": null,
       "capCount": 18,
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-sku-identity",
+        "summary": "The Identity and Access Management (IAM) Platform SKU: a composition of Exeris capabilities providing user onboarding, password authentication with Argon2id, TOTP multi-factor authentication, session management with refresh token rotation, federated login, and EdDSA (Ed25519) access token issuance with JWKS publication, running directly on the Exeris kernel HTTP subsystem with no Spring Framework, servlet container or Netty in the data plane.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     }
   ]
 }

@@ -1,4 +1,0 @@
-{
-  "description": "The SKUs that have a repository. The SKUs page renders a card for each id here and names every other SKU of the registry as planned. check-content fails on an id the registry does not hold and on a card for an id not listed.",
-  "skus": ["api-gateway", "content-api", "identity", "pim"]
-}

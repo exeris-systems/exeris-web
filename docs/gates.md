@@ -15,8 +15,10 @@ last-verified: 2026-10-29
   appears in `content/` or `src/content/` outside a claim reference or an entry of
   `content/meta/number-allowlist.json`, each of which names its source; every `CUSTOM` block is
   mapped to its component in `exeris-codegen.json`.
-- **SKU list** (`scripts/check-content.mjs`): the ids of `content/meta/sku-repos.json` are SKUs of
-  the registry, and a SKU card is rendered only for a listed id.
+- **SKU cards** (`scripts/check-content.mjs`): a card names a SKU of the registry, and every SKU
+  with a public repository has an authored card.
+- **Repository summaries** (`scripts/check-content.mjs`): the README sentence a cap card shows is
+  held to the readiness rules.
 - **Readiness wording** (`scripts/check-content.mjs`, also a unit test): see below.
 - **Output** (`scripts/verify-dist.mjs`): every route has its own HTML with title, description,
   canonical and Open Graph tags; no unresolved content token; no third-party request, tracker,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
-import { checkContent, propsNumberErrors, skuRepoErrors, strayNumbers } from '../scripts/check-content.mjs';
+import { checkContent, propsNumberErrors, repoSummaryErrors, skuCardErrors, strayNumbers } from '../scripts/check-content.mjs';
 
 describe('content gate', () => {
   it('passes on the committed content', () => {
@@ -47,23 +47,32 @@ describe('content gate', () => {
     expect(errors[0]).toMatch(/changed upstream/);
   });
 
-  describe('SKUs with a repository', () => {
-    const skus = [{ id: 'a' }, { id: 'b' }];
+  describe('SKU cards', () => {
+    const skus = [{ id: 'a', repo: { url: 'u' } }, { id: 'b', repo: null }];
     const view = (ids: string[]) => ({
       file: 'view_x.json',
       json: { view: { regions: [{ components: [{ type: 'CUSTOM', customType: 'ExSkuCards', props: JSON.stringify({ skus: ids.map((id) => ({ id })) }) }] }] } },
     });
 
-    it('accepts listed ids that the registry holds', () => {
-      expect(skuRepoErrors({ repos: ['a'], skus, views: [view(['a'])] })).toEqual([]);
+    it('accepts cards for registry SKUs, public or not', () => {
+      expect(skuCardErrors({ skus, views: [view(['a', 'b'])] })).toEqual([]);
     });
 
-    it('fails on a listed id the registry lacks', () => {
-      expect(skuRepoErrors({ repos: ['a', 'z'], skus, views: [] })).toEqual([expect.stringMatching(/"z" is not a SKU of the registry/)]);
+    it('fails on a card for an id the registry lacks', () => {
+      expect(skuCardErrors({ skus, views: [view(['a', 'z'])] })).toEqual([expect.stringMatching(/card for "z", which is not a SKU/)]);
     });
 
-    it('fails on a card for an id the list does not name', () => {
-      expect(skuRepoErrors({ repos: ['a'], skus, views: [view(['a', 'b'])] })).toEqual([expect.stringMatching(/card for "b"/)]);
+    it('fails on a SKU with a public repository and no card', () => {
+      expect(skuCardErrors({ skus, views: [view(['b'])] })).toEqual([expect.stringMatching(/"a" has a public repository and no SKU card/)]);
     });
+  });
+
+  it('holds a README summary a cap card shows to the readiness rules', () => {
+    const caps = [
+      { name: 'exeris-caps-x', repo: { summary: 'Rate limiting as an Exeris capability.' } },
+      { name: 'exeris-caps-y', repo: { summary: 'Production-grade rate limiting.' } },
+      { name: 'exeris-caps-z', repo: null },
+    ];
+    expect(repoSummaryErrors({ caps, allow: [] })).toEqual([expect.stringMatching(/exeris-caps-y: "Production" reads as production/)]);
   });
 });

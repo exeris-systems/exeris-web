@@ -24,6 +24,7 @@ import {
   parseColdStart,
   parseEvidenceBundle,
   parseMavenRelease,
+  parseRepoReadme,
   parseSkus,
   sharedRelease,
   withSkuStatus,
@@ -34,6 +35,8 @@ const DATA = join(ROOT, 'src/data');
 const RAW = 'https://raw.githubusercontent.com/exeris-systems';
 const API = 'https://api.github.com/repos/exeris-systems';
 const CENTRAL = 'https://repo1.maven.org/maven2';
+const ORG_REPOS = 'https://api.github.com/orgs/exeris-systems/repos?type=public&per_page=100';
+const GITHUB = 'https://github.com/exeris-systems';
 
 /** The tooling coordinates the Get started page shows; all are published under one group. */
 export const TOOLING_GROUP = 'eu.exeris';
@@ -102,6 +105,24 @@ async function headSha(repo) {
   return commit.sha;
 }
 
+/**
+ * The names of the organisation's public repositories: one API call, so an unauthenticated build
+ * stays far inside the rate limit. A repository this list does not hold is private or absent,
+ * and the site links neither.
+ */
+async function publicRepos() {
+  const repos = await getJson(ORG_REPOS);
+  if (repos.length >= 100) throw new Error(`${ORG_REPOS}: 100 or more repositories; page through the list`);
+  return new Set(repos.map((r) => r.name));
+}
+
+/** `repo` for a cap or SKU: its public repository and what its README says, or null. */
+export async function repoOf(name, publicNames, readme) {
+  if (!publicNames.has(name)) return null;
+  const { summary, builtAgainst } = parseRepoReadme(await readme(name));
+  return { url: `${GITHUB}/${name}`, summary, builtAgainst };
+}
+
 function write(name, value) {
   mkdirSync(DATA, { recursive: true });
   writeFileSync(join(DATA, name), `${JSON.stringify(value, null, 2)}\n`);
@@ -127,6 +148,11 @@ async function fetchAll() {
 
   const registry = parseCapRegistry(await docs('cap-license-registry.md'));
   const skus = withSkuStatus(parseSkus(await docs('high-level-architecture.md'), registry.caps.map((c) => c.name)), registry.caps);
+
+  const publicNames = await publicRepos();
+  const readme = (name) => getText(`${RAW}/${name}/main/README.md`);
+  for (const cap of registry.caps) cap.repo = await repoOf(cap.name, publicNames, readme);
+  for (const sku of skus) sku.repo = await repoOf(`exeris-sku-${sku.id}`, publicNames, readme);
 
   const arms = [];
   for (const def of COLD_START_ARMS) {
