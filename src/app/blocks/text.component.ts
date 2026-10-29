@@ -9,7 +9,8 @@ interface Segment {
 /**
  * Splits authored text into plain runs, `code` spans (between backticks) and structural counts
  * (`{caps.total}`, resolved from the registers) and version tokens (`{tooling.version}`). Only text nodes are created: content never
- * reaches the DOM as HTML.
+ * reaches the DOM as HTML. With `tokens` false only code spans are split out, and a `{…}` stays
+ * literal text: upstream text carries no site tokens.
  */
 export function segments(text: string, tokens = true): Segment[] {
   const out: Segment[] = [];
