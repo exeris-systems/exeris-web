@@ -1,6 +1,6 @@
 # Reference: Build and Gates
 
-**Source:** `README.md` (§ Build, § Cloudflare Pages), `docs/gates.md` and `package.json`
+**Source:** `README.md` (§ Build, § Cloudflare), `docs/gates.md` and `package.json`
 `scripts`. This file names where to look and yields to them; a script's behaviour is what
 `package.json` and the script say, not what is summarised here.
 
@@ -30,5 +30,5 @@ as `not-run`, never as passing.
 - **`.github/workflows/claude.yml`** — answers an `@claude` mention in an issue, a comment or a
   review. It reviews nothing on its own and gates nothing; the review of a pull request is the
   `review` job above.
-- **Cloudflare Pages** — builds every push through its Git integration; `main` is production. There
-  is no deploy job, so nothing between a push and a deploy can stop it.
+- **Cloudflare Workers Builds** — builds every push; `main` is production, configured by
+  `wrangler.jsonc`. There is no deploy job, so nothing between a push and a deploy can stop it.

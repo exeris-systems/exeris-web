@@ -22,8 +22,8 @@ sentence of those documents, the document is the one to read and to change.
 ## What this repository is answerable for
 
 `exeris-web` is the public site of the Exeris platform, an Angular application prerendered into
-static files and served by Cloudflare Pages. It has no server, and what it says is the public
-statement of what Exeris is, what it measures and what can be had. A sentence on a page is read as
+static files and served as static assets by a Cloudflare Worker. It has no server, and what it
+says is the public statement of what Exeris is, what it measures and what can be had. A sentence on a page is read as
 a promise by a buyer and as a citation by everyone else, so the shared `code` part, which judges
 whether a change is correct, cannot know which sentences this site may print. That is what follows.
 
