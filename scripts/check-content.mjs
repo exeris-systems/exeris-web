@@ -93,17 +93,29 @@ export function viewReadinessErrors(file, view, { skus, allow }) {
       for (const [k, v] of Object.entries(value)) walk(v, k, `${where}.${k}`, own);
     } else if (!NON_PROSE_KEYS.has(key) || LINK_KEYS.has(key)) scan(value, key, where, exempt);
   };
-  scan(view.title ?? '', 'title', 'title', false);
-  (view.regions ?? []).forEach((region, r) =>
-    walkNodes(region.components, (node, at) => {
-      if (node.type !== 'CUSTOM' || !node.props) return;
-      try {
-        walk(JSON.parse(node.props), null, `regions[${r}]${at} props`, false);
-      } catch {
-        // props that are not JSON are reported by the main check
+  // Every node type is held to the rules: a CUSTOM block's props are JSON, a RICH_TEXT node's are
+  // the prose itself. The children of a block attached to a released SKU share its exemption.
+  const visit = (nodes, path, exempt) =>
+    (nodes ?? []).forEach((node, i) => {
+      const at = `${path}[${i}]`;
+      let own = exempt;
+      if (node.props) {
+        let props;
+        try {
+          props = JSON.parse(node.props);
+        } catch {
+          // a CUSTOM block whose props are not JSON is reported by the main check
+          props = node.type === 'CUSTOM' ? undefined : node.props;
+        }
+        if (props && typeof props === 'object') {
+          own = exempt || (typeof props.sku === 'string' && released.has(props.sku));
+          walk(props, null, `${at} props`, exempt);
+        } else if (typeof props === 'string') scan(props, null, `${at} props`, exempt);
       }
-    }, '.components'),
-  );
+      visit(node.children, `${at}.children`, own);
+    });
+  scan(view.title ?? '', 'title', 'title', false);
+  (view.regions ?? []).forEach((region, r) => visit(region.components, `regions[${r}].components`, false));
   return errors;
 }
 

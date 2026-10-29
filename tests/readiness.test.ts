@@ -83,6 +83,23 @@ describe('readiness of the copy attached to a SKU', () => {
     expect(errors[0]).toContain('skus[1]');
   });
 
+  it('holds the prose of a node that is not a CUSTOM block to the rules', () => {
+    const richText = { type: 'RICH_TEXT', props: 'Production support is sold under an SLA' };
+    const plain = { name: 'caps', title: 'T', regions: [{ slot: 'main', components: [{ type: 'CONTAINER', children: [richText] }] }] };
+    const errors = viewReadinessErrors('f', plain, { skus: [], allow: [] });
+    expect(errors.map((e: string) => e.match(/reads as ([a-z-]+)/)?.[1])).toEqual(expect.arrayContaining(['sold', 'support', 'sla']));
+    expect(errors[0]).toContain('regions[0].components[0].children[0] props');
+
+    const skus = [sku('x', 'released'), sku('y', 'poc')];
+    const under = (id: string) => ({
+      name: 'sku-x',
+      title: 'T',
+      regions: [{ slot: 'main', components: [{ type: 'CUSTOM', customType: 'ExSkuCards', props: JSON.stringify({ sku: id }), children: [richText] }] }],
+    });
+    expect(viewReadinessErrors('f', under('x'), { skus, allow: [] })).toEqual([]);
+    expect(viewReadinessErrors('f', under('y'), { skus, allow: [] }).length).toBeGreaterThan(0);
+  });
+
   it('checks links as well as prose', () => {
     const errors = viewReadinessErrors('f', view({ ctas: [{ label: 'Open', href: 'https://console.exeris.eu' }] }), { skus: [], allow: [] });
     expect(errors).toHaveLength(1);

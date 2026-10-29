@@ -122,17 +122,18 @@ different releases, a missing initializr jar, a missing CITABLE row) always fail
 
 Nothing is released as a product today, so copy must not say that something is sold, supported,
 hosted or licensed for production, or invite a sales conversation. The check scans every authored
-string: view props and titles (links included), the typed site content, the SEO and search-index
+string: view titles and the props of every node, `RICH_TEXT` included (links too), the typed site content, the SEO and search-index
 meta files, and rejects the phrases of `READINESS_RULES` in `scripts/check-content.mjs`: sold or
 sale, buy and purchase, `production`, support as an offering, a service-level agreement, `CVE`, a hosted or managed
 service, a control plane, a production, runtime, perpetual or commercial licence, a subscription or
-one-time fee, air-gapped and on-prem, "Contact us" and "Contact sales", "Discuss fit", and any
+one-time fee, air-gapped and on-prem, "Contact us" and "Contact sales", "Discuss fit", "request a
+demo", "book a demo" and "get a quote", and any
 address on `console.exeris.eu` (which no component or public file may carry either).
 
 Two things keep a legitimate technical use from failing the build:
 
-- Copy attached to a SKU whose `status` is `released` is exempt: a node whose `sku` prop names it, or
-  an element of a `skus` list with its `id`. Copy attached to a `poc` or `snapshot` SKU, and all
+- Copy attached to a SKU whose `status` is `released` is exempt: a node whose `sku` prop names it and the
+  nodes nested in it, or an element of a `skus` list with its `id`. Copy attached to a `poc` or `snapshot` SKU, and all
   site-wide copy, is held to the rules. Quoted claim copy is not authored text and is gated by the
   claims lock.
 - `content/meta/readiness-allowlist.json` permits one phrase for one rule, optionally for one view,
@@ -141,9 +142,10 @@ Two things keep a legitimate technical use from failing the build:
 
 When a SKU is released, its exemption follows from the registry; nothing else in the site changes.
 
-`.github/workflows/ci.yml` runs install, data (fetch errors fall back to the committed JSON),
-generation, the content check, the determinism check, lint, tests, the build and Lighthouse CI
-(`npm run lighthouse`).
+`.github/workflows/ci.yml` runs install, data (fetch errors fall back to the committed JSON), a
+notice listing what changed upstream since `src/data` was committed, generation, the content check,
+the determinism check, lint, tests, the build and Lighthouse CI (`npm run lighthouse`), and uploads
+the Lighthouse reports as a build artifact.
 
 ## Cloudflare Pages
 
