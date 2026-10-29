@@ -7,7 +7,15 @@ let loaded: Promise<typeof import('mermaid')['default']> | null = null;
 
 function mermaid(): Promise<typeof import('mermaid')['default']> {
   loaded ??= import('mermaid').then(({ default: m }) => {
-    m.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'dark', fontFamily: 'IBM Plex Sans, system-ui, sans-serif' });
+    // suppressErrorRendering: a diagram that does not parse throws instead of leaving Mermaid's
+    // error graphic on the page; the component then keeps showing the source.
+    m.initialize({
+      startOnLoad: false,
+      securityLevel: 'strict',
+      suppressErrorRendering: true,
+      theme: 'dark',
+      fontFamily: 'IBM Plex Sans, system-ui, sans-serif',
+    });
     return m;
   });
   return loaded;
@@ -39,15 +47,19 @@ export class MermaidComponent {
   }
 
   private async draw(): Promise<void> {
+    const id = `ex-mermaid-${++sequence}`;
     try {
-      const { svg } = await (await mermaid()).render(`ex-mermaid-${++sequence}`, this.source());
+      const { svg } = await (await mermaid()).render(id, this.source());
       const doc = new DOMParser().parseFromString(svg, 'image/svg+xml');
       const root = doc.documentElement;
       if (root.nodeName !== 'svg') return;
       this.out().nativeElement.appendChild(document.importNode(root, true));
       this.drawn.set(true);
     } catch {
-      // Not valid Mermaid, or Mermaid failed to load: the source stays visible.
+      // Not valid Mermaid, or Mermaid failed to load: the source stays visible, and nothing Mermaid
+      // rendered for it stays in the document.
+      document.getElementById(id)?.remove();
+      document.getElementById(`d${id}`)?.remove();
     }
   }
 }
