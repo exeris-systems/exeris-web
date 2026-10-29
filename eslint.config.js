@@ -5,7 +5,7 @@ import angular from 'angular-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist/', '.angular/', '.wrangler/', 'node_modules/', 'src/app/generated/', 'coverage/', '.lighthouseci/'],
+    ignores: ['dist/', '.angular/', '.wrangler/', 'node_modules/', 'src/app/generated/', 'projects/docs/src/app/generated/', 'coverage/', '.lighthouseci/'],
   },
   {
     files: ['**/*.ts'],
