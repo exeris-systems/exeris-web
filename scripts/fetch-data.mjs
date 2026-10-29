@@ -148,8 +148,9 @@ function write(name, value) {
   writeFileSync(join(DATA, name), `${JSON.stringify(value, null, 2)}\n`);
 }
 
-function siteSha() {
-  const fromEnv = process.env.WORKERS_CI_COMMIT_SHA || process.env.CF_PAGES_COMMIT_SHA || process.env.GITHUB_SHA;
+/** The commit the build is made from: the CI's own variable first, else the checkout's HEAD. */
+export function siteSha(env = process.env) {
+  const fromEnv = env.WORKERS_CI_COMMIT_SHA || env.CF_PAGES_COMMIT_SHA || env.GITHUB_SHA;
   if (fromEnv) return fromEnv;
   try {
     return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
