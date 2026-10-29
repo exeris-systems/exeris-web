@@ -14,7 +14,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-gateway-core",
+        "summary": "The substrate of the Gateway family as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-service-boundary-core",
@@ -25,7 +30,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-service-boundary-core",
+        "summary": "Substrate aggregate capability for the Service Boundary family (IDP, PIM, OMS, Headless CMS API).",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-route-registry",
@@ -36,7 +46,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-upstream-pool",
@@ -47,7 +58,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-upstream-pool",
+        "summary": "Upstream clusters and load balancing as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-policy-chain",
@@ -58,7 +74,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-backend-health",
@@ -69,7 +86,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-admin-control-plane",
@@ -80,7 +98,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-gateway-observability",
@@ -91,7 +110,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-gateway-observability",
+        "summary": "Request metrics, trace context and a live preview for the Gateway family as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-rate-limiting",
@@ -102,7 +126,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-rate-limiting",
+        "summary": "Per-key request rate limiting as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-jwt-validation",
@@ -113,7 +142,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-jwt-validation",
+        "summary": "JWT admission as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-tls-termination",
@@ -124,7 +158,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-request-routing",
@@ -135,7 +170,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-request-routing",
+        "summary": "L7 request routing as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-circuit-breaker",
@@ -146,7 +186,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-circuit-breaker",
+        "summary": "Circuit breaking as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-cors-policy",
@@ -157,7 +202,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-cors-policy",
+        "summary": "Cross-origin request policy as an Exeris capability.",
+        "builtAgainst": null
+      }
     },
     {
       "name": "exeris-caps-waf-rules",
@@ -168,7 +218,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-waf-rules",
+        "summary": "A Layer 7 rule engine as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-bot-fingerprinting",
@@ -179,7 +234,8 @@
       "licenceNote": null,
       "visibility": "enterprise-private",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-multi-tenancy",
@@ -190,7 +246,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-audit-trail",
@@ -201,7 +258,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-audit-trail",
+        "summary": "Audit logging as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-rbac-policy",
@@ -212,7 +274,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-soft-delete",
@@ -223,7 +286,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-entity-versioning",
@@ -234,7 +298,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-i18n",
@@ -245,7 +310,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-attachment-storage",
@@ -256,7 +322,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-search-index",
@@ -267,7 +334,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-workflow-engine",
@@ -278,7 +346,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-notification-dispatch",
@@ -289,7 +358,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-import-export",
@@ -300,7 +370,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-rest-emission",
@@ -311,7 +382,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-graphql-emission",
@@ -322,7 +394,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-openapi-emission",
@@ -333,7 +406,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-contact-graph",
@@ -344,7 +418,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-product-catalog",
@@ -355,7 +430,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-pricing-engine",
@@ -366,7 +442,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-inventory-tracking",
@@ -377,7 +454,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-order-lifecycle",
@@ -388,7 +466,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-payment-gateway",
@@ -399,7 +478,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-document-ingestion",
@@ -410,7 +490,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-ocr-pipeline",
@@ -421,7 +502,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-document-classifier",
@@ -432,7 +514,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-field-extraction",
@@ -443,7 +526,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-form-recognition",
@@ -454,7 +538,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-content-types",
@@ -465,7 +550,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-content-versioning",
@@ -476,7 +562,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-asset-management",
@@ -487,7 +574,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-bank-aggregator",
@@ -498,7 +586,8 @@
       "licenceNote": "BudgetHQ → promotable",
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-credential-store",
@@ -509,7 +598,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-credential-store",
+        "summary": "Password credentials as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-session-management",
@@ -520,7 +614,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-session-management",
+        "summary": "Sign-in sessions and refresh tokens as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-mfa-totp",
@@ -531,7 +630,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-mfa-totp",
+        "summary": "Time-based one-time passwords as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-federated-login",
@@ -542,7 +646,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-federated-login",
+        "summary": "Sign-in through an external identity provider as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-token-issuer",
@@ -553,7 +662,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-token-issuer",
+        "summary": "Access-token issuance as an Exeris capability.",
+        "builtAgainst": "0.12.0"
+      }
     },
     {
       "name": "exeris-caps-invitations",
@@ -564,7 +678,12 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "scaffolded",
-      "status": "poc"
+      "status": "poc",
+      "repo": {
+        "url": "https://github.com/exeris-systems/exeris-caps-invitations",
+        "summary": "Tenant invitations as an Exeris capability.",
+        "builtAgainst": "0.13.0-SNAPSHOT"
+      }
     },
     {
       "name": "exeris-caps-ai-llm-abstraction",
@@ -575,7 +694,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-ai-vector-store",
@@ -586,7 +706,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-ai-embedding-pipeline",
@@ -597,7 +718,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-ai-rag-orchestration",
@@ -608,7 +730,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-ai-prompt-templating",
@@ -619,7 +742,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-observability-bridge",
@@ -630,7 +754,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-outbound-credentials",
@@ -641,7 +766,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-service-identity",
@@ -652,7 +778,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-idempotency",
@@ -663,7 +790,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     },
     {
       "name": "exeris-caps-usage-metering",
@@ -674,7 +802,8 @@
       "licenceNote": null,
       "visibility": "public",
       "build": "specified",
-      "status": "poc"
+      "status": "poc",
+      "repo": null
     }
   ],
   "layers": [

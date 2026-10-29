@@ -368,3 +368,40 @@ export function withSkuStatus(skus, caps) {
     status: lowestReadiness([...s.caps.map((c) => byShort.get(c)), ...s.skuSpecificCaps.map(() => 'poc')]),
   }));
 }
+
+/**
+ * What a public cap or SKU repository says about itself, from its README on `main`: the first
+ * sentence of the first paragraph after the H1 (`summary`), and the kernel version of its
+ * `Status:` line (`builtAgainst`). Only the first sentence is taken: the paragraphs after it carry
+ * licence and readiness wording that is the repository's to state, not the site's to repeat.
+ * Links keep their text, emphasis is dropped, code spans are kept.
+ */
+export function parseRepoReadme(markdown) {
+  const lines = markdown.split('\n');
+  const h1 = lines.findIndex((l) => /^# \S/.test(l));
+  if (h1 < 0) throw new Error('README has no H1');
+  const para = [];
+  for (const line of lines.slice(h1 + 1)) {
+    if (!line.trim()) {
+      if (para.length) break;
+      continue;
+    }
+    // A badge line is not prose.
+    if (!para.length && /^\s*\[?!\[/.test(line)) continue;
+    if (/^(#|>|[-*] |```|\||---)/.test(line)) {
+      if (para.length) break;
+      throw new Error('README has no paragraph after its H1');
+    }
+    para.push(line.trim());
+  }
+  if (!para.length) throw new Error('README has no paragraph after its H1');
+  const text = para
+    .join(' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/\*\*([^*]+)\*\*|__([^_]+)__/g, '$1$2')
+    .replace(/(?<![\w*])\*([^*]+)\*(?![\w*])/g, '$1');
+  const summary = text.match(/^.*?[.!?](?=\s+[A-Z`]|$)/)?.[0] ?? text;
+  const status = markdown.match(/^Status:.*$/m)?.[0] ?? null;
+  const builtAgainst = status?.match(/built against `?exeris-kernel`? `?([0-9][\w.-]*[\w])`?/)?.[1] ?? null;
+  return { summary, builtAgainst };
+}

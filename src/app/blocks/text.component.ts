@@ -9,11 +9,12 @@ interface Segment {
 /**
  * Splits authored text into plain runs, `code` spans (between backticks) and structural counts
  * (`{caps.total}`, resolved from the registers) and version tokens (`{tooling.version}`). Only text nodes are created: content never
- * reaches the DOM as HTML.
+ * reaches the DOM as HTML. With `tokens` false only code spans are split out, and a `{…}` stays
+ * literal text: upstream text carries no site tokens.
  */
-export function segments(text: string): Segment[] {
+export function segments(text: string, tokens = true): Segment[] {
   const out: Segment[] = [];
-  const re = /`([^`]+)`|\{([a-z.:-]+)\}/g;
+  const re = tokens ? /`([^`]+)`|\{([a-z.:-]+)\}/g : /`([^`]+)`/g;
   let last = 0;
   for (const m of text.matchAll(re)) {
     if (m.index > last) out.push({ kind: 'text', value: text.slice(last, m.index) });
@@ -32,5 +33,7 @@ export function segments(text: string): Segment[] {
 })
 export class TextComponent {
   readonly text = input.required<string>();
-  protected readonly parts = computed(() => segments(this.text()));
+  /** False for text read from upstream, where a `{…}` is literal, not a site token. */
+  readonly tokens = input(true);
+  protected readonly parts = computed(() => segments(this.text(), this.tokens()));
 }

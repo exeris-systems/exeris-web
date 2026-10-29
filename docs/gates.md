@@ -13,10 +13,14 @@ last-verified: 2026-10-29
   references exists and is quotable; every evidence excerpt is a verbatim part of its claim;
   the copy of every quoted claim matches `content/meta/claims.lock.json`; no numeric literal
   appears in `content/` or `src/content/` outside a claim reference or an entry of
-  `content/meta/number-allowlist.json`, each of which names its source; every `CUSTOM` block is
-  mapped to its component in `exeris-codegen.json`.
-- **SKU list** (`scripts/check-content.mjs`): the ids of `content/meta/sku-repos.json` are SKUs of
-  the registry, and a SKU card is rendered only for a listed id.
+  `content/meta/number-allowlist.json`, each of which names its source; a view names only known
+  `CUSTOM` blocks, gives children only to a block that lays them out, uses only known count
+  tokens and has an entry in `content/meta/seo.json`; every `CUSTOM` block is mapped to its
+  component in `exeris-codegen.json`.
+- **SKU cards** (`scripts/check-content.mjs`): a card names a SKU of the registry, and every SKU
+  with a public repository has an authored card.
+- **Repository summaries** (`scripts/check-content.mjs`): the README sentence a cap card shows is
+  held to the readiness rules.
 - **Readiness wording** (`scripts/check-content.mjs`, also a unit test): see below.
 - **Output** (`scripts/verify-dist.mjs`): every route has its own HTML with title, description,
   canonical and Open Graph tags; no unresolved content token; no third-party request, tracker,
@@ -28,8 +32,8 @@ last-verified: 2026-10-29
 
 Nothing is released as a product today, so copy must not say that something is sold, supported,
 hosted or licensed for production, or invite a sales conversation. The check scans every authored
-string: view titles and the props of every node, `RICH_TEXT` included (links too), the typed site content, the SEO and search-index
-meta files, and rejects the phrases of `READINESS_RULES` in `scripts/check-content.mjs`: sold or
+string: view titles and the props of every node, `RICH_TEXT` included (links too), the typed site
+content, the SEO and search-index meta files, and the README sentences cap cards show, and rejects the phrases of `READINESS_RULES` in `scripts/check-content.mjs`: sold or
 sale, buy and purchase, `production`, support as an offering, a service-level agreement, `CVE`, a hosted or managed
 service, a control plane, a production, runtime, perpetual or commercial licence, a subscription or
 one-time fee, air-gapped and on-prem, "Contact us" and "Contact sales", "Discuss fit", "request a

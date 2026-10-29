@@ -11,7 +11,8 @@
 //    uses an unknown structural-count token or lacks an SEO entry;
 //  - authored copy uses readiness or commercial wording (see READINESS_RULES below) outside an
 //    allow-listed technical use or the copy of a released SKU;
-//  - content/meta/sku-repos.json names an id the SKU registry lacks, or a SKU card is rendered for an id it does not list;
+//  - a SKU card names an id the SKU registry lacks, or a SKU with a public repository has no card;
+//  - the README summary of a public cap repository, which its card shows, uses readiness wording;
 //  - exeris-codegen.json customBlocks does not map a CUSTOM block to a component file that exports it.
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -120,15 +121,15 @@ export function viewReadinessErrors(file, view, { skus, allow }) {
 }
 
 /**
- * The SKUs-with-a-repository list (content/meta/sku-repos.json) against the registry and the
- * pages: every listed id is a SKU of the registry, and an ExSkuCards block carries a card only
- * for a listed id.
+ * The SKU cards against the registry: a card names a SKU of the registry, and every SKU whose
+ * repository is public (`repo` in skus.json, from the organisation's public repositories) has a
+ * card, so its description is authored before the page shows it. A card for a SKU whose repository
+ * is not public stays unrendered until it is.
  */
-export function skuRepoErrors({ repos, skus, views }) {
+export function skuCardErrors({ skus, views }) {
   const errors = [];
   const registry = new Set(skus.map((s) => s.id));
-  const listed = new Set(repos);
-  for (const id of repos) if (!registry.has(id)) errors.push(`content/meta/sku-repos.json: "${id}" is not a SKU of the registry (skus.json)`);
+  const carded = new Set();
   for (const { file, json } of views) {
     (json.view.regions ?? []).forEach((region, r) =>
       walkNodes(region.components, (node, at) => {
@@ -140,10 +141,26 @@ export function skuRepoErrors({ repos, skus, views }) {
           return;
         }
         (props.skus ?? []).forEach((c, i) => {
-          if (!listed.has(c.id)) errors.push(`${file} regions[${r}]${at} props.skus[${i}]: a SKU card for "${c.id}", which content/meta/sku-repos.json does not list`);
+          carded.add(c.id);
+          if (!registry.has(c.id)) errors.push(`${file} regions[${r}]${at} props.skus[${i}]: a SKU card for "${c.id}", which is not a SKU of the registry (skus.json)`);
         });
       }, '.components'),
     );
+  }
+  for (const s of skus) {
+    if (s.repo && !carded.has(s.id)) errors.push(`src/data/skus.json: "${s.id}" has a public repository and no SKU card; write its description in an ExSkuCards block`);
+  }
+  return errors;
+}
+
+/** Readiness wording in what a public repository says about itself, which a cap card shows. */
+export function repoSummaryErrors({ caps, allow }) {
+  const errors = [];
+  for (const c of caps) {
+    if (!c.repo?.summary) continue;
+    for (const h of readinessHits(c.repo.summary, { allow })) {
+      errors.push(`src/data/caps.json: the README summary of ${c.name}: "${h.match}" reads as ${h.rule}; the cap card would show it (see "Readiness wording" in docs/gates.md)`);
+    }
   }
   return errors;
 }
@@ -289,7 +306,8 @@ export function checkContent({ lock = readJson('content/meta/claims.lock.json') 
   const skusData = readJson('src/data/skus.json').skus;
   const allow = readinessAllowlist();
   for (const { file, json } of loadViews()) errors.push(...viewReadinessErrors(file, json.view, { skus: skusData, allow }));
-  errors.push(...skuRepoErrors({ repos: readJson('content/meta/sku-repos.json').skus, skus: skusData, views: loadViews() }));
+  errors.push(...skuCardErrors({ skus: skusData, views: loadViews() }));
+  errors.push(...repoSummaryErrors({ caps: readJson('src/data/caps.json').caps, allow }));
   const siteScan = (file, text, where, isLink) => {
     for (const h of readinessHits(text, { allow, isLink })) errors.push(`${file}${where}: "${h.match}" reads as ${h.rule}; nothing is released as a product (see "Readiness wording" in docs/gates.md)`);
   };

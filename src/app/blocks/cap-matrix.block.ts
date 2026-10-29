@@ -17,10 +17,12 @@ export interface CapMatrixProps {
 }
 
 const LICENCE_FILTERS: readonly (Licence | 'all')[] = ['all', 'community', 'commercial', 'enterprise-private'];
+type SourceFilter = 'all' | 'public';
 
 /**
  * The capability matrix, generated from cap-license-registry.md: a filter bar (layer, licence,
- * match count) over one card per cap, with the SKUs that compose it from HLA §3.3.
+ * public source, match count) over one card per cap, with the SKUs that compose it from HLA §3.3.
+ * A cap whose repository is public links it and shows the first sentence of its README.
  */
 @Component({
   selector: 'ex-cap-matrix',
@@ -61,6 +63,13 @@ const LICENCE_FILTERS: readonly (Licence | 'all')[] = ['all', 'community', 'comm
               }
             </div>
           </div>
+          <div class="ex-capmatrix__filters">
+            <span class="ex-capmatrix__label" id="f-source">Source</span>
+            <div class="ex-seg" role="group" aria-labelledby="f-source">
+              <button type="button" [attr.aria-pressed]="source() === 'all'" (click)="source.set('all')">All</button>
+              <button type="button" [attr.aria-pressed]="source() === 'public'" (click)="source.set('public')">Public ({{ publicCount }})</button>
+            </div>
+          </div>
           <p class="ex-capmatrix__n ex-mono" aria-live="polite">{{ visible().length }} of {{ total }}</p>
         </div>
 
@@ -73,13 +82,17 @@ const LICENCE_FILTERS: readonly (Licence | 'all')[] = ['all', 'community', 'comm
               </p>
               <p class="ex-capcard__status"><ex-status-badge [status]="c.status" /></p>
               <h3 class="ex-mono ex-capcard__name">{{ c.short }}</h3>
-              <p class="ex-card__code">
-                @if (c.build === 'specified') {
-                  {{ c.name }} · {{ c.build }}
-                } @else {
-                  <a class="ex-link" [href]="'https://github.com/exeris-systems/' + c.name">{{ c.name }}</a> · {{ c.build }}
+              @if (c.repo; as repo) {
+                @if (repo.summary) {
+                  <p class="ex-capcard__summary"><ex-text [text]="repo.summary" [tokens]="false" /></p>
                 }
-              </p>
+                <p class="ex-card__code">
+                  <a class="ex-link" [href]="repo.url">{{ c.name }}</a> · {{ c.build }}
+                  @if (repo.builtAgainst) { · kernel {{ repo.builtAgainst }} }
+                </p>
+              } @else {
+                <p class="ex-card__code">{{ c.name }} · {{ c.build }} · source not public</p>
+              }
               @if (c.usedBy.length) {
                 <ul class="ex-tags" [attr.aria-label]="'Composed by'">
                   @for (s of c.usedBy; track s.id) {
@@ -104,12 +117,15 @@ export class CapMatrixComponent {
   protected readonly licenceFilters = LICENCE_FILTERS;
   protected readonly layer = signal(0);
   protected readonly licence = signal<Licence | 'all'>('all');
+  protected readonly source = signal<SourceFilter>('all');
+  protected readonly publicCount = CAPS.filter((c) => c.repo).length;
 
   private readonly all = CAPS.map((c) => ({ ...c, usedBy: skusUsingCap(c.short) }));
 
   protected readonly visible = computed(() =>
     this.all.filter(
-      (c) => (this.layer() === 0 || c.layer === this.layer()) && (this.licence() === 'all' || c.licence === this.licence()),
+      (c) => (this.layer() === 0 || c.layer === this.layer()) && (this.licence() === 'all' || c.licence === this.licence()) &&
+        (this.source() === 'all' || c.repo !== null),
     ),
   );
 

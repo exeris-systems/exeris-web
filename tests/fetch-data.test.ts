@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 // @ts-expect-error -- plain ESM modules without type declarations
-import { FetchError, headersFor, loadUpstream, strictFetch } from '../scripts/fetch-data.mjs';
+import { FetchError, headersFor, loadUpstream, repoOf, strictFetch } from '../scripts/fetch-data.mjs';
 // @ts-expect-error -- plain ESM module without type declarations
 import { isRuntimeError } from '../scripts/lighthouse-ci.mjs';
 
@@ -33,6 +33,36 @@ describe('headersFor', () => {
 
   it('sends no Authorization header without a token', () => {
     expect(headersFor('https://api.github.com/x', {})).not.toHaveProperty('Authorization');
+  });
+});
+
+describe('repoOf', () => {
+  const publicNames = new Set(['exeris-caps-a']);
+
+  it('is null for a repository outside the public list, without reading a README', async () => {
+    const readme = vi.fn();
+    expect(await repoOf('exeris-caps-b', publicNames, readme)).toBeNull();
+    expect(readme).not.toHaveBeenCalled();
+  });
+
+  it('links a public repository and reads its README', async () => {
+    const readme = vi.fn(async () => '# exeris-caps-a\n\nA thing as an Exeris capability. More.\n\nStatus: built against `exeris-kernel` 0.13.0.');
+    expect(await repoOf('exeris-caps-a', publicNames, readme)).toEqual({
+      url: 'https://github.com/exeris-systems/exeris-caps-a',
+      summary: 'A thing as an Exeris capability.',
+      builtAgainst: '0.13.0',
+    });
+    expect(readme).toHaveBeenCalledWith('exeris-caps-a');
+  });
+
+  it('links a repository whose README it cannot read, without a summary', async () => {
+    const warn = vi.fn();
+    expect(await repoOf('exeris-caps-a', publicNames, async () => '# a\n\n## What it does\n', warn)).toEqual({
+      url: 'https://github.com/exeris-systems/exeris-caps-a',
+      summary: null,
+      builtAgainst: null,
+    });
+    expect(warn).toHaveBeenCalledWith(expect.stringMatching(/exeris-caps-a README: .*no paragraph/));
   });
 });
 

@@ -18,7 +18,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"center\": true, \"eyebrow\": \"PRICING\", \"title\": \"Open source today. Design partners first.\", \"lede\": \"The kernel, SDK, tooling, platform and benchmarks are Apache-2.0. The commercial caps and SKUs are public to read and are proofs of concept, so there are no prices and no plans yet. What exists is an invitation to build with them.\"}"
+            "props": "{\"center\": true, \"eyebrow\": \"PRICING\", \"title\": \"Open source today. Design partners first.\", \"lede\": \"The kernel, SDK, tooling, platform, Spring Runtime and benchmarks are Apache-2.0. The commercial caps and SKUs are proofs of concept, and those with a public repository can be read today, so there are no prices and no plans yet. What exists is an invitation to build with them.\"}"
           },
           {
             "type": "CUSTOM",
@@ -34,7 +34,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"id\": \"detachment\", \"alt\": true, \"head\": {\"eyebrow\": \"§ CODE DETACHMENT\", \"title\": \"No silent lock-in. Detach to own.\", \"body\": \"This applies to the commercial caps and SKUs only; everything that is Apache-2.0 is already yours to use and fork. The principle is that nothing you rely on is reachable only through Exeris, and the Wall guarantees there is no hidden classpath glue.\"}, \"steps\": [{\"title\": \"Source you can read\", \"body\": \"The source of commercial caps is public to read and evaluate, so you can see what you depend on.\", \"tone\": \"cyan\"}, {\"title\": \"Operate independently\", \"body\": \"Detachment is the right to operate a version of a commercial cap or SKU without Exeris: the unsigned composition manifest and the build artifacts it needs.\", \"tone\": \"flow\"}, {\"title\": \"Terms arrive with the first release\", \"body\": \"The terms of detachment are published together with the first release of a commercial cap or SKU. Until then nothing is offered.\", \"tone\": \"slate\"}]}"
+            "props": "{\"id\": \"detachment\", \"alt\": true, \"head\": {\"eyebrow\": \"§ CODE DETACHMENT\", \"title\": \"No silent lock-in. Detach to own.\", \"body\": \"This applies to the commercial caps and SKUs only; everything that is Apache-2.0 is already yours to use and fork. The principle is that nothing you rely on is reachable only through Exeris, and the Wall guarantees there is no hidden classpath glue.\"}, \"steps\": [{\"title\": \"Source you can read\", \"body\": \"Where a commercial cap's repository is public, its source can be read and evaluated, so you can see what you depend on.\", \"tone\": \"cyan\"}, {\"title\": \"Operate independently\", \"body\": \"Detachment is the right to operate a version of a commercial cap or SKU without Exeris: the unsigned composition manifest and the build artifacts it needs.\", \"tone\": \"flow\"}, {\"title\": \"Terms arrive with the first release\", \"body\": \"The terms of detachment are published together with the first release of a commercial cap or SKU. Until then nothing is offered.\", \"tone\": \"slate\"}]}"
           },
           {
             "type": "CUSTOM",

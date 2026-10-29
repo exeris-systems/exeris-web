@@ -116,6 +116,6 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
 ];
 
 /** Only repositories that are public on GitHub and carry the Apache-2.0 licence text are named. */
-export const OPEN_SOURCE_REPOS = ['kernel', 'SDK', 'tooling', 'platform', 'benchmarks'] as const;
+export const OPEN_SOURCE_REPOS = ['kernel', 'SDK', 'tooling', 'platform', 'Spring Runtime', 'benchmarks', 'docs'] as const;
 
 export const FOOTER_LEGAL = ['© 2026 Exeris Systems', 'Gdynia, Poland', `Apache-2.0: ${OPEN_SOURCE_REPOS.join(', ')}`];

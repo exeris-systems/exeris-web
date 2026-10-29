@@ -18,7 +18,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"Capabilities\"}], \"eyebrow\": \"TIER 2 · CAPABILITIES\", \"title\": \"Capability matrix\", \"lede\": \"{caps.total} capabilities in {layers} layers, generated at build time from the capability licence registry. Filter by layer or licence; each card names the SKUs that compose it.\", \"ctas\": [{\"label\": \"Registry on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/cap-license-registry.md\"}]}"
+            "props": "{\"crumbs\": [{\"label\": \"Platform\", \"href\": \"/platform\"}, {\"label\": \"Capabilities\"}], \"eyebrow\": \"TIER 2 · CAPABILITIES\", \"title\": \"Capability matrix\", \"lede\": \"{caps.total} capabilities in {layers} layers, generated at build time from the capability licence registry. Filter by layer, licence or public source. A cap whose repository is public links it and quotes the first sentence of its README; each card names the SKUs that compose it.\", \"ctas\": [{\"label\": \"Registry on GitHub\", \"href\": \"https://github.com/exeris-systems/exeris-docs/blob/main/cap-license-registry.md\"}]}"
           },
           {
             "type": "CUSTOM",
@@ -26,7 +26,7 @@
             "binding": {
               "source": "STATIC"
             },
-            "props": "{\"legendTitle\": \"Three licences\", \"legend\": [{\"licence\": \"community\", \"terms\": \"Apache 2.0 or MIT. Free for any use.\", \"production\": \"Open source\"}, {\"licence\": \"commercial\", \"terms\": \"Source is public to read and evaluate.\", \"production\": \"Terms arrive with the first release\"}, {\"licence\": \"enterprise-private\", \"terms\": \"Closed-source. Depends on a kernel-tier SPI extension in the Enterprise driver.\", \"production\": \"Needs the Enterprise driver\"}], \"statusNote\": \"Each card shows its readiness (PoC, Snapshot or Released) and its build state (specified, scaffolded or implemented), both read from the registry.\"}"
+            "props": "{\"legendTitle\": \"Three licences\", \"legend\": [{\"licence\": \"community\", \"terms\": \"Apache 2.0 or MIT. Free for any use.\", \"production\": \"Open source\"}, {\"licence\": \"commercial\", \"terms\": \"Where the repository is public, the source can be read and evaluated.\", \"production\": \"Terms arrive with the first release\"}, {\"licence\": \"enterprise-private\", \"terms\": \"Closed-source. Depends on a kernel-tier SPI extension in the Enterprise driver.\", \"production\": \"Needs the Enterprise driver\"}], \"statusNote\": \"Each card shows its readiness (PoC, Snapshot or Released) and its build state (specified, scaffolded or implemented), both read from the registry.\"}"
           },
           {
             "type": "CONTAINER",

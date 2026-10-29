@@ -9,7 +9,6 @@ import coldStartJson from '../../data/cold-start.json';
 import sagaJson from '../../data/saga-v2.json';
 import buildMetaJson from '../../data/build-meta.json';
 import siteShaJson from '../../data/site-sha.json';
-import skuReposJson from '../../../content/meta/sku-repos.json';
 
 export interface SourceLink {
   label: string;
@@ -31,6 +30,15 @@ export type Readiness = 'poc' | 'snapshot' | 'released';
 
 export type Licence = 'community' | 'commercial' | 'enterprise-private';
 
+/** A public repository of a cap or SKU, and what its README says about it. */
+export interface Repo {
+  url: string;
+  /** The first sentence of the README paragraph after the H1; null when it could not be read. */
+  summary: string | null;
+  /** The kernel version on the README's `Status:` line, when it names one. */
+  builtAgainst: string | null;
+}
+
 export interface Cap {
   name: string;
   short: string;
@@ -43,6 +51,8 @@ export interface Cap {
   build: string;
   /** Readiness; `poc` unless the registry says otherwise. */
   status: Readiness;
+  /** Null when the repository is not public. */
+  repo: Repo | null;
 }
 
 export interface Layer {
@@ -62,6 +72,8 @@ export interface Sku {
   capCount: number;
   /** The lowest readiness among the SKU's caps. */
   status: Readiness;
+  /** Null when the repository is not public. */
+  repo: Repo | null;
 }
 
 export interface ColdStartArm {
@@ -116,8 +128,8 @@ export const CAP_TOTALS = capsJson.totals as Readonly<Record<Licence | 'total', 
 export const CAPS_SOURCE = capsJson.source as UpstreamSource;
 
 export const SKUS = skusJson.skus as readonly Sku[];
-/** Ids of the SKUs that have a repository (content/meta/sku-repos.json). */
-export const SKUS_WITH_REPO: readonly string[] = skuReposJson.skus;
+/** Ids of the SKUs whose repository is public. */
+export const SKUS_WITH_REPO: readonly string[] = SKUS.filter((s) => s.repo).map((s) => s.id);
 export const SKUS_SOURCE = skusJson.source as UpstreamSource;
 
 export const COLD_START = coldStartJson as unknown as {

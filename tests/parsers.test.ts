@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
-import { benchmarksUrl, lowestReadiness, parseCapRegistry, parseMavenRelease, readinessOf, parseClaims, parseSkus } from '../scripts/lib/parsers.mjs';
+import { benchmarksUrl, lowestReadiness, parseCapRegistry, parseMavenRelease, parseRepoReadme, readinessOf, parseClaims, parseSkus } from '../scripts/lib/parsers.mjs';
 
 const CLAIMS = `# Benchmark claims
 
@@ -117,5 +117,32 @@ describe('parseCapRegistry and parseSkus', () => {
     const hla = `### 3.3 SKU\n\n| **One** | Gateway | Source-available | \`a\`, \`zzz\` |\n\n## 4\n\n### 6.3 Tier 3\n\n| \`exeris-sku-one\` | commercial | Source-available (public) | |\n`;
     expect(() => parseSkus(hla, ['exeris-caps-a'])).toThrow(/zzz/);
     expect(parseSkus(hla.replace(', `zzz`', ''), ['exeris-caps-a'])[0]).toMatchObject({ id: 'one', capCount: 1 });
+  });
+});
+
+describe('parseRepoReadme', () => {
+  it('takes the first sentence after the H1 and the kernel version of the Status line', () => {
+    const md = [
+      '# exeris-caps-x',
+      '',
+      'Per-key [rate limiting](https://x) as an **Exeris** capability. It provides `RateLimitPolicy`, used in production.',
+      '',
+      'Status: proof of concept, built against `exeris-kernel` 0.13.0-SNAPSHOT. The API is not stable.',
+    ].join('\n');
+    expect(parseRepoReadme(md)).toEqual({ summary: 'Per-key rate limiting as an Exeris capability.', builtAgainst: '0.13.0-SNAPSHOT' });
+  });
+
+  it('reads a release version and a README without a Status line', () => {
+    expect(parseRepoReadme('# a\n\nOne thing.\n\nStatus: built against exeris-kernel 0.12.0.').builtAgainst).toBe('0.12.0');
+    expect(parseRepoReadme('# a\n\nOne thing.\n\n**Licence:** Apache-2.0.')).toEqual({ summary: 'One thing.', builtAgainst: null });
+  });
+
+  it('skips a badge line after the H1', () => {
+    expect(parseRepoReadme('# a\n\n[![CI](https://x/badge.svg)](https://x)\n\nOne thing. Two.').summary).toBe('One thing.');
+  });
+
+  it('fails on a README with no paragraph after its H1', () => {
+    expect(() => parseRepoReadme('no heading')).toThrow(/no H1/);
+    expect(() => parseRepoReadme('# a\n\n## What it does\n')).toThrow(/no paragraph/);
   });
 });
