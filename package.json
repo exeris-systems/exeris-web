@@ -38,7 +38,7 @@
     "@angular/platform-server": "~22.2.1",
     "@angular/router": "~22.2.1",
     "@angular/ssr": "~22.2.5",
-    "@exeris/ui-kit": "^0.3.0",
+    "@exeris/ui-kit": "^0.5.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "mermaid": "12.2.0",
