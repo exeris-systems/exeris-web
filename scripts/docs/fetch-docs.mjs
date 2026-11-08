@@ -122,7 +122,11 @@ export async function buildDocs(config, { read, refs, list = async () => [] }) {
   const pages = files.map((f) => {
     const ref = refs[f.key];
     const blob = (p) => `${GITHUB}/${f.source.repo}/blob/${ref}/${p}`;
-    const { html, tree, headings, description } = renderDoc(f.body, { path: f.path, published: published.get(f.key), blob, site });
+    const options = { path: f.path, published: published.get(f.key), blob, site };
+    let rendered = renderDoc(f.body, options);
+    // Every page has a first-level heading: a document that opens below it is given its title as one.
+    if (f.data.title && !rendered.headings.some((h) => h.level === 1)) rendered = renderDoc(`# ${f.data.title}\n\n${f.body}`, options);
+    const { html, tree, headings, description } = rendered;
     // A title is shown as plain text in the navigation, the contents and <title>.
     const title = (f.data.title || headings.find((h) => h.level === 1)?.text || f.path).replace(/`/g, '');
     return {
@@ -137,6 +141,11 @@ export async function buildDocs(config, { read, refs, list = async () => [] }) {
       tree,
     };
   });
+  // A <title> names one page: a title two pages share is qualified by the page's section.
+  const label = new Map(config.sections.map((s) => [s.id, s.label]));
+  const shared = new Map();
+  for (const p of pages) shared.set(p.title, (shared.get(p.title) ?? 0) + 1);
+  for (const p of pages) p.headTitle = shared.get(p.title) > 1 ? `${p.title} · ${label.get(p.section)}` : p.title;
   return { pages, skipped };
 }
 
@@ -157,7 +166,11 @@ export function writeGenerated(config, pages, refs) {
     refs,
     sections: config.sections.map((s) => ({ id: s.id, label: s.label })),
     pages: pages.map((p) => {
-      const meta = { ...p, keywords: p.headings.map((h) => h.text).join(' ') };
+      // The index is in every page's initial load: a source URL the page derives from its
+      // repository, ref and path, and a head title that only repeats the title, are left out.
+      const { repo, ref, path } = p.source;
+      const meta = { ...p, source: { repo, ref, path }, keywords: p.headings.map((h) => h.text).join(' ') };
+      if (meta.headTitle === meta.title) delete meta.headTitle;
       delete meta.html;
       delete meta.tree;
       delete meta.headings;
@@ -180,7 +193,12 @@ async function main() {
   const refs = {};
   for (const [key, source] of Object.entries(config.sources)) refs[key] = await resolveRef(source);
   const read = (repo, ref, path) => getText(`${RAW}/${repo}/${ref}/${path}`);
-  const list = async (repo, ref) => (await getJson(`${API}/${repo}/git/trees/${ref}?recursive=1`)).tree.filter((t) => t.type === 'blob').map((t) => t.path);
+  const list = async (repo, ref) => {
+    const { tree, truncated } = await getJson(`${API}/${repo}/git/trees/${ref}?recursive=1`);
+    // A truncated tree would list a directory short and publish it without the files it lost.
+    if (truncated) throw new Error(`${repo}@${ref}: the GitHub tree listing is truncated`);
+    return tree.filter((t) => t.type === 'blob').map((t) => t.path);
+  };
   const { pages, skipped } = await buildDocs(config, { read, refs, list });
   writeGenerated(config, pages, refs);
   for (const s of skipped) console.warn(`fetch-docs: not published: ${s}`);

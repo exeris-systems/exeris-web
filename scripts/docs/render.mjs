@@ -4,7 +4,6 @@ import { parseDocument } from 'htmlparser2';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 
-/** The frontmatter between the leading `---` lines, as flat key/value strings, and the body. */
 /** A one-line YAML scalar: a double-quoted one unescaped, a single-quoted one with '' as a quote. */
 function scalar(value) {
   const dq = value.match(/^"(.*)"$/);
@@ -14,6 +13,7 @@ function scalar(value) {
   return value;
 }
 
+/** The frontmatter between the leading `---` lines, as flat key/value strings, and the body. */
 export function parseFrontmatter(text) {
   const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
   if (!m) return { data: {}, body: text };

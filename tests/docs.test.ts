@@ -167,6 +167,32 @@ describe('buildDocs', () => {
     expect(skipped).toEqual(['kernel:docs/b.md (visibility public, status draft)']);
   });
 
+  it('gives a document that opens below the first level its title as a heading', async () => {
+    const open = { ...config, sections: [{ id: 'kernel', label: 'Kernel', files: ['kernel:docs/step.md'] }] };
+    const step = '---\ntitle: "Step one"\nvisibility: public\nstatus: active\n---\n\n### What changed\n\nText.\n';
+    const { pages } = await buildDocs(open, { read: async () => step, refs: { kernel: 'v1' } });
+    expect(pages[0].html).toMatch(/^<h1 id="step-one">Step one<\/h1>/);
+    expect(pages[0].headings.map((h: { text: string }) => h.text)).toEqual(['What changed']);
+  });
+
+  it('qualifies a title two pages share by the section in their head title', async () => {
+    const two = {
+      sources: { sdk: { repo: 'exeris-sdk', ref: 'main', route: 'sdk' }, tooling: { repo: 'exeris-tooling', ref: 'main', route: 'tooling' } },
+      sections: [
+        { id: 'sdk', label: 'SDK', files: ['sdk:docs/architecture.md', 'sdk:docs/glossary.md'] },
+        { id: 'tooling', label: 'Tooling', files: ['tooling:docs/architecture.md'] },
+      ],
+    };
+    const doc = (title: string) => `---\ntitle: ${title}\nvisibility: public\nstatus: active\n---\n\n# ${title}\n`;
+    const read = async (_repo: string, _ref: string, path: string) => doc(path.endsWith('glossary.md') ? 'Glossary' : 'Architecture');
+    const { pages } = await buildDocs(two, { read, refs: { sdk: 'v1', tooling: 'v1' } });
+    expect(pages.map((p: { title: string; headTitle: string }) => [p.title, p.headTitle])).toEqual([
+      ['Architecture', 'Architecture · SDK'],
+      ['Glossary', 'Glossary'],
+      ['Architecture', 'Architecture · Tooling'],
+    ]);
+  });
+
   it('publishes a README listed as one without frontmatter, and only a README', async () => {
     const readme = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }] }] };
     const { pages } = await buildDocs(readme, { read: async () => '# Exeris SDK\n\nAnnotations for declaring a domain.\n', refs: { sdk: 'v1' } });

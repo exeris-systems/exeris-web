@@ -10,8 +10,10 @@ export interface DocPage {
   readonly route: string;
   readonly section: string;
   readonly title: string;
+  /** The title in the page's <title> when it is not the title: qualified by the page's section. */
+  readonly headTitle?: string;
   readonly description: string;
-  readonly source: { readonly repo: string; readonly ref: string; readonly path: string; readonly url: string };
+  readonly source: { readonly repo: string; readonly ref: string; readonly path: string };
   /** The text of the page's second- and third-level headings, for search. */
   readonly keywords: string;
 }

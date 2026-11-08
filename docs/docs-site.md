@@ -20,7 +20,8 @@ navigation shows, in order. A section lists files in three ways:
 
 - by path, `kernel:docs/architecture.md`;
 - by directory, `{ "dir": "platform:standards" }`: every Markdown file under it at the ref read,
-  its README first, then by path, ADR link stubs (`*.link.md`) left out;
+  its README first, then by path, ADR link stubs (`*.link.md`) left out; a repository listing
+  GitHub returns truncated fails the build rather than publish a directory short;
 - by registry, `{ "registry": "platform:adr-index.md" }`: every ADR and RFC the registry links to,
   in the registry's order, whether the link is relative or an organisation URL at the ref its
   source is read at. A record on another branch, or in a repository that is not a source, is not
@@ -57,8 +58,9 @@ directory: `exeris-sdk/README.md` is `/sdk`, `exeris-sdk/exeris-sdk-tck/README.m
 
 `npm run build:docs` runs `scripts/docs/fetch-docs.mjs`, which reads each listed file from
 `raw.githubusercontent.com` at the ref above and writes `projects/docs/src/app/generated/` (not
-committed): `index.json` with every page's title, description, section, source and the text of
-its headings for search, which every page loads; one module per page holding its document tree
+committed): `index.json` with every page's title, description, section, source (repository, ref
+and path; the page derives the GitHub URL) and the text of its headings for search, which every
+page loads; one module per page holding its document tree
 and its contents, which the build turns into a chunk of its own and the page loads with it; and
 the routes. There is no committed copy, so a failed fetch fails the build. `scripts/docs/render.mjs` renders the
 markdown:
@@ -83,9 +85,11 @@ markdown:
   HTML string reaches the browser and nothing bypasses Angular's sanitising: attributes are bound
   one by one, and links go through Angular's URL sanitiser. A test fails when the allow-list names
   a tag the template does not draw.
-- The page title is the frontmatter `title`, a quoted YAML scalar read as YAML reads it; the
-  description is the first paragraph of at least
-  40 characters, cut near 160.
+- The page title is the frontmatter `title`, a quoted YAML scalar read as YAML reads it; a
+  document that opens below the first level, such as a migration step, is given that title as its
+  first-level heading. A title two pages share is qualified by the page's section in `<title>`
+  (`Architecture · Tooling`), so every page has its own. The description is the first paragraph of
+  at least 40 characters, cut near 160.
 
 The readiness word list of the site's own copy is not applied to the prose of these documents,
 which are reviewed in their own repositories; it applies to what this repository writes for the

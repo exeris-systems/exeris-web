@@ -25,7 +25,7 @@ export class DocsTitleStrategy extends TitleStrategy {
     const path = snapshot.url.split(/[?#]/)[0].replace(/^\/+|\/+$/g, '');
     const page = PAGES.find((p) => p.route === path);
     const home = path === '';
-    const seo = home ? HOME : page ? { title: page.title, description: page.description } : NOT_FOUND;
+    const seo = home ? HOME : page ? { title: page.headTitle ?? page.title, description: page.description } : NOT_FOUND;
     const indexable = home || !!page;
     const url = indexable ? `${SITE_URL}/${path}` : `${SITE_URL}/404`;
     const title = home ? `${SITE_NAME}` : `${seo.title} — ${SITE_NAME}`;
