@@ -36,7 +36,7 @@ not listed is never published, whatever its frontmatter, so a repository's agent
 review rules do not appear on the site.
 
 | Source | Repository | Read at | Route prefix |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `kernel` | `exeris-kernel` | the commit `main` points to | `/kernel/` |
 | `sdk` | `exeris-sdk` | the commit `main` points to | `/sdk/` |
 | `tooling` | `exeris-tooling` | the commit `main` points to | `/tooling/` |

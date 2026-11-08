@@ -13,7 +13,7 @@ last-verified: 2026-10-29
 the latest kernel release from the GitHub API and the tooling release from Maven Central:
 
 | File | Source |
-|---|---|
+| --- | --- |
 | `src/data/claims.json` | `exeris-benchmarks/docs/CLAIMS.md`, registered copy strings keyed `L12.absolute`, `L13.floor`, … |
 | `src/data/cold-start.json` | `exeris-benchmarks/results/cold-start-ttfr/<arm>/20260626T104113Z-n8-res/result.json`, medians for the five arms of L14 |
 | `src/data/caps.json` | `exeris-docs/cap-license-registry.md`: licence, visibility, `Build` state and readiness `Status` (`poc`, `snapshot` or `released`) per cap, read by header name; plus `repo` (see below) |

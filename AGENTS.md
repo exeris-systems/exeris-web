@@ -41,7 +41,7 @@ whose licence is not compatible with that split.
 names everything in it and the bundle pin.
 
 | Kind | Where | What |
-|---|---|---|
+| --- | --- | --- |
 | Roles | `.agents/agents/` | `exeris-web-router` (triage), `exeris-web-reviewer` (verdict), `exeris-web-implementer`, `exeris-web-verification` (gates) |
 | Policies | `.agents/policies/` | `public-claims`, `product-readiness`, `no-third-party-requests`, `view-ir-and-generated-output`, `public-repository`, `site-gates` |
 | Workflows | `.agents/workflows/` | `web-pr-review`, `page-authoring`, `claims-lock-review` |
