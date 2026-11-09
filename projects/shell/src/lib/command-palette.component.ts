@@ -15,6 +15,7 @@ import { SHELL_CONFIG } from './config';
 import { isExternal } from './href.directive';
 import { searchIndex, type SearchEntry } from './fuzzy';
 import { PaletteService } from './palette.service';
+import { TextSearch, mergeResults } from './text-search';
 
 const KIND_LABEL: Record<SearchEntry['kind'], string> = {
   page: 'Page',
@@ -22,6 +23,7 @@ const KIND_LABEL: Record<SearchEntry['kind'], string> = {
   sku: 'SKU',
   concept: 'Concept',
   doc: 'Doc',
+  text: 'Text',
 };
 
 /**
@@ -51,7 +53,7 @@ const KIND_LABEL: Record<SearchEntry['kind'], string> = {
             aria-controls="palette-results"
             [attr.aria-expanded]="results().length > 0"
             [attr.aria-activedescendant]="results().length ? 'palette-opt-' + cursor() : null"
-            placeholder="Search pages, capabilities, SKUs, concepts…"
+            [placeholder]="placeholder"
             autocomplete="off"
             spellcheck="false"
             [value]="query()"
@@ -73,13 +75,20 @@ const KIND_LABEL: Record<SearchEntry['kind'], string> = {
               (click)="go(entry)"
             >
               <span class="ex-tag" [class.ex-tag--flow]="entry.kind === 'page'" [class.ex-tag--cyan]="entry.kind === 'capability'">{{ kindLabel[entry.kind] }}</span>
-              <span class="ex-palette__title">{{ entry.title }}</span>
+              <span class="ex-palette__body">
+                <span class="ex-palette__title">{{ entry.title }}</span>
+                @if (entry.excerpt) {
+                  <span class="ex-palette__excerpt">{{ entry.excerpt }}</span>
+                }
+              </span>
               @if (entry.hint) {
                 <span class="ex-palette__hint">{{ entry.hint }}</span>
               }
             </li>
           } @empty {
-            <li class="ex-palette__empty" role="option" aria-selected="false" aria-disabled="true">No match for “{{ query() }}”.</li>
+            <li class="ex-palette__empty" role="option" aria-selected="false" aria-disabled="true">
+              {{ searching() ? 'Searching the text…' : query().trim() ? 'No match for “' + query() + '”.' : 'Type to search.' }}
+            </li>
           }
         </ul>
         <p class="ex-palette__foot" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd> move · <kbd>↵</kbd> open · <kbd>Esc</kbd> close</p>
@@ -89,21 +98,34 @@ const KIND_LABEL: Record<SearchEntry['kind'], string> = {
 })
 export class CommandPaletteComponent {
   protected readonly palette = inject(PaletteService);
-  private readonly index = inject(SHELL_CONFIG).searchIndex;
+  private readonly config = inject(SHELL_CONFIG);
+  private readonly index = this.config.searchIndex;
+  protected readonly placeholder = this.config.searchPlaceholder ?? 'Search pages, capabilities, SKUs, concepts…';
   protected readonly kindLabel = KIND_LABEL;
   protected readonly query = signal('');
   protected readonly cursor = signal(0);
-  protected readonly results = computed(() => searchIndex(this.index, this.query()));
+  /** The full-text results for the query in the field, and whether a search for it is running. */
+  protected readonly textResults = signal<readonly SearchEntry[]>([]);
+  protected readonly searching = signal(false);
+  protected readonly results = computed(() => mergeResults(searchIndex(this.index, this.query()), this.textResults()));
 
   private readonly field = viewChild<ElementRef<HTMLInputElement>>('field');
   private readonly router = inject(Router);
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly text =
+    this.config.fullText && this.browser
+      ? new TextSearch(this.config.fullText, ({ results, searching }) => {
+          this.textResults.set(results);
+          this.searching.set(searching);
+        })
+      : null;
 
   constructor() {
     effect(() => {
       if (this.palette.open()) {
         this.query.set('');
         this.cursor.set(0);
+        this.text?.run('');
       }
     });
     effect(() => {
@@ -128,8 +150,10 @@ export class CommandPaletteComponent {
   }
 
   protected onInput(event: Event): void {
-    this.query.set((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    this.query.set(value);
     this.cursor.set(0);
+    this.text?.run(value);
   }
 
   protected onKey(event: KeyboardEvent): void {

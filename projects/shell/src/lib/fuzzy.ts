@@ -1,10 +1,12 @@
 /** One entry of the command-palette index. */
 export interface SearchEntry {
-  readonly kind: 'page' | 'capability' | 'sku' | 'concept' | 'doc';
+  readonly kind: 'page' | 'capability' | 'sku' | 'concept' | 'doc' | 'text';
   readonly title: string;
   readonly href: string;
   readonly hint?: string;
   readonly keywords?: string;
+  /** For a full-text result, the passage that matched, as plain text. */
+  readonly excerpt?: string;
 }
 
 /**
@@ -32,7 +34,7 @@ export function fuzzyScore(query: string, text: string): number {
 }
 
 /** Pages and products outrank the long tail of capabilities when the match is equally good. */
-const KIND_WEIGHT: Record<SearchEntry['kind'], number> = { page: 6, sku: 5, concept: 3, doc: 2, capability: 0 };
+const KIND_WEIGHT: Record<SearchEntry['kind'], number> = { page: 6, sku: 5, concept: 3, doc: 2, text: 0, capability: 0 };
 
 /** Entries matching `query`, best first; the whole index, in order, for an empty query. */
 export function searchIndex(entries: readonly SearchEntry[], query: string, limit = 12): SearchEntry[] {

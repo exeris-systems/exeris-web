@@ -31,4 +31,6 @@ an edit that only loosens a header.
 
 - `scripts/verify-dist.mjs` (run by `postbuild`): no third-party request, tracker, inline script or
   cookie write in the output.
+- `scripts/verify-dist.mjs`: each application's `script-src` is exactly the sources it declares in
+  `APPS` (`scripts/postbuild.mjs`): `'self'`, or for the docs `'self' 'wasm-unsafe-eval'`.
 - The CSP in `projects/shell/public/_headers` blocks at runtime what the scan misses.

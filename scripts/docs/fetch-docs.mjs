@@ -199,9 +199,9 @@ function write(name, text) {
 }
 
 /**
- * The generated files: index.json and index.ts, which every page loads, with each page's metadata
- * and the text of its headings as search keywords; one content module per page, loaded with the
- * page, holding its tree and its headings with their ids; routes.ts.
+ * The generated files: index.json and index.ts, which every page loads, with each page's metadata;
+ * one content module per page, loaded with the page, holding its tree and its headings with their
+ * ids; routes.ts. Search reads the prerendered pages (Pagefind), not this index.
  */
 export function writeGenerated(config, pages, refs) {
   rmSync(GENERATED, { recursive: true, force: true });
@@ -213,7 +213,7 @@ export function writeGenerated(config, pages, refs) {
       // The index is in every page's initial load: a source URL the page derives from its
       // repository, ref and path, and a head or navigation title that only repeats the title, are left out.
       const { repo, ref, path } = p.source;
-      const meta = { ...p, source: { repo, ref, path }, keywords: p.headings.map((h) => h.text).join(' ') };
+      const meta = { ...p, source: { repo, ref, path } };
       if (meta.headTitle === meta.title) delete meta.headTitle;
       if (meta.navTitle === meta.title) delete meta.navTitle;
       delete meta.html;

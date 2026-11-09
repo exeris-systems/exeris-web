@@ -1035,6 +1035,27 @@ kbd {
   background: var(--ex-surface-3);
   box-shadow: inset 2px 0 0 var(--ex-flow-cyan);
 }
+.ex-palette__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+/* Beside a result with a passage the hint keeps its width, up to a third of the row. */
+.ex-palette__body + .ex-palette__hint {
+  flex: 0 0 auto;
+  max-width: 34%;
+}
+.ex-palette__excerpt {
+  color: var(--ex-fg-3);
+  font-size: 12.5px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .ex-palette__title {
   color: var(--ex-fg);
   font-size: 14px;

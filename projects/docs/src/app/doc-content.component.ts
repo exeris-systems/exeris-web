@@ -39,7 +39,8 @@ import { MermaidComponent } from './mermaid.component';
           @case ('blockquote') { <blockquote><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></blockquote> }
           @case ('pre') {
             @if (n.a?.class === 'ex-doc__diagram') {
-              <ex-mermaid [source]="textOf(n)" />
+              <!-- A diagram's source is not prose: the search index leaves it out. -->
+              <ex-mermaid data-pagefind-ignore [source]="textOf(n)" />
             } @else {
               <pre [attr.class]="n.a?.class"><ng-container *ngTemplateOutlet="nodes; context: { $implicit: n.c }" /></pre>
             }

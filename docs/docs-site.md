@@ -68,9 +68,9 @@ directory: `exeris-sdk/README.md` is `/sdk`, `exeris-sdk/exeris-sdk-tck/README.m
 
 `npm run build:docs` runs `scripts/docs/fetch-docs.mjs`, which reads each listed file from
 `raw.githubusercontent.com` at the ref above and writes `projects/docs/src/app/generated/` (not
-committed): `index.json` with every page's title, description, section, source (repository, ref
-and path; the page derives the GitHub URL) and the text of its headings for search, which every
-page loads; one module per page holding its document tree
+committed): `index.json` with every page's title, description, section and source (repository,
+ref and path; the page derives the GitHub URL), which every page loads; one module per page
+holding its document tree
 and its contents, which the build turns into a chunk of its own and the page loads with it; and
 the routes. There is no committed copy, so a failed fetch fails the build. `scripts/docs/render.mjs` renders the
 markdown:
@@ -125,6 +125,22 @@ page; inside it each section is a heading that links to its list, then its pages
 more than 25 pages (the records) is a disclosure of its own. On a screen narrower than 900 px it
 folds behind a Contents button that names the group and section, and closes after a navigation.
 Above a page are its group and section; below it, the pages before and after it in its group.
+
+## Search
+
+After the prerender and `postbuild`, `npm run build:docs` runs `pagefind --site
+dist/docs/browser`, which indexes the prerendered pages into `dist/docs/browser/pagefind/`. Only a
+document's `<article data-pagefind-body>` is indexed, with its group and section as metadata; the
+home page, the section lists, the navigation and a diagram's Mermaid source are not. Pagefind
+weights a page's title and headings above its prose.
+
+The palette (⌘K, `/` or the search field on the home page) loads `/pagefind/pagefind.js` when the
+reader first types, and lists the pages whose text matches, at the heading that matched best, with
+the passage. The index is split into chunks, so a query fetches only the parts it needs, all from
+this origin. Pagefind runs its search in WebAssembly, so the docs' Content-Security-Policy adds
+`'wasm-unsafe-eval'` to `script-src` (`scripts/postbuild.mjs`, `APPS.docs.scriptSrc`); it permits
+compiling a WebAssembly module and no evaluation of script text, and `scripts/verify-dist.mjs`
+fails on any other source.
 
 The home page offers the search, four guides to start from by task, each product with one sentence
 on what it covers and its sections, and the records as their lists. A section's list gives each

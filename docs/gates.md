@@ -27,7 +27,8 @@ last-verified: 2026-10-29
   description, canonical and Open Graph tags on its own host and no unresolved content token;
   in the site and the docs, the applications with a route list, every link within the
   application names one of its routes or a file of its output, and an anchor in it an element id
-  on that page; every application carries `_headers` and makes no third-party request, names no
+  on that page; every application carries `_headers` whose `script-src` is exactly `'self'`, or
+  `'self' 'wasm-unsafe-eval'` for the docs, and makes no third-party request, names no
   tracker (by its host or script name, so an ordinary word in a document's prose is not one), runs
   no inline script and writes no cookie.
 - **Lighthouse CI** (`lighthouserc.json`): performance ≥ 0.8, accessibility ≥ 0.9,

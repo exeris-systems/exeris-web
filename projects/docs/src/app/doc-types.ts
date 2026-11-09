@@ -16,8 +16,6 @@ export interface DocPage {
   readonly navTitle?: string;
   readonly description: string;
   readonly source: { readonly repo: string; readonly ref: string; readonly path: string };
-  /** The text of the page's second- and third-level headings, for search. */
-  readonly keywords: string;
 }
 
 /** A page's content module, loaded with the page: its tree and its contents. */

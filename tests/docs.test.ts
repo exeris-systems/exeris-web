@@ -133,7 +133,7 @@ describe('the document tree', () => {
 
   it('draws a diagram block with the Mermaid component, its source as the fallback', () => {
     const template = readFileSync(join(__dirname, '../projects/docs/src/app/doc-content.component.ts'), 'utf8');
-    expect(template).toMatch(/@if \(n\.a\?\.class === 'ex-doc__diagram'\) \{\s*<ex-mermaid \[source\]="textOf\(n\)" \/>/);
+    expect(template).toMatch(/@if \(n\.a\?\.class === 'ex-doc__diagram'\) \{\s*(<!--[^>]*-->\s*)?<ex-mermaid data-pagefind-ignore \[source\]="textOf\(n\)" \/>/);
     const mermaid = readFileSync(join(__dirname, '../projects/docs/src/app/mermaid.component.ts'), 'utf8');
     expect(mermaid).toMatch(/securityLevel: 'strict'/);
     expect(mermaid).toMatch(/drawDiagram\(/);

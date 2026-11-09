@@ -1,28 +1,16 @@
 import { type ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
 import { TitleStrategy, provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
-import { SHELL_CONFIG, type SearchEntry, type ShellConfig } from '@exeris-web/shell';
+import { SHELL_CONFIG, type ShellConfig } from '@exeris-web/shell';
 import buildMeta from '../../../../src/data/build-meta.json';
 import { FOOTER_LEGAL, FOOTER_TAGLINE, LINKS } from '../../../../src/content/site';
 import { routes } from './app.routes';
-import { NAV_GROUPS, NAV_SECTIONS, PAGES, groupOf, sectionRoute } from './docs';
+import { NAV_GROUPS, sectionRoute } from './docs';
+import { fullText } from './search';
 import { DocsTitleStrategy } from './seo';
 
 const SITE = 'https://exeris.eu';
 
-/** Where a page sits, as the palette shows it beside the title: `SDK · Guides`. */
-function hintOf(sectionId: string): string | undefined {
-  const s = NAV_SECTIONS.find((x) => x.id === sectionId);
-  return s ? `${groupOf(s).label} · ${s.label}` : undefined;
-}
-
-const SEARCH: readonly SearchEntry[] = PAGES.map((p) => ({
-  kind: 'doc',
-  title: p.title,
-  href: `/${p.route}`,
-  hint: hintOf(p.section),
-  keywords: `${p.description} ${p.keywords}`,
-}));
 
 const SHELL: ShellConfig = {
   nav: [
@@ -40,7 +28,11 @@ const SHELL: ShellConfig = {
     legal: FOOTER_LEGAL,
   },
   build: { kernel: buildMeta.kernel, siteSha: null },
-  searchIndex: SEARCH,
+  // The palette searches the full text of every page (search.ts), titles and headings weighted
+  // above the prose; it keeps no index of its own.
+  searchIndex: [],
+  searchPlaceholder: 'Search the documentation…',
+  fullText,
 };
 
 export const appConfig: ApplicationConfig = {

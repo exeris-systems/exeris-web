@@ -26,7 +26,10 @@ import { SidebarComponent } from './sidebar.component';
             <li><a [routerLink]="sectionLink()">{{ section().label }}</a></li>
           </ol>
         </nav>
-        <article class="ex-doc prose prose-invert max-w-none"><ex-doc-content [tree]="doc().tree" /></article>
+        <!-- The search index (Pagefind, at build time) reads only this element and its section. -->
+        <article class="ex-doc prose prose-invert max-w-none" data-pagefind-body [attr.data-pagefind-meta]="'section:' + group().label + ' · ' + section().label">
+          <ex-doc-content [tree]="doc().tree" />
+        </article>
         <nav class="ex-docs-pager" aria-label="Pages in this group">
           @if (around().prev; as prev) {
             <a class="ex-docs-pager__link" [routerLink]="'/' + prev.route" rel="prev">

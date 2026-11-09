@@ -2,15 +2,15 @@
 // Verifies the static output of one application (site, docs or lab; site by default): every
 // route emitted its own HTML with title, description, canonical and Open Graph tags; the page
 // markup leaves no unresolved content token; every link within the application reaches a route
-// or a file of its output, and an anchor in it an element of that page; and the application makes
-// no third-party request
-// and runs no inline script (the no-tracking check). The route and SEO checks cover an
+// or a file of its output, and an anchor in it an element of that page; the script-src of its
+// Content-Security-Policy is the one it declares; and the application makes no third-party
+// request and runs no inline script (the no-tracking check). The route and SEO checks cover an
 // application with a route list (APPS in postbuild.mjs); one without it is held to the shared
 // headers and the no-tracking check.
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { APPS } from './postbuild.mjs';
+import { APPS, SCRIPT_SRC } from './postbuild.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -44,6 +44,22 @@ function files(dir) {
   });
 }
 
+/**
+ * The script-src of every Content-Security-Policy in `_headers` must be exactly `allowed`: the
+ * shared `'self'`, or the sources an application names in APPS, so no source is added unnoticed.
+ */
+export function scriptSrcErrors(headers, allowed) {
+  const policies = [...headers.matchAll(/Content-Security-Policy:([^\n]*)/g)].map((m) => m[1]);
+  if (!policies.length) return ['_headers: no Content-Security-Policy'];
+  const byName = (a, b) => a.localeCompare(b);
+  const want = [...allowed].sort(byName).join(' ');
+  return policies.flatMap((policy) => {
+    const sources = policy.match(/script-src ([^;]*)/)?.[1].trim().split(/\s+/) ?? [];
+    const got = [...sources].sort(byName).join(' ');
+    return got === want ? [] : [`_headers: script-src is "${sources.join(' ')}", not "${allowed.join(' ')}"`];
+  });
+}
+
 export function verify(app = 'site') {
   const config = APPS[app];
   if (!config) return { errors: [`unknown application ${app}`], routes: [] };
@@ -53,7 +69,9 @@ export function verify(app = 'site') {
   const routes = config.routes ? [...config.routes(), '404'] : [];
   errors.push(...routeErrors(config, routes));
   errors.push(...linkErrors(out, routes));
-  if (!existsSync(join(out, '_headers'))) errors.push('missing _headers');
+  const headers = join(out, '_headers');
+  if (!existsSync(headers)) errors.push('missing _headers');
+  else errors.push(...scriptSrcErrors(readFileSync(headers, 'utf8'), config.scriptSrc ?? SCRIPT_SRC));
   errors.push(...noTrackingErrors(out, new Set([new URL(url).hostname])));
   return { errors, routes };
 }

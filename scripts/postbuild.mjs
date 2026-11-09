@@ -36,15 +36,39 @@ function docsIndex() {
 }
 
 /**
- * Each application: its output directory, its public URL, its indexable routes and the files
- * postbuild adds beyond 404.html, the sitemap and robots.txt. An application with no route list
- * yet gets no sitemap and is held to the shared checks only.
+ * Each application: its output directory, its public URL, its indexable routes, the files
+ * postbuild adds beyond 404.html, the sitemap and robots.txt, and the sources its
+ * Content-Security-Policy allows scripts from (`'self'` unless named). An application with no
+ * route list yet gets no sitemap and is held to the shared checks only.
+ *
+ * The docs search (Pagefind) compiles a WebAssembly module from this origin, which a browser
+ * allows only under `'wasm-unsafe-eval'`; that source permits WebAssembly compilation and no
+ * evaluation of script text, and only the docs carry it.
  */
 export const APPS = {
   site: { out: OUT, url: SITE_URL, routes: indexableRoutes, redirects: true },
-  docs: { out: join(ROOT, 'dist/docs/browser'), url: 'https://docs.exeris.eu', routes: docsRoutes, files: ['refs.json'] },
+  docs: {
+    out: join(ROOT, 'dist/docs/browser'),
+    url: 'https://docs.exeris.eu',
+    routes: docsRoutes,
+    files: ['refs.json'],
+    scriptSrc: ["'self'", "'wasm-unsafe-eval'"],
+  },
   lab: { out: join(ROOT, 'dist/lab/browser'), url: 'https://lab.exeris.eu', routes: null },
 };
+
+export const SCRIPT_SRC = ["'self'"];
+
+/** `headers` (a `_headers` file) with the script-src of every Content-Security-Policy set to `sources`. */
+export function withScriptSrc(headers, sources) {
+  let found = 0;
+  const out = headers.replace(/(Content-Security-Policy:[^\n]*?)script-src [^;\n]*/g, (_, before) => {
+    found++;
+    return `${before}script-src ${sources.join(' ')}`;
+  });
+  if (!found) throw new Error('postbuild: _headers sets no Content-Security-Policy script-src');
+  return out;
+}
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const name = process.argv[2] ?? 'site';
@@ -56,6 +80,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   writeFileSync(join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`);
   writeFileSync(join(out, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${url}/sitemap.xml\n`);
   const files = ['404.html', `sitemap.xml (${urls.length} URLs)`, 'robots.txt'];
+  if (app.scriptSrc) {
+    const headers = join(out, '_headers');
+    writeFileSync(headers, withScriptSrc(readFileSync(headers, 'utf8'), app.scriptSrc));
+    files.push(`_headers (script-src ${app.scriptSrc.join(' ')})`);
+  }
   if (name === 'docs') {
     // The commit each source was read at, which scripts/docs/refresh.mjs compares with the sources'
     // refs now to decide whether the live docs need a rebuild.
