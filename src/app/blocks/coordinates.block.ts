@@ -56,7 +56,7 @@ export interface CoordinatesProps {
   `,
 })
 export class CoordinatesComponent {
-  readonly props = input.required<CoordinatesProps, unknown>({ transform: (value: unknown) => value as CoordinatesProps });
+  readonly props = input.required<CoordinatesProps>();
   protected readonly tooling = TOOLING;
   protected central(artifact: string): string {
     return `https://central.sonatype.com/artifact/${this.tooling.group}/${artifact}/${this.tooling.version}`;

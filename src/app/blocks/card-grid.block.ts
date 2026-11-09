@@ -93,7 +93,7 @@ export interface CardGridProps {
   `,
 })
 export class CardGridComponent {
-  readonly props = input.required<CardGridProps, unknown>({ transform: (value: unknown) => value as CardGridProps });
+  readonly props = input.required<CardGridProps>();
   protected readonly tagClass = tagClass;
   protected readonly toneVar = toneVar;
 

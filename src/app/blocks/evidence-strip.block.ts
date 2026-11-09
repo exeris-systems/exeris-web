@@ -57,7 +57,7 @@ export interface EvidenceStripProps {
   `,
 })
 export class EvidenceStripComponent {
-  readonly props = input.required<EvidenceStripProps, unknown>({ transform: (value: unknown) => value as EvidenceStripProps });
+  readonly props = input.required<EvidenceStripProps>();
   protected readonly btnClass = btnClass;
 
   protected readonly cells = computed(() =>

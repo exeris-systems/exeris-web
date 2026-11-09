@@ -32,5 +32,5 @@ export interface TierDeepProps {
   `,
 })
 export class TierDeepComponent {
-  readonly props = input.required<TierDeepProps, unknown>({ transform: (value: unknown) => value as TierDeepProps });
+  readonly props = input.required<TierDeepProps>();
 }

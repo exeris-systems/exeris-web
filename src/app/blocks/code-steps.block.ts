@@ -47,6 +47,6 @@ export interface CodeStepsProps {
   `,
 })
 export class CodeStepsComponent {
-  readonly props = input.required<CodeStepsProps, unknown>({ transform: (value: unknown) => value as CodeStepsProps });
+  readonly props = input.required<CodeStepsProps>();
   protected readonly stepLabel = stepLabel;
 }

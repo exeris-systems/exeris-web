@@ -61,5 +61,5 @@ export interface ConsumerTableProps {
   `,
 })
 export class ConsumerTableComponent {
-  readonly props = input.required<ConsumerTableProps, unknown>({ transform: (value: unknown) => value as ConsumerTableProps });
+  readonly props = input.required<ConsumerTableProps>();
 }

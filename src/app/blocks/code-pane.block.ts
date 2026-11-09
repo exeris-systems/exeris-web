@@ -29,7 +29,7 @@ export interface CodePaneProps {
   `,
 })
 export class CodePaneComponent {
-  readonly props = input.required<CodePaneProps, unknown>({ transform: (value: unknown) => value as CodePaneProps });
+  readonly props = input.required<CodePaneProps>();
   protected readonly tagClass = tagClass;
   protected readonly lines = computed(() => {
     const lang = this.props().lang;
