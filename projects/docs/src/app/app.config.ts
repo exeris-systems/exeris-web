@@ -15,7 +15,7 @@ const SEARCH: readonly SearchEntry[] = PAGES.map((p) => ({
   title: p.title,
   href: `/${p.route}`,
   hint: NAV_SECTIONS.find((s) => s.id === p.section)?.label,
-  keywords: `${p.description} ${p.headings.map((h) => h.text).join(' ')}`,
+  keywords: `${p.description} ${p.keywords}`,
 }));
 
 const SHELL: ShellConfig = {

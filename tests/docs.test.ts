@@ -23,6 +23,14 @@ describe('frontmatter and publication', () => {
     expect(isPublished(parseFrontmatter('# no frontmatter').data)).toBe(false);
   });
 
+  it('reads quoted titles as YAML does', () => {
+    const title = (line: string) => parseFrontmatter(`---\ntitle: ${line}\n---\n`).data.title;
+    expect(title(`'ADR-006: Spring-Free Kernel Boundary ("The Wall")'`)).toBe('ADR-006: Spring-Free Kernel Boundary ("The Wall")');
+    expect(title(`'It''s here'`)).toBe("It's here");
+    expect(title(`"Say \\"hi\\""`)).toBe('Say "hi"');
+    expect(title('Plain: words')).toBe('Plain: words');
+  });
+
   it('routes a file by its source and path', () => {
     expect(routeOf('kernel', 'docs/subsystems/memory.md')).toBe('kernel/subsystems/memory');
     expect(routeOf('platform', 'high-level-architecture.md')).toBe('platform/high-level-architecture');
@@ -159,6 +167,32 @@ describe('buildDocs', () => {
     expect(skipped).toEqual(['kernel:docs/b.md (visibility public, status draft)']);
   });
 
+  it('gives a document that opens below the first level its title as a heading', async () => {
+    const open = { ...config, sections: [{ id: 'kernel', label: 'Kernel', files: ['kernel:docs/step.md'] }] };
+    const step = '---\ntitle: "Step one"\nvisibility: public\nstatus: active\n---\n\n### What changed\n\nText.\n';
+    const { pages } = await buildDocs(open, { read: async () => step, refs: { kernel: 'v1' } });
+    expect(pages[0].html).toMatch(/^<h1 id="step-one">Step one<\/h1>/);
+    expect(pages[0].headings.map((h: { text: string }) => h.text)).toEqual(['What changed']);
+  });
+
+  it('qualifies a title two pages share by the section in their head title', async () => {
+    const two = {
+      sources: { sdk: { repo: 'exeris-sdk', ref: 'main', route: 'sdk' }, tooling: { repo: 'exeris-tooling', ref: 'main', route: 'tooling' } },
+      sections: [
+        { id: 'sdk', label: 'SDK', files: ['sdk:docs/architecture.md', 'sdk:docs/glossary.md'] },
+        { id: 'tooling', label: 'Tooling', files: ['tooling:docs/architecture.md'] },
+      ],
+    };
+    const doc = (title: string) => `---\ntitle: ${title}\nvisibility: public\nstatus: active\n---\n\n# ${title}\n`;
+    const read = async (_repo: string, _ref: string, path: string) => doc(path.endsWith('glossary.md') ? 'Glossary' : 'Architecture');
+    const { pages } = await buildDocs(two, { read, refs: { sdk: 'v1', tooling: 'v1' } });
+    expect(pages.map((p: { title: string; headTitle: string }) => [p.title, p.headTitle])).toEqual([
+      ['Architecture', 'Architecture · SDK'],
+      ['Glossary', 'Glossary'],
+      ['Architecture', 'Architecture · Tooling'],
+    ]);
+  });
+
   it('publishes a README listed as one without frontmatter, and only a README', async () => {
     const readme = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }] }] };
     const { pages } = await buildDocs(readme, { read: async () => '# Exeris SDK\n\nAnnotations for declaring a domain.\n', refs: { sdk: 'v1' } });
@@ -171,6 +205,44 @@ describe('buildDocs', () => {
     const both = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }, 'sdk:docs/README.md'] }] };
     const page = '---\nvisibility: public\nstatus: active\n---\n\n# SDK\n';
     await expect(buildDocs(both, { read: async () => page, refs: { sdk: 'v1' } })).rejects.toThrow(/sdk:README\.md and sdk:docs\/README\.md are both \/sdk/);
+  });
+
+  it('lists a directory: every Markdown file under it, a README first, no ADR link stub', async () => {
+    const cfg = { sources: { docs: { repo: 'exeris-docs', ref: 'main', route: 'platform' } }, sections: [{ id: 'std', label: 'Standards', files: [{ dir: 'docs:standards' }] }] };
+    const page = '---\nvisibility: public\nstatus: active\n---\n\n# P\n';
+    const list = async () => ['standards/b.md', 'standards/README.md', 'standards/checklists/a.md', 'standards/x.link.md', 'standards/c.txt', 'other/d.md'];
+    const { pages } = await buildDocs(cfg, { read: async () => page, refs: { docs: 'abc' }, list });
+    expect(pages.map((p: { route: string }) => p.route)).toEqual(['platform/standards', 'platform/standards/b', 'platform/standards/checklists/a']);
+    await expect(buildDocs(cfg, { read: async () => page, refs: { docs: 'abc' }, list: async () => [] })).rejects.toThrow(/holds no Markdown file/);
+  });
+
+  it('lists the records a registry links to, in its order, and reports the ones it cannot read', async () => {
+    const cfg = {
+      sources: {
+        docs: { repo: 'exeris-docs', ref: 'main', route: 'platform' },
+        kernel: { repo: 'exeris-kernel', ref: 'main', route: 'kernel' },
+      },
+      sections: [
+        { id: 'kernel', label: 'Kernel', files: ['kernel:docs/adr/ADR-002-b.md'] },
+        { id: 'decisions', label: 'Decisions', files: [{ registry: 'docs:adr-index.md' }] },
+      ],
+    };
+    const index = [
+      '| 001 | [ADR-001](adr/ADR-001-a.md) |',
+      '| 002 | [ADR-002](https://github.com/exeris-systems/exeris-kernel/blob/main/docs/adr/ADR-002-b.md) |',
+      '| 003 | [ADR-003](https://github.com/exeris-systems/exeris-kernel/blob/development/0.12.0/docs/adr/ADR-003-c.md) |',
+      '| 004 | [ADR-004](https://github.com/exeris-systems/exeris-agents/blob/main/docs/adr/ADR-004-d.md) |',
+      '| 005 | [stub](https://github.com/exeris-systems/exeris-kernel/blob/main/docs/adr/ADR-005.link.md) [rfc](rfc/RFC-2026-01-01-e.md) [std](standards/x.md) |',
+    ].join('\n');
+    const page = '---\nvisibility: public\nstatus: active\n---\n\n# P\n';
+    const read = async (_r: string, _ref: string, path: string) => (path === 'adr-index.md' ? index : page);
+    const { pages, skipped } = await buildDocs(cfg, { read, refs: { docs: 'a1', kernel: 'k1' } });
+    expect(pages.map((p: { route: string; section: string }) => [p.route, p.section])).toEqual([
+      ['kernel/adr/ADR-002-b', 'kernel'],
+      ['platform/adr/ADR-001-a', 'decisions'],
+      ['platform/rfc/RFC-2026-01-01-e', 'decisions'],
+    ]);
+    expect(skipped).toEqual(['docs:adr-index.md: 2 links to records at another ref or in a repository that is not a source']);
   });
 
   it('fails on a listed file of an unknown source', async () => {

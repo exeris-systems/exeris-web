@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
-import { noTrackingErrors, routeErrors, verify } from '../scripts/verify-dist.mjs';
+import { linkErrors, noTrackingErrors, routeErrors, verify } from '../scripts/verify-dist.mjs';
 
 function out(files: Record<string, string>): string {
   const dir = mkdtempSync(join(tmpdir(), 'verify-dist-'));
@@ -55,5 +55,30 @@ describe('the route check of an application', () => {
     const dir = out({ 'kernel/a/index.html': page('https://exeris.eu/kernel/a') });
     const errors = routeErrors({ out: dir, url: 'https://docs.exeris.eu' }, ['kernel/a']);
     expect(errors).toEqual(expect.arrayContaining([expect.stringMatching(/no canonical/), expect.stringMatching(/canonical is https:\/\/exeris\.eu\/kernel\/a/)]));
+  });
+});
+
+describe('the link check of an application', () => {
+  const dir = out({
+    'index.html': '<a href="/kernel/a">a</a><a href="/og.png">image</a><a href="https://exeris.eu/x">site</a><a href="//cdn.test/x">cdn</a>',
+    'kernel/a/index.html': '<h2 id="contract">Contract</h2><a href="#contract">here</a><a href="/kernel/b#hot-path">b</a><a href="/">home</a>',
+    'kernel/b/index.html': '<h2 id="hot-path">Hot path</h2><a href="/kernel/a/">a</a>',
+    'og.png': '',
+  });
+
+  it('accepts links to routes, files of the output and anchors that exist', () => {
+    expect(linkErrors(dir, ['', 'kernel/a', 'kernel/b'])).toEqual([]);
+  });
+
+  it('rejects a link to a missing route and an anchor missing from its page', () => {
+    const broken = out({
+      'index.html': '<a href="/kernel/gone">x</a><a href="/kernel/gone">again</a><a href="/kernel/a#nope">y</a><a href="#top">z</a>',
+      'kernel/a/index.html': '<h2 id="contract">Contract</h2>',
+    });
+    expect(linkErrors(broken, ['', 'kernel/a'])).toEqual([
+      '/: link /kernel/gone: no such route',
+      '/: link /kernel/a#nope: no element #nope on /kernel/a',
+      '/: link #top: no element #top on /',
+    ]);
   });
 });

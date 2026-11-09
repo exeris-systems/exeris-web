@@ -29,7 +29,7 @@ navigation, footer and command palette (each application supplies their content 
 manifest.
 
 | Script | What it does |
-|---|---|
+| --- | --- |
 | `npm run data` | Downloads the upstream registers into `src/data/*.json` ([build-time data](docs/build-time-data.md)) |
 | `npm run generate:views` | Runs `exeris-gen generate` over `content/views` into `src/app/generated` |
 | `npm run check:content` | The claims and content gate |
@@ -60,7 +60,7 @@ sitemap use; `/start/` redirects to it), `404.html` with status 404 for an unkno
 empty `previews` block, which preview builds of other branches need.
 
 | Setting | Value |
-|---|---|
+| --- | --- |
 | Build command | `npm run build` |
 | Deploy command | `npx wrangler deploy` |
 | Non-production branch deploy command | `npx wrangler preview` (or `npx wrangler versions upload`) |

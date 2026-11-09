@@ -39,7 +39,8 @@ export interface LabProps {
  * The benchmark laboratory: one tab per evidence category, every figure either a registered
  * claim string, a chart drawn from the numbers inside such a string, a median read from the
  * campaign's result.json, or a CITABLE row of the evidence bundle. Tabs follow the WAI-ARIA tabs
- * pattern; all panels are in the prerendered HTML and the URL fragment selects one.
+ * pattern; all panels are in the prerendered HTML and the URL fragment selects one: a tab's id is
+ * its fragment, so `/lab#spring` scrolls to the tabs and opens Spring.
  */
 @Component({
   selector: 'ex-lab',
@@ -61,7 +62,7 @@ export interface LabProps {
             <button
               type="button"
               role="tab"
-              [id]="'tab-' + t.id"
+              [id]="t.id"
               [attr.aria-controls]="'panel-' + t.id"
               [attr.aria-selected]="active() === t.id"
               [attr.tabindex]="active() === t.id ? 0 : -1"
@@ -72,7 +73,7 @@ export interface LabProps {
         </div>
 
         @for (t of props().tabs; track t.id) {
-          <div class="ex-lab__panel" role="tabpanel" [id]="'panel-' + t.id" [attr.aria-labelledby]="'tab-' + t.id" [hidden]="active() !== t.id" tabindex="0">
+          <div class="ex-lab__panel" role="tabpanel" [id]="'panel-' + t.id" [attr.aria-labelledby]="t.id" [hidden]="active() !== t.id" tabindex="0">
             <h2 class="ex-lab__title">{{ t.title }}</h2>
             <p class="ex-lab__intro"><ex-text [text]="t.intro" /></p>
 
@@ -263,6 +264,6 @@ export class LabComponent {
     if (next < 0) return;
     event.preventDefault();
     this.select(ids[next]);
-    this.host.nativeElement.querySelector<HTMLElement>(`#tab-${ids[next]}`)?.focus();
+    this.host.nativeElement.querySelector<HTMLElement>(`#${ids[next]}`)?.focus();
   }
 }

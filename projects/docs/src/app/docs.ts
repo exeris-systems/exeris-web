@@ -17,5 +17,10 @@ export function pageById(id: string): DocPage {
   return page;
 }
 
+/** The file a page was rendered from, on GitHub at the ref it was read at. */
+export function sourceUrl({ source }: DocPage): string {
+  return `https://github.com/exeris-systems/${source.repo}/blob/${source.ref}/${source.path}`;
+}
+
 /** The release or commit each source was read at, for the footer. */
 export const SOURCE_REFS = DOCS_INDEX.refs;
