@@ -13,9 +13,13 @@ The severity is `docs/repo-review-rules.md` S4.
 2. **No cookie and no tracking identifier.** No cookie write, and no `localStorage` or
    `sessionStorage` value that identifies a visitor.
 3. **No analytics, tag manager or beacon**, first-party or otherwise.
-4. **No inline script and no inline event handler.** The policy is `script-src 'self'`.
-5. **The CSP is not loosened.** An edit to `projects/shell/public/_headers` that adds `unsafe-inline`,
-   `unsafe-eval`, a host or a wildcard to a fetch directive changes the promise.
+4. **No inline script and no inline event handler.** The policy is `script-src 'self'`. The one
+   exception is docs.exeris.eu, whose `script-src` may add `'wasm-unsafe-eval'` and nothing else,
+   so that its search can compile a WebAssembly module served from its own origin. The source
+   permits WebAssembly compilation only, not the evaluation of script text.
+5. **The CSP is not loosened.** An edit to `projects/shell/public/_headers`, or to the sources an
+   application declares, that adds `unsafe-inline`, `unsafe-eval`, a host or a wildcard to a
+   fetch directive, or any source beyond the exception in rule 4, changes the promise.
 6. **A link is not a request.** An `<a href>` to another site navigates on a click and is judged as
    copy (licence and hygiene), not under this policy.
 
