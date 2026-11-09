@@ -102,6 +102,23 @@ export function apiFailureDetail(url, headers, env = process.env) {
   return ` (${token}; ${rate})`;
 }
 
+/**
+ * The reason a GitHub API refusal gives in its body (`message`), on one line and cut to 200
+ * characters, or ''. A 403 with rate limit left is a token the API will not accept for that
+ * repository, and only the message says why.
+ */
+export function apiMessage(url, body) {
+  if (new URL(url).hostname !== 'api.github.com') return '';
+  let message;
+  try {
+    message = JSON.parse(body).message;
+  } catch {
+    return '';
+  }
+  if (typeof message !== 'string' || !message) return '';
+  return `: ${message.replace(/\s+/g, ' ').trim().slice(0, 200)}`;
+}
+
 async function request(url, method = 'GET') {
   let res;
   try {
@@ -109,7 +126,10 @@ async function request(url, method = 'GET') {
   } catch (err) {
     throw new FetchError(`${method} ${url}: ${err.message}`, { cause: err });
   }
-  if (!res.ok) throw new FetchError(`${method} ${url}: HTTP ${res.status}${apiFailureDetail(url, res.headers)}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new FetchError(`${method} ${url}: HTTP ${res.status}${apiFailureDetail(url, res.headers)}${apiMessage(url, body)}`);
+  }
   return res;
 }
 

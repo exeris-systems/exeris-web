@@ -56,5 +56,7 @@ version, and the fetch prints a warning.
 The token is `SITE_GITHUB_TOKEN`, or `GITHUB_TOKEN` when that is unset (CI passes the token
 Actions provides under that name; a secret store that reserves the `GITHUB_` prefix takes the
 first). It is sent to `api.github.com` only, never to Maven Central or `raw.githubusercontent.com`. A failed
-GitHub API call names, in the build log, whether a token was sent and the rate limit the response
-reports: a 403 with none of 60 left is the unauthenticated limit, which the build hosts share.
+GitHub API call names, in the build log, whether a token was sent, the rate limit the response
+reports and the reason its body gives: a 403 with none of 60 left is the unauthenticated limit,
+which the build hosts share; a 403 with limit left is a token GitHub refuses for that repository,
+and the reason says why.

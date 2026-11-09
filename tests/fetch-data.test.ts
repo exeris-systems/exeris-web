@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 // @ts-expect-error -- plain ESM modules without type declarations
-import { FetchError, apiFailureDetail, headersFor, loadUpstream, repoOf, siteSha, strictFetch } from '../scripts/fetch-data.mjs';
+import { FetchError, apiFailureDetail, apiMessage, headersFor, loadUpstream, repoOf, siteSha, strictFetch } from '../scripts/fetch-data.mjs';
 // @ts-expect-error -- plain ESM module without type declarations
 import { isRuntimeError } from '../scripts/lighthouse-ci.mjs';
 
@@ -70,6 +70,21 @@ describe('repoOf', () => {
       builtAgainst: null,
     });
     expect(warn).toHaveBeenCalledWith(expect.stringMatching(/exeris-caps-a README: .*no paragraph/));
+  });
+});
+
+describe('apiMessage', () => {
+  const api = 'https://api.github.com/repos/exeris-systems/exeris-kernel/commits/main';
+
+  it('gives the reason a GitHub API refusal states, on one line', () => {
+    expect(apiMessage(api, JSON.stringify({ message: 'Resource not accessible\nby personal access token' }))).toBe(': Resource not accessible by personal access token');
+    expect(apiMessage(api, JSON.stringify({ message: 'x'.repeat(300) }))).toHaveLength(202);
+  });
+
+  it('gives nothing for a body without a message or another host', () => {
+    expect(apiMessage(api, 'not json')).toBe('');
+    expect(apiMessage(api, '{}')).toBe('');
+    expect(apiMessage('https://repo1.maven.org/maven2/x', JSON.stringify({ message: 'm' }))).toBe('');
   });
 });
 
