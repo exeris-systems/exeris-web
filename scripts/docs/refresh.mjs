@@ -23,24 +23,18 @@ const COMPARE_FILES = 300;
  */
 export async function staleSources(sources, deployed, current, changed) {
   if (!deployed) return ['the live site names no source commits'];
-  const reasons = [];
-  for (const [key, source] of Object.entries(sources)) {
-    const from = deployed[key];
-    const to = current[key];
-    if (from === to) continue;
-    if (!from) {
-      reasons.push(`${key}: not in the live site`);
-      continue;
-    }
-    const paths = await changed(source.repo, from, to);
-    if (!paths) reasons.push(`${key}: ${from.slice(0, 7)}..${to.slice(0, 7)} cannot be compared`);
-    else if (paths.length >= COMPARE_FILES) reasons.push(`${key}: ${paths.length} or more files changed`);
-    else {
-      const docs = paths.filter((p) => p.endsWith('.md'));
-      if (docs.length) reasons.push(`${key}: ${docs.length} Markdown file(s) changed, ${docs[0]} first`);
-    }
-  }
-  return reasons;
+  const reasons = await Promise.all(Object.entries(sources).map(([key, source]) => staleReason(key, source, deployed[key], current[key], changed)));
+  return reasons.filter(Boolean);
+}
+
+async function staleReason(key, source, from, to, changed) {
+  if (from === to) return null;
+  if (!from) return `${key}: not in the live site`;
+  const paths = await changed(source.repo, from, to);
+  if (!paths) return `${key}: ${from.slice(0, 7)}..${to.slice(0, 7)} cannot be compared`;
+  if (paths.length >= COMPARE_FILES) return `${key}: ${paths.length} or more files changed`;
+  const docs = paths.filter((p) => p.endsWith('.md'));
+  return docs.length ? `${key}: ${docs.length} Markdown file(s) changed, ${docs[0]} first` : null;
 }
 
 async function liveRefs() {
@@ -64,8 +58,9 @@ async function main() {
   const force = process.argv.includes('--force');
   const dryRun = process.argv.includes('--dry-run');
   const { sources } = JSON.parse(readFileSync(join(ROOT, 'projects/docs/sources.json'), 'utf8'));
-  const current = {};
-  for (const [key, source] of Object.entries(sources)) current[key] = await resolveRef(source);
+  const entries = Object.entries(sources);
+  const refs = await Promise.all(entries.map(([, source]) => resolveRef(source)));
+  const current = Object.fromEntries(entries.map(([key], i) => [key, refs[i]]));
   const reasons = force ? ['requested'] : await staleSources(sources, await liveRefs(), current, changedPaths);
   if (!reasons.length) {
     console.log('refresh: docs.exeris.eu is current; no Markdown file changed in its sources');
@@ -77,8 +72,10 @@ async function main() {
   if (!hook) throw new Error('refresh: DOCS_DEPLOY_HOOK is not set; it is the deploy hook URL of the exeris-web-docs Worker');
   const res = await fetch(hook, { method: 'POST' });
   if (!res.ok) throw new Error(`refresh: the deploy hook answered ${res.status}`);
+  // Only a build id of the expected shape is echoed into the log.
   const { result } = await res.json();
-  console.log(`refresh: build ${result?.build_uuid ?? '(no id)'} ${result?.already_exists ? 'already queued' : result?.status ?? 'started'}`);
+  const id = /^[0-9a-f-]{36}$/.test(result?.build_uuid ?? '') ? result.build_uuid : '(no id)';
+  console.log(`refresh: build ${id} ${result?.already_exists ? 'already queued' : 'started'}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

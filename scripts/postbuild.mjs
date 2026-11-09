@@ -57,5 +57,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     writeFileSync(join(out, 'refs.json'), `${JSON.stringify(docsIndex().refs)}\n`);
     files.push('refs.json');
   }
-  console.log(`postbuild${name === 'site' ? '' : ` ${name}`}: ${files.join(', ')}`);
+  const label = name === 'site' ? 'postbuild' : `postbuild ${name}`;
+  console.log(`${label}: ${files.join(', ')}`);
 }

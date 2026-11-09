@@ -32,8 +32,9 @@ jobs:
           node-version: 24
           cache: npm
 
+      # The check needs the packages' code only, not their install scripts.
       - name: Install
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Rebuild the docs when their sources changed
         run: node scripts/docs/refresh.mjs ${{ inputs.force && '--force' || '' }}
