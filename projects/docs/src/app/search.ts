@@ -24,7 +24,11 @@ let pagefind: Promise<Pagefind> | null = null;
 
 /** The documents whose text matches `query`, best first, as palette entries. */
 export async function fullText(query: string): Promise<readonly SearchEntry[]> {
-  pagefind ??= import(/* @vite-ignore */ PAGEFIND) as Promise<Pagefind>;
+  // A failed first load is forgotten, so the next query tries again rather than fail the same way.
+  pagefind ??= (import(/* @vite-ignore */ PAGEFIND) as Promise<Pagefind>).catch((err: unknown) => {
+    pagefind = null;
+    throw err;
+  });
   const found = await (await pagefind).search(query);
   if (!found) return [];
   const pages = await Promise.all(found.results.slice(0, RESULTS).map((r) => r.data()));
@@ -54,13 +58,12 @@ export function routeOf(url: string): string {
   return hash ? `${route}#${hash}` : route;
 }
 
-const ENTITIES: Readonly<Record<string, string>> = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", '#x27': "'" };
-
-/** An excerpt as plain text: Pagefind marks the match with `<mark>` and escapes the rest. */
+/**
+ * An excerpt as plain text: Pagefind marks the match with `<mark>` and escapes the rest. The
+ * browser's parser reads it as an inert document (no script runs, nothing loads) and its text
+ * content is the passage with the entities decoded; the palette binds it as text.
+ */
 export function plain(html: string): string {
-  return html
-    .replace(/<[^>]*>/g, '')
-    .replace(/&(amp|lt|gt|quot|#39|#x27);/g, (_, e: string) => ENTITIES[e])
-    .replace(/\s+/g, ' ')
-    .trim();
+  const text = new DOMParser().parseFromString(html, 'text/html').body.textContent ?? '';
+  return text.split(/\s+/).filter(Boolean).join(' ');
 }

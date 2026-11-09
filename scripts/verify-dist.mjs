@@ -51,10 +51,11 @@ function files(dir) {
 export function scriptSrcErrors(headers, allowed) {
   const policies = [...headers.matchAll(/Content-Security-Policy:([^\n]*)/g)].map((m) => m[1]);
   if (!policies.length) return ['_headers: no Content-Security-Policy'];
-  const want = [...allowed].sort().join(' ');
+  const byName = (a, b) => a.localeCompare(b);
+  const want = [...allowed].sort(byName).join(' ');
   return policies.flatMap((policy) => {
     const sources = policy.match(/script-src ([^;]*)/)?.[1].trim().split(/\s+/) ?? [];
-    const got = [...sources].sort().join(' ');
+    const got = [...sources].sort(byName).join(' ');
     return got === want ? [] : [`_headers: script-src is "${sources.join(' ')}", not "${allowed.join(' ')}"`];
   });
 }

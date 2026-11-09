@@ -14,14 +14,12 @@ The severity is `docs/repo-review-rules.md` S4.
    `sessionStorage` value that identifies a visitor.
 3. **No analytics, tag manager or beacon**, first-party or otherwise.
 4. **No inline script and no inline event handler.** The policy is `script-src 'self'`. The one
-   exception is docs.exeris.eu, whose `script-src` adds `'wasm-unsafe-eval'` (set by
-   `scripts/postbuild.mjs`, `APPS.docs.scriptSrc`): its search (Pagefind) compiles a WebAssembly
-   module served from the same origin. The source permits WebAssembly compilation only, not the
-   evaluation of script text.
-5. **The CSP is not loosened.** An edit to `projects/shell/public/_headers`, or to an
-   application's `scriptSrc`, that adds `unsafe-inline`, `unsafe-eval`, a host or a wildcard to a
-   fetch directive changes the promise. `scripts/verify-dist.mjs` fails when an application's
-   `script-src` is not exactly the one it declares.
+   exception is docs.exeris.eu, whose `script-src` may add `'wasm-unsafe-eval'` and nothing else,
+   so that its search can compile a WebAssembly module served from its own origin. The source
+   permits WebAssembly compilation only, not the evaluation of script text.
+5. **The CSP is not loosened.** An edit to `projects/shell/public/_headers`, or to the sources an
+   application declares, that adds `unsafe-inline`, `unsafe-eval`, a host or a wildcard to a
+   fetch directive, or any source beyond the exception in rule 4, changes the promise.
 6. **A link is not a request.** An `<a href>` to another site navigates on a click and is judged as
    copy (licence and hygiene), not under this policy.
 
@@ -33,6 +31,6 @@ an edit that only loosens a header.
 
 - `scripts/verify-dist.mjs` (run by `postbuild`): no third-party request, tracker, inline script or
   cookie write in the output.
-- `scripts/verify-dist.mjs`: each application's `script-src` is `'self'`, or the docs' declared
-  `'self' 'wasm-unsafe-eval'`, and nothing else.
+- `scripts/verify-dist.mjs`: each application's `script-src` is exactly the sources it declares in
+  `APPS` (`scripts/postbuild.mjs`): `'self'`, or for the docs `'self' 'wasm-unsafe-eval'`.
 - The CSP in `projects/shell/public/_headers` blocks at runtime what the scan misses.

@@ -15,6 +15,7 @@ import { SHELL_CONFIG } from './config';
 import { isExternal } from './href.directive';
 import { searchIndex, type SearchEntry } from './fuzzy';
 import { PaletteService } from './palette.service';
+import { TextSearch, mergeResults } from './text-search';
 
 const KIND_LABEL: Record<SearchEntry['kind'], string> = {
   page: 'Page',
@@ -24,10 +25,6 @@ const KIND_LABEL: Record<SearchEntry['kind'], string> = {
   doc: 'Doc',
   text: 'Text',
 };
-
-/** A full-text search waits this long after the last keystroke, and needs this many characters. */
-const TEXT_DELAY_MS = 150;
-const TEXT_MIN_CHARS = 2;
 
 /**
  * ⌘K / Ctrl+K / "/" command palette over the build-time index (routes, capabilities, SKUs,
@@ -107,27 +104,28 @@ export class CommandPaletteComponent {
   protected readonly kindLabel = KIND_LABEL;
   protected readonly query = signal('');
   protected readonly cursor = signal(0);
-  /** The full-text results for the latest query that returned, and whether a search is running. */
+  /** The full-text results for the query in the field, and whether a search for it is running. */
   protected readonly textResults = signal<readonly SearchEntry[]>([]);
   protected readonly searching = signal(false);
-  protected readonly results = computed(() => {
-    const own = searchIndex(this.index, this.query());
-    const seen = new Set(own.map((e) => e.href));
-    return [...own, ...this.textResults().filter((e) => !seen.has(e.href))];
-  });
-  private textTimer: ReturnType<typeof setTimeout> | undefined;
-  private textTicket = 0;
+  protected readonly results = computed(() => mergeResults(searchIndex(this.index, this.query()), this.textResults()));
 
   private readonly field = viewChild<ElementRef<HTMLInputElement>>('field');
   private readonly router = inject(Router);
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly text =
+    this.config.fullText && this.browser
+      ? new TextSearch(this.config.fullText, ({ results, searching }) => {
+          this.textResults.set(results);
+          this.searching.set(searching);
+        })
+      : null;
 
   constructor() {
     effect(() => {
       if (this.palette.open()) {
         this.query.set('');
         this.cursor.set(0);
-        this.searchText('');
+        this.text?.run('');
       }
     });
     effect(() => {
@@ -155,33 +153,7 @@ export class CommandPaletteComponent {
     const value = (event.target as HTMLInputElement).value;
     this.query.set(value);
     this.cursor.set(0);
-    this.searchText(value);
-  }
-
-  /** Runs the full-text search for `query` once typing pauses; only the latest query's answer is kept. */
-  private searchText(query: string): void {
-    clearTimeout(this.textTimer);
-    const ticket = ++this.textTicket;
-    const q = query.trim();
-    const search = this.config.fullText;
-    if (!search || !this.browser || q.length < TEXT_MIN_CHARS) {
-      this.textResults.set([]);
-      this.searching.set(false);
-      return;
-    }
-    this.searching.set(true);
-    this.textTimer = setTimeout(() => {
-      search(q).then(
-        (found) => {
-          if (ticket !== this.textTicket) return;
-          this.textResults.set(found);
-          this.searching.set(false);
-        },
-        () => {
-          if (ticket === this.textTicket) this.searching.set(false);
-        },
-      );
-    }, TEXT_DELAY_MS);
+    this.text?.run(value);
   }
 
   protected onKey(event: KeyboardEvent): void {
