@@ -21,9 +21,14 @@ export function indexableRoutes() {
     .sort();
 }
 
-/** Routes of the docs pages, from the index scripts/docs/fetch-docs.mjs writes. */
+/**
+ * Routes of the docs, from the index scripts/docs/fetch-docs.mjs writes: the home page, each
+ * document and each section's page list.
+ */
 export function docsRoutes() {
-  return ['', ...docsIndex().pages.map((p) => p.route)];
+  const index = docsIndex();
+  const sections = index.sections.filter((s) => index.pages.some((p) => p.section === s.id));
+  return ['', ...index.pages.map((p) => p.route), ...sections.map((s) => `browse/${s.id}`)];
 }
 
 function docsIndex() {

@@ -5,16 +5,22 @@ import { SHELL_CONFIG, type SearchEntry, type ShellConfig } from '@exeris-web/sh
 import buildMeta from '../../../../src/data/build-meta.json';
 import { FOOTER_LEGAL, FOOTER_TAGLINE, LINKS } from '../../../../src/content/site';
 import { routes } from './app.routes';
-import { NAV_SECTIONS, PAGES } from './docs';
+import { NAV_GROUPS, NAV_SECTIONS, PAGES, groupOf, sectionRoute } from './docs';
 import { DocsTitleStrategy } from './seo';
 
 const SITE = 'https://exeris.eu';
+
+/** Where a page sits, as the palette shows it beside the title: `SDK · Guides`. */
+function hintOf(sectionId: string): string | undefined {
+  const s = NAV_SECTIONS.find((x) => x.id === sectionId);
+  return s ? `${groupOf(s).label} · ${s.label}` : undefined;
+}
 
 const SEARCH: readonly SearchEntry[] = PAGES.map((p) => ({
   kind: 'doc',
   title: p.title,
   href: `/${p.route}`,
-  hint: NAV_SECTIONS.find((s) => s.id === p.section)?.label,
+  hint: hintOf(p.section),
   keywords: `${p.description} ${p.keywords}`,
 }));
 
@@ -29,7 +35,8 @@ const SHELL: ShellConfig = {
   github: LINKS.github,
   footer: {
     tagline: FOOTER_TAGLINE,
-    columns: NAV_SECTIONS.map((s) => ({ title: s.label, links: s.pages.slice(0, 4).map((p) => ({ label: p.title, href: `/${p.route}` })) })).slice(0, 3),
+    // The first three products, each with its sections' page lists.
+    columns: NAV_GROUPS.slice(0, 3).map((g) => ({ title: g.label, links: g.sections.map((s) => ({ label: s.label, href: sectionRoute(s) })) })),
     legal: FOOTER_LEGAL,
   },
   build: { kernel: buildMeta.kernel, siteSha: null },

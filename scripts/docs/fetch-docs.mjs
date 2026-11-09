@@ -40,6 +40,10 @@ const isRecord = (path) => isDocument(path) && /(^|\/)(adr|rfc)\/[^/]+$/.test(pa
  * a README.
  */
 export async function buildDocs(config, { read, refs, list = async () => [] }) {
+  const groups = new Set((config.groups ?? []).map((g) => g.id));
+  for (const s of config.sections) {
+    if (!groups.has(s.group)) throw new Error(`sources.json: section ${s.id} names no group ${s.group}`);
+  }
   const byRepo = new Map(Object.entries(config.sources).map(([k, src]) => [src.repo, k]));
   const refsOf = (repo) => {
     const key = byRepo.get(repo);
@@ -134,6 +138,8 @@ export async function buildDocs(config, { read, refs, list = async () => [] }) {
       route: f.route,
       section: f.section,
       title,
+      readme: f.readme,
+      path: f.path,
       description,
       source: { repo: f.source.repo, ref, path: f.path, url: blob(f.path) },
       headings: headings.filter((h) => h.level === 2 || h.level === 3),
@@ -141,12 +147,49 @@ export async function buildDocs(config, { read, refs, list = async () => [] }) {
       tree,
     };
   });
-  // A <title> names one page: a title two pages share is qualified by the page's section.
-  const label = new Map(config.sections.map((s) => [s.id, s.label]));
+  // A <title> names one page: a title two pages share is qualified by the page's group.
+  const groupOf = new Map(config.sections.map((s) => [s.id, s.group]));
+  const groupLabel = new Map(config.groups.map((g) => [g.id, g.label]));
   const shared = new Map();
   for (const p of pages) shared.set(p.title, (shared.get(p.title) ?? 0) + 1);
-  for (const p of pages) p.headTitle = shared.get(p.title) > 1 ? `${p.title} · ${label.get(p.section)}` : p.title;
+  for (const p of pages) p.headTitle = shared.get(p.title) > 1 ? `${p.title} · ${groupLabel.get(groupOf.get(p.section))}` : p.title;
+  for (const section of config.sections) navTitles(pages.filter((p) => p.section === section.id));
+  for (const p of pages) {
+    delete p.readme;
+    delete p.path;
+  }
   return { pages, skipped };
+}
+
+/**
+ * The label of each page of one section in the navigation, set as `navTitle`: the title, without
+ * a prefix (`Kernel Subsystem: `, `Exeris Kernel — `) that two or more pages of the section open
+ * with, since the section heading already says it, and without a subtitle after ` — ` (one that
+ * opens in lower case or runs half again as long as what precedes it; the page's own heading
+ * keeps it), unless what stays is a record's number. A source's own README is
+ * its Introduction, and any other README listed by path or directory, the index of a
+ * documentation directory, is the section's Overview; a package's README listed as one keeps its
+ * title.
+ */
+export function navTitles(pages) {
+  const prefixOf = (title) => title.match(/^(.{3,40}?)(?:: | — )\S/)?.[1] ?? null;
+  const count = new Map();
+  for (const p of pages) {
+    const prefix = prefixOf(p.title);
+    if (prefix) count.set(prefix, (count.get(prefix) ?? 0) + 1);
+  }
+  for (const p of pages) {
+    const prefix = prefixOf(p.title);
+    let nav = p.title;
+    if (p.path === 'README.md') nav = 'Introduction';
+    else if (!p.readme && /(^|\/)README\.md$/.test(p.path)) nav = 'Overview';
+    else if (prefix && count.get(prefix) > 1) nav = p.title.slice(prefix.length).replace(/^(?:: | — )/, '');
+    const [head, ...rest] = nav.split(' — ');
+    const tail = rest.join(' — ');
+    const subtitle = tail && (/^[a-z]/.test(tail) || tail.length > head.length * 1.5);
+    if (subtitle && head.length >= 12 && !/^[A-Z]+-[\d-]+$/.test(head)) nav = head;
+    p.navTitle = nav;
+  }
 }
 
 function write(name, text) {
@@ -164,13 +207,15 @@ export function writeGenerated(config, pages, refs) {
   rmSync(GENERATED, { recursive: true, force: true });
   const index = {
     refs,
-    sections: config.sections.map((s) => ({ id: s.id, label: s.label })),
+    groups: config.groups.map((g) => ({ id: g.id, label: g.label })),
+    sections: config.sections.map((s) => ({ id: s.id, group: s.group, label: s.label })),
     pages: pages.map((p) => {
       // The index is in every page's initial load: a source URL the page derives from its
-      // repository, ref and path, and a head title that only repeats the title, are left out.
+      // repository, ref and path, and a head or navigation title that only repeats the title, are left out.
       const { repo, ref, path } = p.source;
       const meta = { ...p, source: { repo, ref, path }, keywords: p.headings.map((h) => h.text).join(' ') };
       if (meta.headTitle === meta.title) delete meta.headTitle;
+      if (meta.navTitle === meta.title) delete meta.navTitle;
       delete meta.html;
       delete meta.tree;
       delete meta.headings;
