@@ -65,9 +65,13 @@ S4. **The site sets no cookie, runs no analytics and makes no third-party reques
     cookie write, `localStorage` used as a tracking identifier, an analytics or tag-manager
     snippet, an external font, script, image, stylesheet or frame host, a runtime request to
     another origin, an inline script or inline event handler, or a
-    `projects/shell/public/_headers` edit that loosens the Content-Security-Policy below
-    `script-src 'self'` (an `unsafe-inline`,
-    `unsafe-eval`, a host, a wildcard) → `[HARD BLOCK]`. A new link that merely navigates to
+    `projects/shell/public/_headers` edit, or a change to the sources an application declares, that
+    loosens the Content-Security-Policy below `script-src 'self'` (an `unsafe-inline`,
+    `unsafe-eval`, a host, a wildcard, or any other source) → `[HARD BLOCK]`. The one exception is
+    `'wasm-unsafe-eval'` in the `script-src` of docs.exeris.eu, for a search that compiles a
+    WebAssembly module served from its own origin; it permits no evaluation of script text, and
+    adding it there is not a finding. The same source for exeris.eu or the lab, or any further
+    source for the docs, is. A new link that merely navigates to
     another site is not a request and is judged by S7. A change to the promise in `README.md` or
     `AGENTS.md` without the code that keeps it → `[CONTRACT]`.
 
