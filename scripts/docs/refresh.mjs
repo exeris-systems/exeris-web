@@ -72,10 +72,10 @@ async function main() {
   if (!hook) throw new Error('refresh: DOCS_DEPLOY_HOOK is not set; it is the deploy hook URL of the exeris-web-docs Worker');
   const res = await fetch(hook, { method: 'POST' });
   if (!res.ok) throw new Error(`refresh: the deploy hook answered ${res.status}`);
-  // Only a build id of the expected shape is echoed into the log.
+  // The build is listed under the docs Worker's builds in Cloudflare; the log names no part of
+  // the hook's answer.
   const { result } = await res.json();
-  const id = /^[0-9a-f-]{36}$/.test(result?.build_uuid ?? '') ? result.build_uuid : '(no id)';
-  console.log(`refresh: build ${id} ${result?.already_exists ? 'already queued' : 'started'}`);
+  console.log(result?.already_exists ? 'refresh: a build was already queued' : 'refresh: build started');
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
