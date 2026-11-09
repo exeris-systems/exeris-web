@@ -72,8 +72,10 @@ the same way, with build command `npm run build:docs` and deploy command
 `npx wrangler deploy --config projects/docs/wrangler.jsonc` (previews: `npx wrangler preview
 --config projects/docs/wrangler.jsonc`), the same Node version and the same secret. Its deploy
 hook for `main` (Settings → Builds → Deploy Hooks) is the repository secret `DOCS_DEPLOY_HOOK`:
-the hourly docs refresh posts to it when a document in a source changed (see
-[the docs site](docs/docs-site.md)).
+the hourly refresh posts to it when a document in a source changed (see
+[the docs site](docs/docs-site.md)). The `exeris-web` Worker's deploy hook for `main` is
+`SITE_DEPLOY_HOOK`, which the same refresh posts to when the data the site shows changed upstream
+(see [build-time data](docs/build-time-data.md)).
 
 Workers Builds builds every push; the repository has no deploy job. It sets `WORKERS_CI=1`, which
 makes `npm run data` strict: a failed fetch fails the deploy instead of publishing the committed

@@ -17,6 +17,7 @@
 // it needs no network, and committing it would make every build dirty the tree.
 
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -193,7 +194,32 @@ export function siteSha(env = process.env) {
   }
 }
 
-async function fetchAll() {
+/** The upstream data the site is built from: the files fetchAll writes under src/data/. */
+export const UPSTREAM_FILES = ['build-meta.json', 'caps.json', 'claims.json', 'cold-start.json', 'saga-v2.json', 'skus.json'];
+
+/**
+ * A digest of the upstream data as the site shows it: every file of UPSTREAM_FILES, without the
+ * commits it was read at (`commit`, `sources`), so a commit to a register that changes no row
+ * changes no digest while any changed claim, cap, SKU, release or figure does.
+ */
+export function dataDigest(files) {
+  const strip = (v) =>
+    Array.isArray(v)
+      ? v.map(strip)
+      : v && typeof v === 'object'
+        ? Object.fromEntries(Object.entries(v).filter(([k]) => k !== 'commit' && k !== 'sources').map(([k, x]) => [k, strip(x)]))
+        : v;
+  const extra = Object.keys(files).filter((name) => !UPSTREAM_FILES.includes(name));
+  if (extra.length) throw new Error(`dataDigest: ${extra.join(', ')} not in UPSTREAM_FILES`);
+  const hash = createHash('sha256');
+  for (const name of UPSTREAM_FILES) {
+    if (!(name in files)) throw new Error(`dataDigest: no ${name}`);
+    hash.update(`${name}\0${JSON.stringify(strip(files[name]))}\0`);
+  }
+  return hash.digest('hex');
+}
+
+export async function fetchAll() {
   const [benchmarksSha, docsSha] = await Promise.all([headSha('exeris-benchmarks'), headSha('exeris-docs')]);
   const benchmarks = (path) => getText(`${RAW}/exeris-benchmarks/${benchmarksSha}/${path}`);
   const docs = (path) => getText(`${RAW}/exeris-docs/${docsSha}/${path}`);

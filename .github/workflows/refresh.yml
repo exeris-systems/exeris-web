@@ -1,0 +1,59 @@
+name: Refresh
+
+# exeris.eu and docs.exeris.eu read their upstream data and documents at build time. Each hour this
+# checks both against what the live sites were built from and starts a build of a Worker through
+# its deploy hook when the content changed: for the docs, a Markdown file in a source since the
+# commits in refs.json; for the site, the data digest in data-digest.json. A run by hand can force
+# a build of one site or both.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Which site to check
+        type: choice
+        options: [both, docs, site]
+        default: both
+      force:
+        description: Rebuild even when nothing changed
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+
+      # The checks need the packages' code only, not their install scripts.
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Rebuild the docs when their sources changed
+        if: inputs.target != 'site'
+        run: node scripts/docs/refresh.mjs ${{ inputs.force && '--force' || '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCS_DEPLOY_HOOK: ${{ secrets.DOCS_DEPLOY_HOOK }}
+
+      # Runs whether or not the docs step succeeded: the two sites are independent.
+      - name: Rebuild exeris.eu when its data changed
+        if: ${{ !cancelled() && inputs.target != 'docs' }}
+        run: node scripts/refresh-site.mjs ${{ inputs.force && '--force' || '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SITE_DEPLOY_HOOK: ${{ secrets.SITE_DEPLOY_HOOK }}
