@@ -60,3 +60,16 @@ GitHub API call names, in the build log, whether a token was sent, the rate limi
 reports and the reason its body gives: a 403 with none of 60 left is the unauthenticated limit,
 which the build hosts share; a 403 with limit left is a token GitHub refuses for that repository,
 and the reason says why.
+
+## Keeping the live site current
+
+The data is read when the site is built, and Workers Builds builds on a push to this repository,
+so a new release or register row would otherwise wait for the next unrelated push. The site's
+`postbuild` writes `/data-digest.json`: a SHA-256 over the upstream files (`UPSTREAM_FILES` in
+`scripts/fetch-data.mjs`: build metadata, caps, claims, the cold-start and saga figures, SKUs)
+without the commits they were read at, so a commit to a register that changes no row changes
+nothing. Each hour `.github/workflows/refresh.yml` runs `scripts/refresh-site.mjs`, which reads the
+same data as a build would, computes the same digest and, when it differs from the live one or
+the live site has none, starts a build through the `exeris-web` Worker's deploy hook (repository
+secret `SITE_DEPLOY_HOOK`). The workflow run by hand can force a build. The same workflow keeps
+docs.exeris.eu current (see [the docs site](docs-site.md)).

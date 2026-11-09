@@ -7,6 +7,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { startBuild } from '../deploy-hook.mjs';
 import { getJson } from '../fetch-data.mjs';
 import { resolveRef } from './fetch-docs.mjs';
 
@@ -68,14 +69,7 @@ async function main() {
   }
   for (const r of reasons) console.log(`refresh: rebuild: ${r}`);
   if (dryRun) return;
-  const hook = process.env.DOCS_DEPLOY_HOOK;
-  if (!hook) throw new Error('refresh: DOCS_DEPLOY_HOOK is not set; it is the deploy hook URL of the exeris-web-docs Worker');
-  const res = await fetch(hook, { method: 'POST' });
-  if (!res.ok) throw new Error(`refresh: the deploy hook answered ${res.status}`);
-  // The build is listed under the docs Worker's builds in Cloudflare; the log names no part of
-  // the hook's answer.
-  const { result } = await res.json();
-  console.log(result?.already_exists ? 'refresh: a build was already queued' : 'refresh: build started');
+  console.log(`refresh: ${await startBuild('DOCS_DEPLOY_HOOK', 'exeris-web-docs')}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

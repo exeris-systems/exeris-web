@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 // @ts-expect-error -- plain ESM modules without type declarations
-import { FetchError, apiFailureDetail, apiMessage, headersFor, loadUpstream, repoOf, siteSha, strictFetch } from '../scripts/fetch-data.mjs';
+import { FetchError, apiFailureDetail, apiMessage, dataDigest, headersFor, loadUpstream, repoOf, siteSha, strictFetch } from '../scripts/fetch-data.mjs';
 // @ts-expect-error -- plain ESM module without type declarations
 import { isRuntimeError } from '../scripts/lighthouse-ci.mjs';
 
@@ -201,5 +201,40 @@ describe('serve-static', () => {
     } finally {
       child.kill();
     }
+  });
+});
+
+describe('dataDigest', () => {
+  const files = () => ({
+    'build-meta.json': { kernel: { tag: 'v1' }, sources: { 'exeris-docs': 'aaa' } },
+    'caps.json': { commit: 'aaa', caps: [{ name: 'gateway', readiness: 'poc' }] },
+    'claims.json': { commit: 'aaa', claims: {} },
+    'cold-start.json': { source: { commit: 'bbb' }, arms: [] },
+    'saga-v2.json': { source: { commit: 'bbb' }, rows: [] },
+    'skus.json': { commit: 'aaa', skus: [] },
+  });
+
+  it('ignores the commits the data was read at', () => {
+    const later = files();
+    later['caps.json'].commit = 'ccc';
+    later['build-meta.json'].sources['exeris-docs'] = 'ccc';
+    later['cold-start.json'].source.commit = 'ddd';
+    expect(dataDigest(later)).toBe(dataDigest(files()));
+  });
+
+  it('changes with any value the site shows', () => {
+    const changed = files();
+    changed['caps.json'].caps[0].readiness = 'released';
+    expect(dataDigest(changed)).not.toBe(dataDigest(files()));
+    const release = files();
+    release['build-meta.json'].kernel.tag = 'v2';
+    expect(dataDigest(release)).not.toBe(dataDigest(files()));
+  });
+
+  it('fails on a missing file and on one it does not know', () => {
+    const missing: Record<string, unknown> = files();
+    delete missing['skus.json'];
+    expect(() => dataDigest(missing)).toThrow(/no skus.json/);
+    expect(() => dataDigest({ ...files(), 'extra.json': {} })).toThrow(/extra.json not in UPSTREAM_FILES/);
   });
 });

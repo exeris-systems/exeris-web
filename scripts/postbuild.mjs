@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 // Completes the static output of one application (site by default, or docs) for Cloudflare:
 // 404.html (served with status 404 for any unknown path), sitemap.xml and robots.txt for its
-// indexable routes; for the docs, refs.json with the commits the sources were read at.
+// indexable routes; for the site, data-digest.json with the digest of the data it shows; for the
+// docs, refs.json with the commits the sources were read at.
 import { copyFileSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { UPSTREAM_FILES, dataDigest } from './fetch-data.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const OUT = join(ROOT, 'dist/exeris-web/browser');
@@ -46,7 +48,7 @@ function docsIndex() {
  * evaluation of script text, and only the docs carry it.
  */
 export const APPS = {
-  site: { out: OUT, url: SITE_URL, routes: indexableRoutes, redirects: true },
+  site: { out: OUT, url: SITE_URL, routes: indexableRoutes, redirects: true, files: ['data-digest.json'] },
   docs: {
     out: join(ROOT, 'dist/docs/browser'),
     url: 'https://docs.exeris.eu',
@@ -84,6 +86,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const headers = join(out, '_headers');
     writeFileSync(headers, withScriptSrc(readFileSync(headers, 'utf8'), app.scriptSrc));
     files.push(`_headers (script-src ${app.scriptSrc.join(' ')})`);
+  }
+  if (name === 'site') {
+    // The digest of the upstream data the site was built from, which scripts/refresh-site.mjs
+    // compares with the data the registers give now to decide whether the site needs a rebuild.
+    const data = Object.fromEntries(UPSTREAM_FILES.map((f) => [f, JSON.parse(readFileSync(join(ROOT, 'src/data', f), 'utf8'))]));
+    writeFileSync(join(out, 'data-digest.json'), `${JSON.stringify({ digest: dataDigest(data) })}\n`);
+    files.push('data-digest.json');
   }
   if (name === 'docs') {
     // The commit each source was read at, which scripts/docs/refresh.mjs compares with the sources'
