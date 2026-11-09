@@ -150,15 +150,6 @@
       ]
     },
     {
-      "id": "tooling-migration",
-      "label": "Tooling migration",
-      "files": [
-        {
-          "dir": "tooling:docs/migration/0.11.0"
-        }
-      ]
-    },
-    {
       "id": "spring-runtime",
       "label": "Spring runtime",
       "files": [
