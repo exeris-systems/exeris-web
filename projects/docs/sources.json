@@ -1,5 +1,5 @@
 {
-  "description": "What docs.exeris.eu publishes. Each source is read at build time at the commit its main branch points to; until the 1.0 releases the documentation follows main, and from 1.0 it is read at release tags, one version of the site per release. A file is published only when it is listed here, by path, by a directory (dir) or through the records an ADR registry links to (registry), and its frontmatter says visibility public and status active, or, for an entry marked readme, when it is a README of the public repository: a README has no frontmatter and is as public as its repository. Sections are shown in this order; a file belongs to the first section whose list names it.",
+  "description": "What docs.exeris.eu publishes. Each source is read at build time at the commit its main branch points to; until the 1.0 releases the documentation follows main, and from 1.0 it is read at release tags, one version of the site per release. A file is published only when it is listed here, by path, by a directory (dir) or through the records an ADR registry links to (registry), and its frontmatter says visibility public and status active, or, for an entry marked readme, when it is a README of the public repository: a README has no frontmatter and is as public as its repository. Groups and their sections are shown in this order; a file belongs to the first section whose list names it, so the sections that list records by directory or registry come last.",
   "sources": {
     "kernel": {
       "repo": "exeris-kernel",
@@ -32,157 +32,37 @@
       "route": "platform"
     }
   },
-  "sections": [
+  "groups": [
     {
-      "id": "guides",
-      "label": "Guides",
-      "files": [
-        "kernel:docs/guides/01-platform-and-dependencies.md",
-        "kernel:docs/guides/02-build-an-application.md",
-        "kernel:docs/guides/03-implement-a-provider.md",
-        "platform:cap-author-guide.md"
-      ]
-    },
-    {
-      "id": "platform",
-      "label": "Platform",
-      "files": [
-        "platform:high-level-architecture.md",
-        "platform:b2b-technical-whitepaper.md",
-        "platform:layer-build-order.md",
-        "platform:cap-license-registry.md"
-      ]
+      "id": "kernel",
+      "label": "Kernel"
     },
     {
       "id": "sdk",
-      "label": "SDK",
-      "files": [
-        {
-          "file": "sdk:README.md",
-          "readme": true
-        },
-        "sdk:docs/architecture.md",
-        "sdk:docs/glossary.md",
-        "sdk:docs/stability-matrix.md"
-      ]
-    },
-    {
-      "id": "sdk-guides",
-      "label": "SDK guides",
-      "files": [
-        "sdk:docs/guides/README.md",
-        "sdk:docs/guides/01-platform-and-dependencies.md",
-        "sdk:docs/guides/02-model-a-domain.md",
-        "sdk:docs/guides/03-declare-behavior.md",
-        "sdk:docs/guides/04-model-a-graph.md",
-        "sdk:docs/guides/05-declare-presentation.md",
-        "sdk:docs/guides/06-read-and-write-source.md",
-        "sdk:docs/guides/07-consume-the-ast.md",
-        "sdk:docs/guides/08-capabilities-and-composition.md",
-        "sdk:docs/guides/09-style-generated-ui.md"
-      ]
-    },
-    {
-      "id": "sdk-modules",
-      "label": "SDK modules",
-      "files": [
-        "sdk:docs/modules/README.md",
-        "sdk:docs/modules/01-annotations.md",
-        "sdk:docs/modules/02-source-model.md",
-        "sdk:docs/modules/03-source-model-io.md",
-        "sdk:docs/modules/04-annotation-catalog.md",
-        "sdk:docs/modules/05-composition-spec.md",
-        "sdk:docs/modules/06-composition-lifecycle.md",
-        "sdk:docs/modules/07-composition-runtime.md",
-        "sdk:docs/modules/08-tck.md",
-        "sdk:docs/modules/09-ui-kit.md",
-        "sdk:docs/modules/10-examples.md"
-      ]
+      "label": "SDK"
     },
     {
       "id": "tooling",
-      "label": "Tooling",
-      "files": [
-        {
-          "file": "tooling:README.md",
-          "readme": true
-        },
-        {
-          "file": "tooling:exeris-codegen-ts/README.md",
-          "readme": true
-        },
-        "tooling:docs/architecture.md",
-        "tooling:docs/glossary.md",
-        "tooling:docs/stability-matrix.md",
-        "tooling:docs/generators.md",
-        "tooling:docs/diagnostics.md",
-        "tooling:docs/MIGRATION-0.x-to-1.0.md"
-      ]
-    },
-    {
-      "id": "tooling-guides",
-      "label": "Tooling guides",
-      "files": [
-        "tooling:docs/guides/README.md",
-        "tooling:docs/guides/01-add-the-tooling-to-a-build.md",
-        "tooling:docs/guides/02-generate-an-application.md",
-        "tooling:docs/guides/03-reference-other-entities.md",
-        "tooling:docs/guides/04-project-into-a-graph.md",
-        "tooling:docs/guides/05-generate-the-frontend.md",
-        "tooling:docs/guides/06-read-a-capability-graph-refusal.md"
-      ]
-    },
-    {
-      "id": "tooling-modules",
-      "label": "Tooling modules",
-      "files": [
-        "tooling:docs/modules/README.md",
-        "tooling:docs/modules/01-diagnostics.md",
-        "tooling:docs/modules/02-processor.md",
-        "tooling:docs/modules/03-codegen-core.md",
-        "tooling:docs/modules/04-codegen-java.md",
-        "tooling:docs/modules/05-codegen-ts.md",
-        "tooling:docs/modules/06-codegen-maven-plugin.md",
-        "tooling:docs/modules/07-codegen-cli.md",
-        "tooling:docs/modules/08-initializr.md",
-        "tooling:docs/modules/09-app-starter.md",
-        "tooling:docs/modules/10-e2e-tests.md"
-      ]
+      "label": "Tooling"
     },
     {
       "id": "spring-runtime",
-      "label": "Spring runtime",
-      "files": [
-        {
-          "file": "spring-runtime:README.md",
-          "readme": true
-        },
-        "spring-runtime:docs/architecture/overview.md",
-        "spring-runtime:docs/architecture/kernel-integration-seams.md",
-        "spring-runtime:docs/architecture/compat-spring-security-support.md",
-        "spring-runtime:docs/architecture/spring-boot-4-matrix.md",
-        "spring-runtime:docs/roadmap-1.0-trl9.md"
-      ]
+      "label": "Spring runtime"
     },
     {
-      "id": "spring-runtime-guides",
-      "label": "Spring runtime guides",
-      "files": [
-        "spring-runtime:docs/guides/README.md",
-        "spring-runtime:docs/guides/getting-started.md",
-        "spring-runtime:docs/guides/configuration-reference.md",
-        "spring-runtime:docs/guides/securing-routes.md",
-        "spring-runtime:docs/guides/transactions-and-jdbc.md",
-        "spring-runtime:docs/guides/events-and-sagas.md",
-        "spring-runtime:docs/guides/graph-queries.md",
-        "spring-runtime:docs/guides/health-and-operations.md",
-        "spring-runtime:docs/guides/compatibility-mode-migration.md",
-        "spring-runtime:docs/guides/upgrading-0.7-to-0.8.md"
-      ]
+      "id": "platform",
+      "label": "Platform"
     },
+    {
+      "id": "records",
+      "label": "Decisions and standards"
+    }
+  ],
+  "sections": [
     {
       "id": "kernel",
-      "label": "Kernel",
+      "group": "kernel",
+      "label": "Overview",
       "files": [
         "kernel:docs/whitepaper.md",
         "kernel:docs/architecture.md",
@@ -191,8 +71,19 @@
       ]
     },
     {
+      "id": "guides",
+      "group": "kernel",
+      "label": "Guides",
+      "files": [
+        "kernel:docs/guides/01-platform-and-dependencies.md",
+        "kernel:docs/guides/02-build-an-application.md",
+        "kernel:docs/guides/03-implement-a-provider.md"
+      ]
+    },
+    {
       "id": "modules",
-      "label": "Kernel modules",
+      "group": "kernel",
+      "label": "Modules",
       "files": [
         "kernel:docs/modules/01-spi.md",
         "kernel:docs/modules/02-core.md",
@@ -204,6 +95,7 @@
     },
     {
       "id": "subsystems",
+      "group": "kernel",
       "label": "Subsystems",
       "files": [
         "kernel:docs/subsystems/bootstrap.md",
@@ -227,6 +119,7 @@
     },
     {
       "id": "reference",
+      "group": "kernel",
       "label": "Reference",
       "files": [
         "kernel:docs/stability-matrix.md",
@@ -237,7 +130,155 @@
       ]
     },
     {
+      "id": "sdk",
+      "group": "sdk",
+      "label": "Overview",
+      "files": [
+        {
+          "file": "sdk:README.md",
+          "readme": true
+        },
+        "sdk:docs/architecture.md",
+        "sdk:docs/glossary.md",
+        "sdk:docs/stability-matrix.md"
+      ]
+    },
+    {
+      "id": "sdk-guides",
+      "group": "sdk",
+      "label": "Guides",
+      "files": [
+        "sdk:docs/guides/README.md",
+        "sdk:docs/guides/01-platform-and-dependencies.md",
+        "sdk:docs/guides/02-model-a-domain.md",
+        "sdk:docs/guides/03-declare-behavior.md",
+        "sdk:docs/guides/04-model-a-graph.md",
+        "sdk:docs/guides/05-declare-presentation.md",
+        "sdk:docs/guides/06-read-and-write-source.md",
+        "sdk:docs/guides/07-consume-the-ast.md",
+        "sdk:docs/guides/08-capabilities-and-composition.md",
+        "sdk:docs/guides/09-style-generated-ui.md"
+      ]
+    },
+    {
+      "id": "sdk-modules",
+      "group": "sdk",
+      "label": "Modules",
+      "files": [
+        "sdk:docs/modules/README.md",
+        "sdk:docs/modules/01-annotations.md",
+        "sdk:docs/modules/02-source-model.md",
+        "sdk:docs/modules/03-source-model-io.md",
+        "sdk:docs/modules/04-annotation-catalog.md",
+        "sdk:docs/modules/05-composition-spec.md",
+        "sdk:docs/modules/06-composition-lifecycle.md",
+        "sdk:docs/modules/07-composition-runtime.md",
+        "sdk:docs/modules/08-tck.md",
+        "sdk:docs/modules/09-ui-kit.md",
+        "sdk:docs/modules/10-examples.md"
+      ]
+    },
+    {
+      "id": "tooling",
+      "group": "tooling",
+      "label": "Overview",
+      "files": [
+        {
+          "file": "tooling:README.md",
+          "readme": true
+        },
+        {
+          "file": "tooling:exeris-codegen-ts/README.md",
+          "readme": true
+        },
+        "tooling:docs/architecture.md",
+        "tooling:docs/glossary.md",
+        "tooling:docs/stability-matrix.md",
+        "tooling:docs/generators.md",
+        "tooling:docs/diagnostics.md",
+        "tooling:docs/MIGRATION-0.x-to-1.0.md"
+      ]
+    },
+    {
+      "id": "tooling-guides",
+      "group": "tooling",
+      "label": "Guides",
+      "files": [
+        "tooling:docs/guides/README.md",
+        "tooling:docs/guides/01-add-the-tooling-to-a-build.md",
+        "tooling:docs/guides/02-generate-an-application.md",
+        "tooling:docs/guides/03-reference-other-entities.md",
+        "tooling:docs/guides/04-project-into-a-graph.md",
+        "tooling:docs/guides/05-generate-the-frontend.md",
+        "tooling:docs/guides/06-read-a-capability-graph-refusal.md"
+      ]
+    },
+    {
+      "id": "tooling-modules",
+      "group": "tooling",
+      "label": "Modules",
+      "files": [
+        "tooling:docs/modules/README.md",
+        "tooling:docs/modules/01-diagnostics.md",
+        "tooling:docs/modules/02-processor.md",
+        "tooling:docs/modules/03-codegen-core.md",
+        "tooling:docs/modules/04-codegen-java.md",
+        "tooling:docs/modules/05-codegen-ts.md",
+        "tooling:docs/modules/06-codegen-maven-plugin.md",
+        "tooling:docs/modules/07-codegen-cli.md",
+        "tooling:docs/modules/08-initializr.md",
+        "tooling:docs/modules/09-app-starter.md",
+        "tooling:docs/modules/10-e2e-tests.md"
+      ]
+    },
+    {
+      "id": "spring-runtime",
+      "group": "spring-runtime",
+      "label": "Overview",
+      "files": [
+        {
+          "file": "spring-runtime:README.md",
+          "readme": true
+        },
+        "spring-runtime:docs/architecture/overview.md",
+        "spring-runtime:docs/architecture/kernel-integration-seams.md",
+        "spring-runtime:docs/architecture/compat-spring-security-support.md",
+        "spring-runtime:docs/architecture/spring-boot-4-matrix.md",
+        "spring-runtime:docs/roadmap-1.0-trl9.md"
+      ]
+    },
+    {
+      "id": "spring-runtime-guides",
+      "group": "spring-runtime",
+      "label": "Guides",
+      "files": [
+        "spring-runtime:docs/guides/README.md",
+        "spring-runtime:docs/guides/getting-started.md",
+        "spring-runtime:docs/guides/configuration-reference.md",
+        "spring-runtime:docs/guides/securing-routes.md",
+        "spring-runtime:docs/guides/transactions-and-jdbc.md",
+        "spring-runtime:docs/guides/events-and-sagas.md",
+        "spring-runtime:docs/guides/graph-queries.md",
+        "spring-runtime:docs/guides/health-and-operations.md",
+        "spring-runtime:docs/guides/compatibility-mode-migration.md",
+        "spring-runtime:docs/guides/upgrading-0.7-to-0.8.md"
+      ]
+    },
+    {
+      "id": "platform",
+      "group": "platform",
+      "label": "Overview",
+      "files": [
+        "platform:high-level-architecture.md",
+        "platform:cap-author-guide.md",
+        "platform:b2b-technical-whitepaper.md",
+        "platform:layer-build-order.md",
+        "platform:cap-license-registry.md"
+      ]
+    },
+    {
       "id": "decisions",
+      "group": "records",
       "label": "Decisions",
       "files": [
         {
@@ -247,6 +288,7 @@
     },
     {
       "id": "rfcs",
+      "group": "records",
       "label": "RFCs",
       "files": [
         {
@@ -265,6 +307,7 @@
     },
     {
       "id": "standards",
+      "group": "records",
       "label": "Standards",
       "files": [
         {

@@ -10,13 +10,16 @@ last-verified: 2026-10-29
 # The docs site
 
 `projects/docs` is docs.exeris.eu. Its pages are the documentation of other repositories,
-rendered when the site is built; this repository authors only the navigation, the home page and
-the not-found page.
+rendered when the site is built; this repository authors only the navigation, the home page, the
+section lists and the not-found page.
 
 ## What is published
 
 `projects/docs/sources.json` lists every file the site may publish, grouped into the sections the
-navigation shows, in order. A section lists files in three ways:
+navigation shows, in order. Each section belongs to a group, a product (Kernel, SDK, Tooling,
+Spring runtime, Platform) or the records (Decisions, RFCs, Standards), and is named within it:
+Overview, Guides, Modules. A section that names no configured group fails the build. A section
+lists files in three ways:
 
 - by path, `kernel:docs/architecture.md`;
 - by directory, `{ "dir": "platform:standards" }`: every Markdown file under it at the ref read,
@@ -27,7 +30,8 @@ navigation shows, in order. A section lists files in three ways:
   source is read at. A record on another branch, or in a repository that is not a source, is not
   read, and the build log counts those links.
 
-A file listed twice belongs to the first section that lists it. A listed file is published only when its frontmatter says
+A file listed twice belongs to the first section that lists it, so the sections that list records
+by directory or registry come last. A listed file is published only when its frontmatter says
 `visibility: public` and `status: active`; any other listed file is left out and named in the
 build log. An entry marked `readme` is the one exception: a README carries no frontmatter and is
 as public as its repository, which the build reads without credentials, so a README of a private
@@ -93,9 +97,14 @@ markdown:
   a tag the template does not draw.
 - The page title is the frontmatter `title`, a quoted YAML scalar read as YAML reads it; a
   document that opens below the first level, such as a migration step, is given that title as its
-  first-level heading. A title two pages share is qualified by the page's section in `<title>`
+  first-level heading. A title two pages share is qualified by the page's group in `<title>`
   (`Architecture · Tooling`), so every page has its own. The description is the first paragraph of
   at least 40 characters, cut near 160.
+- The label of a page in the navigation (`navTitle`) is its title without what the section
+  heading already says: a prefix two or more pages of the section share (`Kernel Subsystem: `,
+  `Exeris Kernel — `) and a subtitle after ` — ` that opens in lower case or runs half again as long
+  as what precedes it, unless a record's number would be left alone. A source's README is its
+  Introduction, a README that indexes a documentation directory its section's Overview.
 
 The readiness word list of the site's own copy is not applied to the prose of these documents,
 which are reviewed in their own repositories; it applies to what this repository writes for the
@@ -103,12 +112,20 @@ docs site.
 
 ## Pages and gates
 
-Every page, the home page and the not-found page are prerendered with their own title,
+Every page, the home page, each section's list (`/browse/<section>`) and the not-found page are
+prerendered with their own title,
 description, canonical URL on `https://docs.exeris.eu` and Open Graph tags. `scripts/postbuild.mjs
 docs` writes `404.html`, `sitemap.xml` and `robots.txt`; `scripts/verify-dist.mjs docs` checks
 every route's tags, the links and the no-tracking rules (see [Build gates](gates.md)): a link
 within the docs that names no route or file of the output, or an anchor no element of its page
 carries, fails the build. CI builds the docs on every run with the repository's token.
 
-The navigation beside a page shows each section as a disclosure with its page count, open on the
-section of the current page.
+The navigation beside a page shows each group as a disclosure, open on the group of the current
+page; inside it each section is a heading that links to its list, then its pages, and a section of
+more than 25 pages (the records) is a disclosure of its own. On a screen narrower than 900 px it
+folds behind a Contents button that names the group and section, and closes after a navigation.
+Above a page are its group and section; below it, the pages before and after it in its group.
+
+The home page offers the search, four guides to start from by task, each product with one sentence
+on what it covers and its sections, and the records as their lists. A section's list gives each
+page with the first paragraph of its document.

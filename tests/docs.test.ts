@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
-import { buildDocs } from '../scripts/docs/fetch-docs.mjs';
+import { buildDocs, navTitles } from '../scripts/docs/fetch-docs.mjs';
 // @ts-expect-error -- plain ESM module without type declarations
 import { SANITIZE, isPublished, parseFrontmatter, renderDoc, rewriteHref, routeOf, slug, toTree } from '../scripts/docs/render.mjs';
 
@@ -149,8 +149,9 @@ describe('the document tree', () => {
 
 describe('buildDocs', () => {
   const config = {
+    groups: [{ id: 'g', label: 'G' }],
     sources: { kernel: { repo: 'exeris-kernel', ref: 'release', route: 'kernel' } },
-    sections: [{ id: 'kernel', label: 'Kernel', files: ['kernel:docs/a.md', 'kernel:docs/b.md'] }],
+    sections: [{ id: 'kernel', group: 'g', label: 'Kernel', files: ['kernel:docs/a.md', 'kernel:docs/b.md'] }],
   };
   const files: Record<string, string> = {
     'docs/a.md': '---\ntitle: "A `x`"\nvisibility: public\nstatus: active\n---\n\n# A\n\nSee [b](b.md) for the rest of it.\n',
@@ -168,19 +169,23 @@ describe('buildDocs', () => {
   });
 
   it('gives a document that opens below the first level its title as a heading', async () => {
-    const open = { ...config, sections: [{ id: 'kernel', label: 'Kernel', files: ['kernel:docs/step.md'] }] };
+    const open = { ...config, sections: [{ id: 'kernel', group: 'g', label: 'Kernel', files: ['kernel:docs/step.md'] }] };
     const step = '---\ntitle: "Step one"\nvisibility: public\nstatus: active\n---\n\n### What changed\n\nText.\n';
     const { pages } = await buildDocs(open, { read: async () => step, refs: { kernel: 'v1' } });
     expect(pages[0].html).toMatch(/^<h1 id="step-one">Step one<\/h1>/);
     expect(pages[0].headings.map((h: { text: string }) => h.text)).toEqual(['What changed']);
   });
 
-  it('qualifies a title two pages share by the section in their head title', async () => {
+  it('qualifies a title two pages share by the group in their head title', async () => {
     const two = {
+      groups: [
+        { id: 'sdk', label: 'SDK' },
+        { id: 'tooling', label: 'Tooling' },
+      ],
       sources: { sdk: { repo: 'exeris-sdk', ref: 'main', route: 'sdk' }, tooling: { repo: 'exeris-tooling', ref: 'main', route: 'tooling' } },
       sections: [
-        { id: 'sdk', label: 'SDK', files: ['sdk:docs/architecture.md', 'sdk:docs/glossary.md'] },
-        { id: 'tooling', label: 'Tooling', files: ['tooling:docs/architecture.md'] },
+        { id: 'sdk', group: 'sdk', label: 'Overview', files: ['sdk:docs/architecture.md', 'sdk:docs/glossary.md'] },
+        { id: 'tooling', group: 'tooling', label: 'Overview', files: ['tooling:docs/architecture.md'] },
       ],
     };
     const doc = (title: string) => `---\ntitle: ${title}\nvisibility: public\nstatus: active\n---\n\n# ${title}\n`;
@@ -193,22 +198,27 @@ describe('buildDocs', () => {
     ]);
   });
 
+  it('fails on a section whose group is not configured', async () => {
+    const orphan = { ...config, sections: [{ id: 'x', group: 'none', label: 'X', files: ['kernel:docs/a.md'] }] };
+    await expect(buildDocs(orphan, { read, refs: { kernel: 'v1' } })).rejects.toThrow(/section x names no group none/);
+  });
+
   it('publishes a README listed as one without frontmatter, and only a README', async () => {
-    const readme = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }] }] };
+    const readme = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', group: 'g', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }] }] };
     const { pages } = await buildDocs(readme, { read: async () => '# Exeris SDK\n\nAnnotations for declaring a domain.\n', refs: { sdk: 'v1' } });
     expect(pages.map((p: { route: string; title: string }) => [p.route, p.title])).toEqual([['sdk', 'Exeris SDK']]);
-    const wrong = { ...readme, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:docs/guide.md', readme: true }] }] };
+    const wrong = { ...readme, sections: [{ id: 'sdk', group: 'g', label: 'SDK', files: [{ file: 'sdk:docs/guide.md', readme: true }] }] };
     await expect(buildDocs(wrong, { read: async () => '', refs: { sdk: 'v1' } })).rejects.toThrow(/marked readme but is not a README/);
   });
 
   it('fails on two files published at one route', async () => {
-    const both = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }, 'sdk:docs/README.md'] }] };
+    const both = { ...config, sources: { sdk: { repo: 'exeris-sdk', ref: 'release', route: 'sdk' } }, sections: [{ id: 'sdk', group: 'g', label: 'SDK', files: [{ file: 'sdk:README.md', readme: true }, 'sdk:docs/README.md'] }] };
     const page = '---\nvisibility: public\nstatus: active\n---\n\n# SDK\n';
     await expect(buildDocs(both, { read: async () => page, refs: { sdk: 'v1' } })).rejects.toThrow(/sdk:README\.md and sdk:docs\/README\.md are both \/sdk/);
   });
 
   it('lists a directory: every Markdown file under it, a README first, no ADR link stub', async () => {
-    const cfg = { sources: { docs: { repo: 'exeris-docs', ref: 'main', route: 'platform' } }, sections: [{ id: 'std', label: 'Standards', files: [{ dir: 'docs:standards' }] }] };
+    const cfg = { groups: [{ id: 'g', label: 'G' }], sources: { docs: { repo: 'exeris-docs', ref: 'main', route: 'platform' } }, sections: [{ id: 'std', group: 'g', label: 'Standards', files: [{ dir: 'docs:standards' }] }] };
     const page = '---\nvisibility: public\nstatus: active\n---\n\n# P\n';
     const list = async () => ['standards/b.md', 'standards/README.md', 'standards/checklists/a.md', 'standards/x.link.md', 'standards/c.txt', 'other/d.md'];
     const { pages } = await buildDocs(cfg, { read: async () => page, refs: { docs: 'abc' }, list });
@@ -218,13 +228,14 @@ describe('buildDocs', () => {
 
   it('lists the records a registry links to, in its order, and reports the ones it cannot read', async () => {
     const cfg = {
+      groups: [{ id: 'g', label: 'G' }],
       sources: {
         docs: { repo: 'exeris-docs', ref: 'main', route: 'platform' },
         kernel: { repo: 'exeris-kernel', ref: 'main', route: 'kernel' },
       },
       sections: [
-        { id: 'kernel', label: 'Kernel', files: ['kernel:docs/adr/ADR-002-b.md'] },
-        { id: 'decisions', label: 'Decisions', files: [{ registry: 'docs:adr-index.md' }] },
+        { id: 'kernel', group: 'g', label: 'Kernel', files: ['kernel:docs/adr/ADR-002-b.md'] },
+        { id: 'decisions', group: 'g', label: 'Decisions', files: [{ registry: 'docs:adr-index.md' }] },
       ],
     };
     const index = [
@@ -246,6 +257,50 @@ describe('buildDocs', () => {
   });
 
   it('fails on a listed file of an unknown source', async () => {
-    await expect(buildDocs({ ...config, sections: [{ id: 'x', label: 'X', files: ['nope:a.md'] }] }, { read, refs: {} })).rejects.toThrow(/names no source nope/);
+    await expect(buildDocs({ ...config, sections: [{ id: 'x', group: 'g', label: 'X', files: ['nope:a.md'] }] }, { read, refs: {} })).rejects.toThrow(/names no source nope/);
+  });
+});
+
+describe('navTitles', () => {
+  interface P {
+    title: string;
+    path: string;
+    readme?: boolean;
+    navTitle?: string;
+  }
+  const labels = (pages: P[]) => {
+    navTitles(pages);
+    return pages.map((p) => p.navTitle);
+  };
+
+  it('drops a prefix two pages of the section share, and keeps one only a single page has', () => {
+    expect(
+      labels([
+        { title: 'Kernel Subsystem: Memory (L0 Foundation)', path: 'docs/subsystems/memory.md' },
+        { title: 'Kernel Subsystem: Config (L0 Foundation)', path: 'docs/subsystems/config.md' },
+        { title: 'Scheduling Subsystem', path: 'docs/subsystems/scheduling.md' },
+        { title: 'Exeris Kernel — Support Matrix', path: 'docs/support-matrix.md' },
+      ]),
+    ).toEqual(['Memory (L0 Foundation)', 'Config (L0 Foundation)', 'Scheduling Subsystem', 'Exeris Kernel — Support Matrix']);
+  });
+
+  it('drops a long subtitle, but never leaves a record number alone', () => {
+    expect(
+      labels([
+        { title: 'Generator catalogue — which generator wrote each generated file', path: 'docs/generators.md' },
+        { title: 'ADR-015 — Codegen Emission Strategy', path: 'docs/adr/ADR-015.md' },
+        { title: 'ADR-023: Capability Licensing Taxonomy — community / commercial', path: 'docs/adr/ADR-023.md' },
+      ]),
+    ).toEqual(['Generator catalogue', 'ADR-015 — Codegen Emission Strategy', 'ADR-023: Capability Licensing Taxonomy']);
+  });
+
+  it('names a source README Introduction, a directory README Overview, and keeps a package README', () => {
+    expect(
+      labels([
+        { title: 'Exeris SDK', path: 'README.md', readme: true },
+        { title: 'Developer guides', path: 'docs/guides/README.md' },
+        { title: '@exeris/codegen-ts', path: 'exeris-codegen-ts/README.md', readme: true },
+      ]),
+    ).toEqual(['Introduction', 'Overview', '@exeris/codegen-ts']);
   });
 });

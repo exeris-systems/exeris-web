@@ -10,8 +10,10 @@ export interface DocPage {
   readonly route: string;
   readonly section: string;
   readonly title: string;
-  /** The title in the page's <title> when it is not the title: qualified by the page's section. */
+  /** The title in the page's <title> when it is not the title: qualified by the page's group. */
   readonly headTitle?: string;
+  /** The label in the navigation when it is not the title: shorter, or Overview or Introduction. */
+  readonly navTitle?: string;
   readonly description: string;
   readonly source: { readonly repo: string; readonly ref: string; readonly path: string };
   /** The text of the page's second- and third-level headings, for search. */
@@ -26,7 +28,8 @@ export interface DocContent {
 
 export interface DocsIndex {
   readonly refs: Readonly<Record<string, string>>;
-  readonly sections: readonly { readonly id: string; readonly label: string }[];
+  readonly groups: readonly { readonly id: string; readonly label: string }[];
+  readonly sections: readonly { readonly id: string; readonly group: string; readonly label: string }[];
   readonly pages: readonly DocPage[];
 }
 
