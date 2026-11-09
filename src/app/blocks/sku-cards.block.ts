@@ -68,7 +68,7 @@ interface CardView extends SkuCardProps {
   `,
 })
 export class SkuCardsComponent {
-  readonly props = input.required<SkuCardsProps, unknown>({ transform: (value: unknown) => value as SkuCardsProps });
+  readonly props = input.required<SkuCardsProps>();
 
   protected readonly cards = computed<CardView[]>(() =>
     this.props().skus.filter((c) => SKUS_WITH_REPO.includes(c.id)).map((c) => ({ ...c, sku: sku(c.id) })),

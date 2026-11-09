@@ -110,7 +110,7 @@ type SourceFilter = 'all' | 'public';
   `,
 })
 export class CapMatrixComponent {
-  readonly props = input.required<CapMatrixProps, unknown>({ transform: (value: unknown) => value as CapMatrixProps });
+  readonly props = input.required<CapMatrixProps>();
   protected readonly layers = LAYERS;
   protected readonly totals = CAP_TOTALS;
   protected readonly total = CAPS.length;

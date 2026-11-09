@@ -66,7 +66,7 @@ export interface PlatformMapProps {
   `,
 })
 export class PlatformMapComponent {
-  readonly props = input.required<PlatformMapProps, unknown>({ transform: (value: unknown) => value as PlatformMapProps });
+  readonly props = input.required<PlatformMapProps>();
 
   protected itemsOf(t: MapTier): readonly string[] {
     if (t.items === 'skus') return SKUS.map((s) => s.name);

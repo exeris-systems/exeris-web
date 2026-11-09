@@ -59,5 +59,5 @@ export interface CodeExampleProps {
   `,
 })
 export class CodeExampleComponent {
-  readonly props = input.required<CodeExampleProps, unknown>({ transform: (value: unknown) => value as CodeExampleProps });
+  readonly props = input.required<CodeExampleProps>();
 }

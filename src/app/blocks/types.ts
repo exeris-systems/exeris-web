@@ -2,9 +2,10 @@
  * Prop shapes shared by several blocks.
  *
  * A block takes its `props` from the page the generator emits, where they are the JSON of the
- * IR node's `props` as an object literal: string unions arrive widened to `string`. Each block
- * therefore declares its `props` input with `transform: (value: unknown) => value as Props`, and
- * `npm run check:content` and the tests hold the authored JSON to the shape.
+ * IR node's `props` as an object literal `as const`: strings keep their literal types and arrays
+ * are readonly, so a block declares its `props` input with its own props type and the template
+ * type check holds every page's props to it. `npm run check:content` and the tests hold the
+ * authored JSON to the shapes the type check cannot see.
  */
 
 export type Tone = 'flow' | 'cyan' | 'slate' | 'ok' | 'err' | 'evidence' | 'muted';

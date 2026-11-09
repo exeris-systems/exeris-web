@@ -23,6 +23,7 @@
   "peers": [],
   "generateTests": false,
   "scaffold": false,
+  "render": "ssg",
   "viewHeading": "none",
   "customBlocks": {
     "ExBento": {

@@ -158,7 +158,7 @@ export interface LabProps {
   `,
 })
 export class LabComponent {
-  readonly props = input.required<LabProps, unknown>({ transform: (value: unknown) => value as LabProps });
+  readonly props = input.required<LabProps>();
 
   protected readonly active = signal<LabTab['id']>('cold-start');
   protected readonly links = LINKS;

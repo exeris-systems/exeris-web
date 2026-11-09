@@ -1,11 +1,8 @@
 import { RenderMode, type ServerRoute } from '@angular/ssr';
-import { viewRoutes } from './generated/view.routes';
+import { viewServerRoutes } from './generated/view.routes.server';
 
 /**
- * The prerender list: every generated view route. The site has no server, so nothing renders on
- * request; an unknown path is answered by 404.html.
+ * The prerender list: every view route, as the generator lists them under `render: 'ssg'`. The
+ * site has no server, so nothing renders on request; an unknown path is answered by 404.html.
  */
-export const serverRoutes: ServerRoute[] = [
-  ...viewRoutes.map((route): ServerRoute => ({ path: route.path ?? '', renderMode: RenderMode.Prerender })),
-  { path: '**', renderMode: RenderMode.Client },
-];
+export const serverRoutes: ServerRoute[] = [...viewServerRoutes, { path: '**', renderMode: RenderMode.Client }];
