@@ -19,7 +19,7 @@ const RAW = 'https://raw.githubusercontent.com/exeris-systems';
 const GITHUB = 'https://github.com/exeris-systems';
 
 /** The ref a source is read at: the commit `main` points to, or the latest release tag. */
-async function resolveRef(source) {
+export async function resolveRef(source) {
   if (source.ref === 'release') return (await getJson(`${API}/${source.repo}/releases/latest`)).tag_name;
   if (source.ref === 'main') return (await getJson(`${API}/${source.repo}/commits/main`)).sha;
   throw new Error(`sources.json: unknown ref ${source.ref} for ${source.repo}`);
