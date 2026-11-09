@@ -1,0 +1,43 @@
+name: Docs refresh
+
+# docs.exeris.eu reads its sources at build time. Each hour this compares the commits the live site
+# was built from with the sources' refs now and, when a Markdown file changed, starts a build of
+# the docs Worker through its deploy hook (secret DOCS_DEPLOY_HOOK). A run by hand can force one.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Rebuild even when no document changed
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+
+      # The check needs the packages' code only, not their install scripts.
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Rebuild the docs when their sources changed
+        run: node scripts/docs/refresh.mjs ${{ inputs.force && '--force' || '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCS_DEPLOY_HOOK: ${{ secrets.DOCS_DEPLOY_HOOK }}

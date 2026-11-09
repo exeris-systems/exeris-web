@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Completes the static output of one application (site by default, or docs) for Cloudflare:
 // 404.html (served with status 404 for any unknown path), sitemap.xml and robots.txt for its
-// indexable routes.
+// indexable routes; for the docs, refs.json with the commits the sources were read at.
 import { copyFileSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,17 +23,21 @@ export function indexableRoutes() {
 
 /** Routes of the docs pages, from the index scripts/docs/fetch-docs.mjs writes. */
 export function docsRoutes() {
-  const index = JSON.parse(readFileSync(join(ROOT, 'projects/docs/src/app/generated/index.json'), 'utf8'));
-  return ['', ...index.pages.map((p) => p.route)];
+  return ['', ...docsIndex().pages.map((p) => p.route)];
+}
+
+function docsIndex() {
+  return JSON.parse(readFileSync(join(ROOT, 'projects/docs/src/app/generated/index.json'), 'utf8'));
 }
 
 /**
- * Each application: its output directory, its public URL and its indexable routes. An
- * application with no route list yet gets no sitemap and is held to the shared checks only.
+ * Each application: its output directory, its public URL, its indexable routes and the files
+ * postbuild adds beyond 404.html, the sitemap and robots.txt. An application with no route list
+ * yet gets no sitemap and is held to the shared checks only.
  */
 export const APPS = {
   site: { out: OUT, url: SITE_URL, routes: indexableRoutes, redirects: true },
-  docs: { out: join(ROOT, 'dist/docs/browser'), url: 'https://docs.exeris.eu', routes: docsRoutes },
+  docs: { out: join(ROOT, 'dist/docs/browser'), url: 'https://docs.exeris.eu', routes: docsRoutes, files: ['refs.json'] },
   lab: { out: join(ROOT, 'dist/lab/browser'), url: 'https://lab.exeris.eu', routes: null },
 };
 
@@ -46,5 +50,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const urls = app.routes().map((r) => `  <url><loc>${url}/${r}</loc></url>`);
   writeFileSync(join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`);
   writeFileSync(join(out, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${url}/sitemap.xml\n`);
-  console.log(`postbuild${name === 'site' ? '' : ` ${name}`}: 404.html, sitemap.xml (${urls.length} URLs), robots.txt`);
+  const files = ['404.html', `sitemap.xml (${urls.length} URLs)`, 'robots.txt'];
+  if (name === 'docs') {
+    // The commit each source was read at, which scripts/docs/refresh.mjs compares with the sources'
+    // refs now to decide whether the live docs need a rebuild.
+    writeFileSync(join(out, 'refs.json'), `${JSON.stringify(docsIndex().refs)}\n`);
+    files.push('refs.json');
+  }
+  const label = name === 'site' ? 'postbuild' : `postbuild ${name}`;
+  console.log(`${label}: ${files.join(', ')}`);
 }

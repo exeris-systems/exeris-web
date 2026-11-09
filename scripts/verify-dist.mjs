@@ -59,7 +59,7 @@ export function verify(app = 'site') {
 }
 
 /** Route, SEO and token checks of an application's prerendered pages. */
-export function routeErrors({ out, url, redirects }, routes) {
+export function routeErrors({ out, url, redirects, files = [] }, routes) {
   const errors = [];
   const seenTitles = new Map();
   const REQUIRED = required(url);
@@ -82,7 +82,7 @@ export function routeErrors({ out, url, redirects }, routes) {
     if (token) errors.push(`/${route}: unresolved content token ${token[0]}`);
   }
   if (routes.length) {
-    for (const extra of ['404.html', 'sitemap.xml', 'robots.txt', ...(redirects ? ['_redirects'] : [])]) {
+    for (const extra of ['404.html', 'sitemap.xml', 'robots.txt', ...(redirects ? ['_redirects'] : []), ...files]) {
       if (!existsSync(join(out, extra))) errors.push(`missing ${extra}`);
     }
   }

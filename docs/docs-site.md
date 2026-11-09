@@ -45,7 +45,13 @@ review rules do not appear on the site.
 | `platform` | `exeris-docs` | the commit `main` points to | `/platform/` |
 
 Until the 1.0 releases the site follows `main`, so a fix to a document is published by the next
-build, and each page names the commit it was read at. From 1.0 the kernel, SDK and tooling are
+build, and each page names the commit it was read at. The build writes those commits to
+`/refs.json`. Each hour `.github/workflows/docs-refresh.yml` runs `scripts/docs/refresh.mjs`, which
+compares them with the commits the sources' `main` points to now and, when a Markdown file changed
+in between, starts a build through the `exeris-web-docs` Worker's deploy hook (repository secret
+`DOCS_DEPLOY_HOOK`). A live site without `refs.json`, a commit GitHub cannot compare and a change
+too long to list rebuild too; a change to code only does not. The workflow run by hand can force a
+build. From 1.0 the kernel, SDK and tooling are
 read at their release tags, with one version of the site per release; there is no versioning
 before then, because the 0.x releases would all need their own.
 
