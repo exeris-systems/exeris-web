@@ -39,6 +39,13 @@ export interface ShellConfig {
   };
   /** The command palette's entries, built at build time. */
   readonly searchIndex: readonly SearchEntry[];
+  /** What the palette's field says it searches; the site's own wording when unset. */
+  readonly searchPlaceholder?: string;
+  /**
+   * A search over the full text, run in the browser as the reader types; its results follow the
+   * index's in the palette. An application without one searches the index only.
+   */
+  readonly fullText?: (query: string) => Promise<readonly SearchEntry[]>;
 }
 
 export const SHELL_CONFIG = new InjectionToken<ShellConfig>('SHELL_CONFIG');

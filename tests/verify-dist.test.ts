@@ -3,7 +3,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM module without type declarations
-import { linkErrors, noTrackingErrors, routeErrors, verify } from '../scripts/verify-dist.mjs';
+import { linkErrors, noTrackingErrors, routeErrors, scriptSrcErrors, verify } from '../scripts/verify-dist.mjs';
+// @ts-expect-error -- plain ESM module without type declarations
+import { withScriptSrc } from '../scripts/postbuild.mjs';
 
 function out(files: Record<string, string>): string {
   const dir = mkdtempSync(join(tmpdir(), 'verify-dist-'));
@@ -80,5 +82,30 @@ describe('the link check of an application', () => {
       '/: link /kernel/a#nope: no element #nope on /kernel/a',
       '/: link #top: no element #top on /',
     ]);
+  });
+});
+
+describe('scriptSrcErrors', () => {
+  const csp = (scriptSrc: string) => `/*\n  Content-Security-Policy: default-src 'self'; script-src ${scriptSrc}; object-src 'none'\n`;
+
+  it('accepts the script-src an application declares, in any order', () => {
+    expect(scriptSrcErrors(csp("'self'"), ["'self'"])).toEqual([]);
+    expect(scriptSrcErrors(csp("'wasm-unsafe-eval' 'self'"), ["'self'", "'wasm-unsafe-eval'"])).toEqual([]);
+  });
+
+  it('fails on a source the application does not declare, or no policy', () => {
+    expect(scriptSrcErrors(csp("'self' 'wasm-unsafe-eval'"), ["'self'"])).toEqual([`_headers: script-src is "'self' 'wasm-unsafe-eval'", not "'self'"`]);
+    expect(scriptSrcErrors(csp("'self' 'unsafe-eval'"), ["'self'", "'wasm-unsafe-eval'"])).toHaveLength(1);
+    expect(scriptSrcErrors('/*\n  X-Frame-Options: DENY\n', ["'self'"])).toEqual(['_headers: no Content-Security-Policy']);
+  });
+});
+
+describe('withScriptSrc', () => {
+  it('sets the script-src of the policy and leaves the other directives', () => {
+    const headers = "/*\n  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'\n  X-Frame-Options: DENY\n";
+    expect(withScriptSrc(headers, ["'self'", "'wasm-unsafe-eval'"])).toBe(
+      "/*\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'\n  X-Frame-Options: DENY\n",
+    );
+    expect(() => withScriptSrc('/*\n  X-Frame-Options: DENY\n', ["'self'"])).toThrow(/no Content-Security-Policy script-src/);
   });
 });

@@ -23,7 +23,9 @@ There is no server.
 
 **The site sets no cookies, loads no analytics and makes no third-party requests.** A change that
 adds a cookie, a tracker, an external font, script or image host, or any runtime request to a
-third party changes that promise and is not an implementation detail.
+third party changes that promise and is not an implementation detail. Scripts run only from the
+site's own origin (`script-src 'self'`); docs.exeris.eu alone adds `'wasm-unsafe-eval'`, so its
+search can compile the WebAssembly module it serves itself, and no source beyond those.
 
 **Generated output is not edited by hand.** `src/app/generated/` is written by Exeris Tooling and
 listed in its `.exeris-codegen-manifest`; `src/data/site-sha.json` is produced per build. Change the
