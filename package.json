@@ -53,7 +53,7 @@
     "@exeris/codegen-ts": "0.11.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.6.6",
     "angular-eslint": "^22.6.0",
     "eslint": "^10.14.0",
     "htmlparser2": "^12.0.0",
