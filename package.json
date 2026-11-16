@@ -61,7 +61,7 @@
     "markdown-it": "^15.0.3",
     "pagefind": "1.5.2",
     "postcss": "^8.5.0",
-    "sanitize-html": "^2.18.1",
+    "sanitize-html": "^2.18.2",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.0",
     "typescript-eslint": "^8.72.1",
